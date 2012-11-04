@@ -8,9 +8,9 @@ tags: [clojure, lisp]
 ---
 {% include JB/setup %}
 
-I thought I'd take a moment to present one possible path, or set of alternate paths, for learning "Clojure":http://clojure.org, a modern Lisp implemented on top of the Java Virtual Machine.  
+I thought I'd take a moment to present one possible path, or set of alternate paths, for learning "Clojure":http://clojure.org, a modern Lisp implemented on top of the Java Virtual Machine.
 
-In addition to a surprising number of very good resources out there for such a young language, there are resources specific to other Lisps which map reasonably well onto Clojure.  
+In addition to a surprising number of very good resources out there for such a young language, there are resources specific to other Lisps which map reasonably well onto Clojure.
 
 Clojure does have a learning curve, especially for one coming from imperative languages such as Java, Python, C++, or Ruby.  These languages are, in some ways, more similar to each other than they are to functional languages such as Clojure (though they all have features which were pioneered originally in implementations of Lisp, one of the oldest computer languages).
 
