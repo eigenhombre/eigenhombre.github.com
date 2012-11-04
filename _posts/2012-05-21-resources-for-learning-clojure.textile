@@ -1,0 +1,53 @@
+---
+layout: post
+title: "Resources for Learning Clojure"
+description: ""
+category:
+tags: [clojure, lisp]
+---
+{% include JB/setup %}
+
+I thought I'd take a moment to present one possible path, or set of alternate paths, for learning "Clojure":http://clojure.org, a modern Lisp implemented on top of the Java Virtual Machine.  
+
+In addition to a surprising number of very good resources out there for such a young language, there are resources specific to other Lisps which map reasonably well onto Clojure.  
+
+Clojure does have a learning curve, especially for one coming from imperative languages such as Java, Python, C++, or Ruby.  These languages are, in some ways, more similar to each other than they are to functional languages such as Clojure (though they all have features which were pioneered originally in implementations of Lisp, one of the oldest computer languages).
+
+Since the approach I have taken has been somewhat haphazard, and I have the benefit of some hindsight now, I present a rough sequence which might make the road a little less bumpy for others.  Though not an exhaustive list of resources by any means, the following diagram summarizes the discussion points that follows.  (Caveat: I have not read all of the books completely through yet.)
+
+!/images/learnclojure2_sm.jpg!
+A possible map for navigating Clojure-related resources
+
+The approach I recommend goes something like this:
+
+If you are going to pick just one of these resources to get started, I recommend the O'Reilly book "Clojure Programming":http://www.clojurebook.com/ by C. Emerick et. al.  I have both the early-bird PDF and print versions of this book, and it's not only an excellent book on Clojure, it's one of the best O'Reilly books I've seen in the dozen or so years I've been reading them.  The other two books are also good (I have not checked out the 2nd edition of Programming Clojure yet)... Clojure is particularly blessed in having not just one but at least three excellent "starter books" on the language.
+
+If you're curious why one might want to learn a Lisp as your next (or last?) programming language, Paul Graham "evangelizes":http://www.paulgraham.com/avg.html very effectively about Lisp in some of his many "essays":http://www.paulgraham.com/articles.html.  You might want to check those out before diving into Clojure per se.
+
+Additionally, Rich Hickey's videos, particularly "Simple Made Easy":http://www.infoq.com/presentations/Simple-Made-Easy, though not so much about Lisp or Clojure per se, explain the challenges and limitations involved with stateful Object-Oriented programming and motivate the ideas behind functional programming in general and Clojure in particular.  I very much recommend these videos, though reaction to them among programmers I've shown them to has varied wildly from enthusiasm to extreme irritation.
+
+People with exposure to Common Lisp or Scheme may be familiar with Abelton and Sussman's "Structure and Interpretation of Computer Programs":http://mitpress.mit.edu/sicp/ ; Friedman's "The Little Schemer":http://www.ccs.neu.edu/home/matthias/BTLS/ and its sequels "The Seasoned Schemer":http://www.ccs.neu.edu/home/matthias/BTSS/ and "The Reasoned Schemer":http://www.ccs.neu.edu/home/matthias/BRS/ ; and P. Seibel's "Practical Common Lisp":http://www.gigamonkeys.com/book/, which I've only peeked at but which has an excellent reputation.  These books could provide a gateway into Clojure, or might merit a look at once you've got some Clojure basics under your belt.  I find them to be interesting supplemental reading.
+
+Before getting to the more advanced books, the "Clojure Koans":https://github.com/functional-koans/clojure-koans are a fun and pleasantly gradual way to start reinforcing your Clojure basics (I worked most of them on various airplane flights to the South Pole last year).  Similar but somewhat more challenging are the "4clojure":http://4clojure.org problems (I'm about 3/4 of the way through these).
+
+I find these kinds of problems alternately soothing (when I get them right away) and maddening (when I actually have to work at them).  They are like crossword puzzles for programmers, and they do really help reinforce the material from the books.  Due to the way the problems are implemented, they are unfortunately limited in terms of how they cover Java interoperability, macros, and concurrency.
+
+After you've read an introductory text, worked some problems and maybe started one or two personal projects with the language, you're ready for "The Joy of Clojure":http://joyofclojure.com/.  This book is somewhat hard to describe; I started it too early, then came back after six months and it make a whole lot more sense.  The best way to explain The Joy of Clojure is that it helps you to understand both some of the quirks of the language and what makes it truly great, and will help you evolve from writing clumsy translations of what you've learned in other languages, to truly compact, elegant, idiomatic Clojure code.
+
+After, or perhaps during, Joy of Clojure, take a deep dive into macros, the secret sauce of Lisp.  Macros allow one to implement new language features in order to make one's code elegant and expressive, and to optimize the fit to one's problem domain.  Paul Graham's "On Lisp":http://www.paulgraham.com/onlisp.html is mostly about macros; Hoyte's "Let over Lambda":http://letoverlambda.com/ (most of which I have not read yet) apparently refers to On Lisp in parts, and therefore might make a good sequel to that book.
+
+To summarize (strongest suggestions in *bold*):
+
+# Graham essays
+# Hickey videos
+# Introductory book (*Clojure Programming*, Programming Clojure, or Practical Clojure)
+# Possibly detour into SICP, Practical Common Lisp and/or The * Schemer books
+# Clojure Koans
+# 4Clojure Problems
+# *Joy of Clojure*
+# On Lisp
+# Let Over Lambda
+
+There are many other Lisp books which I haven't read yet, as well as a Clojure book or two I've left out.  Also, lest I forget, the Clojure community has a reputation for being extremely welcoming and helpful.  There is a "Google Group":http://groups.google.com/group/clojure / mailing list and an IRC chat as well.
+
+The bottom line is that for such a young language (or young variant of an old language), we are fortunate to have such a rich selection of resources to pick and choose from.  Enjoy!
