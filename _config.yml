@@ -9,8 +9,8 @@ pygments: true
 # Themes are encouraged to use these universal variables
 # so be sure to set them if your theme uses them.
 #
-title : Stronsoid
-tagline: Making good code better
+title : Forays into simplicity
+tagline: software musings from John Jacobsen
 author :
   name : John Jacobsen
   email : john@mail.npxdesigns.com
