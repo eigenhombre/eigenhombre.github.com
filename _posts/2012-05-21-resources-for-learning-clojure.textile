@@ -2,7 +2,8 @@
 layout: post
 title: "Resources for Learning Clojure"
 description: ""
-category:
+tagline: Books and Tutorials
+category: clojure
 tags: [clojure, lisp]
 ---
 {% include JB/setup %}
