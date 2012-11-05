@@ -1,0 +1,65 @@
+---
+layout: post
+title: "Playing With ClojureScript"
+description: ""
+category: clojure
+tags: [clojure, clojurescript]
+---
+{% include JB/setup %}
+
+I would like to teach the basics of "ClojureScript":https://github.com/clojure/clojurescript to myself and a few friends.  To that end, I propose to make a simple, dynamic graphical formatter for Lisp code.
+
+h3. Parentheses
+
+Love 'em or hate 'em, Lisp has lots of parentheses.  I come to Clojure with a long background in Python, where whitespace plays an important role in enhancing readability (no curly braces or semicolons to establish block level and to separate statements).
+
+Parentheses in Lisp serve as a simple syntactic device for the notation of trees of expressions.  While most (all?) computer languages are parsed into Abstract Syntax Trees by the compiler/interpreter prior to type checking, optimization and code generation, in Lisp the programmer works with ASTs more or less directly ("code-as-data").
+
+Lisp macros allow one to manipulate those trees prior to compilation and execution -- this affords the ability to essentially create new language features at will, to suit whatever abstractions fit the problem at hand, rather than being constrained by those afforded by the underlying language itself (for much, much more on macros, see Paul Graham's "On Lisp":http://www.paulgraham.com/onlisp.html).
+
+So, all those parentheses have a point, but they can make the code less readable (in my opinion).  However, *readability is partly a graphical design issue.*  In other words, the __presentation__ matters as well as the syntax.  In some editors, our design options are minimal or nonexistent.  But, on the Web (or in IDEs or in publications) we can change the graphical design to enhance readability.
+
+Since the parentheses serve (at least partly) as an aid to metaprogramming rather than readability, let's de-emphasise the parentheses graphically and see how the code looks.
+
+h3. What is ClojureScript?
+
+Clojure is a "hosted" language, meaning that it runs as a sometimes-fairly-thin layer on top of another language, namely Java.  The philosophy is that the underlying language is not hidden, but available for interoperability with existing libraries, or for performance.
+
+ClojureScript is the same idea, but for JavaScript rather than Java.  Whereas Clojure compiles to Java bytecode, ClojureScript compiles to JavaScript.
+
+Why might this be a good idea?
+
+!/images/js-good-parts.jpg!
+
+As the "lingua franca of the Web":http://www.codinghorror.com/blog/2007/05/javascript-the-lingua-franca-of-the-web.html, JavaScript is everywhere -- deployed to more different devices worldwide than any other language.  However, as the relative sizes of Cockroft's and Flanagan's books suggest, it is a language with many flaws.  For the past few years I have been developing and maintaining a fairly ambitious Web application for a client (in Python/Django/JavaScript+jQuery) and, while I appreciate some things about JavaScript, they are the Scheme-y, functional parts; Clojure is a better-designed language with far fewer flaws, in my opinion.
+
+As Web applications become more complex, having better, more powerful languages becomes more important.  I'm also intrigued by the possibility of using the same language for both client and server (something that "Node.js":http://nodejs.org/ does for JavaScript).
+
+Enough of the motivation.  Let's try to build our app.
+
+h3. Spec
+
+Let's start with a quick sketch of how the app should work.  The following parts should exist:
+
+# A textarea portion where a user can copy-paste, type, or edit some code
+# A display area where the resulting code is displayed according to our style rules
+
+Whenever the textarea is updated, the display area should update automatically.  No buttons need be pushed.
+
+h3. Getting Started
+
+Like most Clojurians, we'll use "Leingingen":https://github.com/technomancy/leiningen to automate basic project-related tasks, starting with creating a new project.  We'll also use Chris Granger's "@cljs-template@ plugin":https://github.com/ibdknox/cljs-template for ClojureScript and Leingingen.  Creating the project is simple:
+
+bc. lein new cljs-template greyparens
+
+You can ignore:
+
+bc. Could not find metadata cljs-template:lein-template/maven-metadata.xml in central (http://repo1.maven.org/maven2)
+
+As a test,
+
+bc. cd greyparens
+lein run
+
+Then visit "@http://localhost:8090@":http://localhost:8090.  You should get a grey background with a message in green saying, "Time to build something!"
+
