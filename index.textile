@@ -11,7 +11,7 @@ Welcome to *John Jacobsen's technical blog*.
 
 I have been a software developer since the late 1980s, mostly working in the field of high energy physics and particle astrophysics.  My current specialty is developing distributed and/or Web-based applications for scientific computing, though I have done a fair amount of low level software engineering (Linux device drivers and embedded systems) as well.
 
-I like to write elegant, powerful, maintainable code.  Generally this means striving for simplicity whenever possible.  I also practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I like Python, Clojure, other Lisps, Git, Eclipse, Emacs, and many, many more things.  I'm also an on-again, off-again "artist":http://johnj.com.
+I like to write elegant, powerful, maintainable code.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  I also practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I like Python, Clojure, other Lisps, Git, Eclipse, Emacs, and many, many more things.  I'm also an on-again, off-again "artist":http://johnj.com.
 
 The site for my "consulting business":http://npxdesigns.com has more details.  I'm also on "StackOverflow":http://stackoverflow.com/users/611752/johnj and "GitHub":http://github.com/eigenhombre.
 
