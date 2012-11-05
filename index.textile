@@ -13,6 +13,9 @@ I prefer iterative, test-driven development and fully-automated deployment workf
 
 The site for my "consulting business":http://npxdesigns.com has more details.  I'm also "on GitHub":http://eigenhombre.github.com and "StackOverflow":http://stackoverflow.com/users/611752/johnj
 
+<iframe src="http://ghbtns.com/github-btn.html?user=eigenhombre&type=follow"
+  allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="20px"></iframe>
+
 Occasionally I will post a review of a workshop, conference or other interesting tidbit on the following blog.  I also "tweet about various obsessions, software or otherwise":https://twitter.com/eigenhombre.
 
 <a href="https://twitter.com/eigenhombre"
