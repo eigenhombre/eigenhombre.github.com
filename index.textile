@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Software
-tagline: ... and more
+tagline: ... and other things that should be as simple as possible, but not simpler.
 ---
 {% include JB/setup %}
 
