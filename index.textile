@@ -9,14 +9,14 @@ tagline: ... and other things that should be as simple as possible, but not simp
 
 I have been a software developer since the late 1980s, mostly working in the field of high energy physics and particle astrophysics.  My current specialty is developing distributed and/or Web-based applications for scientific computing, though I have done a fair amount of low level software engineering (Linux device drivers and embedded systems) as well.
 
-I prefer iterative, test-driven development and fully-automated deployment workflows with frequent releases ("Agile").  I like Clojure, other Lisps, Python, Git, Eclipse, Emacs, and many, many more things.
+I prefer iterative, test-driven development and fully-automated deployment workflows with frequent releases ("Agile").  I like Python, Clojure, other Lisps, Git, Eclipse, Emacs, and many, many more things.  I'm also an on-again, off-again "artist":http://johnj.com.
 
-The site for my "consulting business":http://npxdesigns.com has more details.  I'm also "on GitHub":http://eigenhombre.github.com and "StackOverflow":http://stackoverflow.com/users/611752/johnj
+The site for my "consulting business":http://npxdesigns.com has more details.  I'm also on "StackOverflow":http://stackoverflow.com/users/611752/johnj and "GitHub":http://eigenhombre.github.com.
 
 <iframe src="http://ghbtns.com/github-btn.html?user=eigenhombre&type=follow"
-  allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="20px"></iframe>
+  allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="25px"></iframe>
 
-Occasionally I will post a review of a workshop, conference or other interesting tidbit on the following blog.  I also "tweet about various obsessions, software or otherwise":https://twitter.com/eigenhombre.
+Occasionally I will post about various side projects on the following blog.  I also "tweet about various obsessions, software or otherwise":https://twitter.com/eigenhombre.
 
 <a href="https://twitter.com/eigenhombre"
 class="twitter-follow-button" data-show-count="false">Follow
