@@ -37,21 +37,24 @@ In a large project with many tests, some fast and some slow, I often need to spe
 
 One piece of Clojure philosophy (from Functional Programming, a.k.a. "FP") that has been influencing my thinking of late is the notion of **composability**: the decoupling or disentanglement of the pieces of the systems one builds into small, general, composable pieces.  This will make those pieces easier to reuse in new ways, and will also facilitate reasoning about their use and behaviors.  (Unfortunately, the merits of the FP approach, which are many, have poisoned my enthusiasm for OO to the extent that I will typically use a function, or even a closure, before using an object, which would perhaps be more Pythonic in some cases).
 
-So, in the current case under discussion (continuous testing), rather than making some kind of stateful object which knows about not only your current file system, but also what tests should be allowed, their underlying dependencies, etc., it would be better (or at least more 'functional') instead to simply provide a directory-watching function that checks a dictionary of file hashes, and compose that function with whatever test program suits your purposes at the moment. 
+So, in the current case under discussion (continuous testing), rather than making some kind of stateful object which knows about not only your current file system, but also what tests should be allowed, their underlying dependencies, etc., it would be better (or at least more 'functional') instead to simply provide a directory-watching function that checks a dictionary of file hashes, and compose that function with whatever test program suits your purposes at the moment.
 
 The result of these thoughts is "a small script":https://github.com/eigenhombre/continuous-testing-helper called <code>conttest</code> which is a simplification of <code>tdaemon</code> that composes well with any test suite you can specify on the command line.
 
 Some examples follow:
 
-<code>$ conttest nosetests  # Runs nosetests whenever the files on disk change</code>
+bc.. $ conttest nosetests  # Runs nosetests whenever the files on disk change
 
-<code>$ conttest nosetests path.to.test:harness  # Runs only tests in 'harness' object in path/to/test </code>
+$ conttest nosetests path.to.test:harness  # Runs only tests in 'harness'
+                                           # object in path/to/test -- handy
+                                           # for developing a single feature
+                                           # or fixing a single bug.
 
-<code>$ conttest 'pep8 -r . ; nosetests'  # Check both PEP-8 style and unit tests</code>
+$ conttest 'pep8 -r . ; nosetests'  # Check both PEP-8 style and unit tests
 
-It would work equally well with a different language ('"blub":http://www.paulgraham.com/avg.html') with a separate compilation step:
+p. It would work equally well with a different language ('"blub":http://www.paulgraham.com/avg.html') with a separate compilation step:
 
-<code>$ conttest 'make && ./run-tests'</code>
+bc. $ conttest 'make && ./run-tests'
 
 Using this program, depending on my needs of the moment, I can continuously run a single unit test, all my "fast" unit tests, or, if I'm willing to deal with slower turnaround times, all my unit and integration tests.
 
