@@ -1,0 +1,17 @@
+---
+layout: post
+title: "Managing the Most Remote Data Center in the World"
+description: ""
+category: IceCube
+tags: [meta, physics, icecube]
+---
+{% include JB/setup %}
+
+This video is from an interview I did with James Turner at "OSCON":http://www.oscon.com/ in July of 2010.
+
+From "Slashdot":http://it.slashdot.org/story/10/07/23/1142249/Managing-the-Most-Remote-Data-Center-In-the-World:
+
+"Imagine that your data center was in the most geographically remote location in the world. Now imagine that you can only get to it 4 months of the year. Just for fun, add in some of the most extreme weather conditions in the world. That's the challenge that faces John Jacobsen, one of the people responsible for making sure that the data from the IceCube Neutrino Observatory makes it all the way from the South Pole to researchers across the world. In an interview recorded at OSCON, Jacobsen talks about the problems that he has to face (video), which includes (surprisingly) keeping the data center cool. If you're ever griped because you had to haul yourself across town in the middle of the night to fix a server crash, this interview should put things in perspective."
+
+
+<iframe width="560" height="315" src="http://www.youtube.com/embed/v9VUk9xB6co" frameborder="0" allowfullscreen></iframe>
