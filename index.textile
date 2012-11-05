@@ -7,6 +7,8 @@ tagline: ... and other things that should be as simple as possible, but not simp
 
 !images/5269103637_e8e1d7e684_m.jpg!
 
+Welcome to *John Jacobsen's technical blog*.
+
 I have been a software developer since the late 1980s, mostly working in the field of high energy physics and particle astrophysics.  My current specialty is developing distributed and/or Web-based applications for scientific computing, though I have done a fair amount of low level software engineering (Linux device drivers and embedded systems) as well.
 
 I like to write elegant, powerful, maintainable code.  Generally this means striving for simplicity whenever possible.  I also practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I like Python, Clojure, other Lisps, Git, Eclipse, Emacs, and many, many more things.  I'm also an on-again, off-again "artist":http://johnj.com.
