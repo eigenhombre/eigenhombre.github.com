@@ -11,7 +11,7 @@ I have been a software developer since the late 1980s, mostly working in the fie
 
 I prefer iterative, test-driven development and fully-automated deployment workflows with frequent releases ("Agile").  I like Clojure, other Lisps, Python, Git, Eclipse, Emacs, and many, many more things.
 
-The site for my "consulting business":http://npxdesigns.com has more details.  I'm also "on GitHub":http://eigenhombre.github.com and "StackOverflow":http://stackoverflow.com/users/611752/johnj
+The site for my "consulting business":http://npxdesigns.com has more details.  I'm also "on GitHub":http://github.com/eigenhombre and "StackOverflow":http://stackoverflow.com/users/611752/johnj
 
 <iframe src="http://ghbtns.com/github-btn.html?user=eigenhombre&type=follow"
   allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="20px"></iframe>
