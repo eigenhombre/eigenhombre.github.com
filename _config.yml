@@ -9,6 +9,7 @@ pygments: true
 # Themes are encouraged to use these universal variables
 # so be sure to set them if your theme uses them.
 #
+name : Forays into Simplicity
 title : Forays into simplicity
 tagline: software musings from John Jacobsen
 author :
