@@ -14,7 +14,7 @@ In addition to a surprising number of very good resources out there for such a y
 
 Clojure does have a learning curve, especially for one coming from imperative languages such as Java, Python, C++, or Ruby.  These languages are, in some ways, more similar to each other than they are to functional languages such as Clojure (though they all have features which were pioneered originally in implementations of Lisp, one of the oldest computer languages).
 
-Since the approach I have taken has been somewhat haphazard, and I have the benefit of some hindsight now, I present a rough sequence which might make the road a little less bumpy for others.  Though not an exhaustive list of resources by any means, the following diagram summarizes the discussion points that follows.  (Caveat: I have not read all of the books completely through yet.)
+Since the approach I took was somewhat haphazard and I have the benefit of some hindsight now, I present here a rough sequence which might make the road a little less bumpy for others.  Though not an exhaustive list of resources by any means, the following diagram summarizes the discussion points that follows.  (Caveat: I have not read all of the books completely through yet.)
 
 "!/images/learnclojure2_sm.jpg!":/images/learnclojure2.jpg
 __A possible map for navigating Clojure-related resources__
