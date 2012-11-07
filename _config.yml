@@ -11,7 +11,8 @@ pygments: true
 #
 name : Forays into Simplicity
 title : Forays into simplicity
-tagline: software musings from John Jacobsen
+tagline : software musings from John Jacobsen
+url : http://eigenhombre.com
 author :
   name : John Jacobsen
   email : john@mail.npxdesigns.com
