@@ -1,0 +1,22 @@
+---
+layout: post
+title: "A Foray into Machine Learning?"
+description: ""
+category: Machine Learning
+tags: [machine learning, math]
+---
+{% include JB/setup %}
+
+Last week, I completed Stanford's class on machine learning from "Coursera":http://coursera.org.
+
+The course is a hands-on survey of several supervised and unsupervised learning algorithms, with practical emphasis on how to tune them for optimal performance and how to choose the best approach given the particular constraints of the problem and the available data.  Several real-world examples are used in the lectures and problem sets, which helps keep the course material comprehensible and relevant.
+
+I had, in fact, "worked on neural networks":http://www.sciencedirect.com/science/article/pii/0168900291911088 as applied to experimental high-energy physics back in the '90s, and it was rewarding to get a renewed and much broader view of the field (which has obviously moved forward quite a bit since that time).  I enjoyed the class, partly because the lectures and problems were thoughtfully crafted, partly because the material is fascinating (and increasingly relevant) and partly because, for the first time since completing my Ph.D.... __I got to use some actual math!__
+
+It may sound funny, but, while you need a pretty extensive mathematics background to complete a doctorate in physics, as a software developer (even working in physics) you can easily find yourself doing work that doesn't require any math beyond arithmetic or basic algebra.  So, for longer than I care to specify precisely, I haven't had much use for all that linear algebra, multivariate calculus, differential equations, complex analysis, etc., etc.--getting back into it a bit was a pleasure.
+
+I was telling "a friend":http://matthewrocklin.com that I needed to find some use for the material before I forgot it all.  He mentioned "Kaggle":http://www.kaggle.com.  Kaggle is "an arena where you can match your data science skills against a global cadre of experts in statistics, mathematics, and machine learning."  They host competitions where you (or your team) compete for prize money by providing the best algorithm to solve a regression or classification problem.  More interesting to me (at the moment), they have some "starter" problems, including one similar to what we did in the course.
+
+In future posts, I would like to go about producing solutions for one or more of these, using "Clojure":/tags.html#clojure-ref and/or Octave/Matlab.  Stay tuned.
+
+
