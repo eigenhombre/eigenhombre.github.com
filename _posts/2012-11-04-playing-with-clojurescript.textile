@@ -1,0 +1,129 @@
+---
+layout: post
+title: "Playing With ClojureScript"
+description: ""
+category: clojure
+tags: [clojure, clojurescript]
+draft: true
+---
+{% include JB/setup %}
+
+I would like to teach the basics of "ClojureScript":https://github.com/clojure/clojurescript to myself and a few friends.  To that end, I propose to make a simple, dynamic graphical formatter for Lisp code in ClojureScript.
+
+h3. Motivation: Parentheses vs. Whitespace
+
+Love 'em or hate 'em, Lisp code has lots of parentheses (though Clojure has less than other variants).  I came to Clojure from Python, where whitespace plays an important role in enhancing readability (no curly braces or semicolons to establish block level and to separate statements).  In graphic design, whitespace is a key aspect of composition; its use in code is a __graphical trick which enhances readability__.
+
+In Lisp, on the other hand, parentheses serve as a simple syntactic device for the notation of trees of expressions.  While most (all?) computer languages are parsed into Abstract Syntax Trees by the compiler/interpreter prior to type checking, optimization and code generation, in Lisp the programmer works with ASTs more or less directly ("code-as-data").
+
+Lisp macros allow one to manipulate those trees prior to compilation and execution--this affords the ability to essentially create new language features at will, to suit whatever abstractions fit the problem at hand, rather than being constrained by those afforded by the underlying language itself (for much, much more on macros, see Paul Graham's "On Lisp":http://www.paulgraham.com/onlisp.html).
+
+So, all those parentheses have a point, but they can make the code less readable (in my opinion).  However, *readability is partly a graphical design issue.*  In other words, the __presentation__ matters as well as the syntax.  In some editors, our design options are minimal or nonexistent.  But, on the Web (or in IDEs or in publications) we can change the graphical design to enhance readability.
+
+Since the parentheses serve (at least partly) as an aid to metaprogramming rather than readability, let's de-emphasise the parentheses graphically and see how the code looks.
+
+h3. What is ClojureScript?
+
+Clojure is a "hosted" language, meaning that it runs as a sometimes-fairly-thin layer on top of another language, namely Java.  The philosophy is that the underlying language is not hidden, but available for interoperability with existing libraries, or for performance.  ClojureScript is the same idea, but for JavaScript rather than Java.  Whereas Clojure compiles to Java bytecode, ClojureScript compiles to JavaScript.  It also uses the "Google Clojure cross-compiler":https://developers.google.com/closure/compiler/ to optimize for size and performance.
+
+Why might a language on top of JavaScript be a good idea?
+
+!/images/js-good-parts.jpg!
+
+As the "lingua franca of the Web":http://www.codinghorror.com/blog/2007/05/javascript-the-lingua-franca-of-the-web.html, JavaScript is everywhere -- deployed to more different devices worldwide than any other language.  However, as the relative sizes of Cockroft's and Flanagan's books suggest, it is a language with many flaws.  For the past few years I have been developing and maintaining a fairly ambitious Web application for a client (in Python/Django/JavaScript+jQuery) and, while I appreciate some things about JavaScript, they are the Scheme-y, functional parts; Clojure is a better-designed language with far fewer flaws, in my opinion.  (I have also played with CoffeeScript, a lean, syntactic-sugary layer which has some nice features but still stays pretty close to JavaScript.)
+
+As Web applications become more complex, having better, more powerful languages becomes more important.  I'm also intrigued by the possibility of using the same language for both client and server (something that "Node.js":http://nodejs.org/ does for JavaScript).
+
+Enough of the motivation.  Let's try to build our app.
+
+h3. Spec
+
+Let's start with a quick sketch of how the app should work.  The following parts should exist:
+
+# A textarea portion where a user can copy-paste, type, or edit some code
+# A 'results' area where the resulting code is displayed according to our style rules
+
+Whenever the textarea is updated, the display area should update automatically.  No buttons need be pushed.
+
+h3. Getting Started
+
+Like most Clojurians, we'll use "Leingingen":https://github.com/technomancy/leiningen to automate basic project-related tasks, starting with creating a new project.  We'll also use Chris Granger's "@cljs-template@ plugin":https://github.com/ibdknox/cljs-template for ClojureScript and Leingingen.  @cljs-template@ also bundles "Noir":http://webnoir.org for the server side of things.
+
+Creating the project is simple:
+
+bc. lein new cljs-template greyparens
+
+(If you get @Could not find metadata cljs-template:lein-template/maven-metadata.xml in central (http://repo1.maven.org/maven2)@ in the output, you can ignore that.)
+
+As a test,
+
+bc. cd greyparens
+lein run
+
+Then visit "@http://localhost:8090@":http://localhost:8090.  You should get a grey background with a message in green saying, "Time to build something!"
+
+You'll also see three buttons at the lower right which specify what sort of JavaScript will be generated by the ClojureScript / Google Closure--you can leave them alone for now.
+
+h3. Actually Doing Something
+
+Let's make our textarea and results area now, by adding them to the HTML returned by the server.  @cljs-template@ hooks us up with the "hiccup":https://github.com/weavejester/hiccup templating engine, in which simple combinations for vectors and keywords becomes a compact DSL for describing HTML.
+
+One simple change we can make is to add a short header and some text to our HTML indicating the nature of our app.  So, in @src/greyparens/views/main.clj@,
+
+{% highlight clojure %}
+
+(defpage "/" []
+         (common/layout
+           [:div#content ]))
+
+{% endhighlight %}
+
+becomes
+
+{% highlight clojure %}
+
+(defpage "/" []
+         (common/layout
+           [:div#content
+            [:h1 "Welcome to Greyparens"]
+            [:p "Type your Lisp/Clojure code below:"]]))
+
+{% endhighlight %}
+
+reload the web page and you'll see our additions (don't worry about the formatting yet).
+
+To add an editable text area, we need @text-area@ from @hiccup.form@, so we add the required import to our namespace declaration (line 5):
+
+{% highlight clojure linenos=table %}
+
+(ns greyparens.views.main
+  (:require [greyparens.views.common :as common])
+  (:use [noir.core :only [defpage]]
+        [hiccup.core :only [html]]
+        [hiccup.form :only [text-area]]))
+
+{% endhighlight %}
+
+Now we can add our text-area for the user to type her code into.  We'll also add the results div.  @views/main.clj@ therefore becomes:
+
+{% highlight clojure %}
+
+(defpage "/" []
+         (common/layout
+          [:div#content
+           [:h1 "Welcome to Greyparens"]
+           [:p "Type your Lisp/Clojure code below:"]
+           (text-area {:id "editarea",
+                       :rows 20,
+                       :cols 70}
+                      "" "Add your code here...")
+           [:div#results "Results will appear here..."]]))
+
+{% endhighlight %}
+
+We're now done with the part created by the server, whose sole job is to feed us the HTML, CSS and JavaScript we need.  In fact, we could have done everything on the client side, but it is common practice to have the server provide any needed HTML and wire the dynamic behavior in on the client side.
+
+h3. The Client
+
+Let's first fix up the appearance.  At the moment, our app looks something like this:
+
