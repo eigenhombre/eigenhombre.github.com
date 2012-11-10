@@ -134,7 +134,11 @@ $${\partial J(\theta) \over \partial \theta_j}
   = {1 \over m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)} + {\lambda \over m} \theta_j
   \quad\text{for $j \ge 1$}$$
 
-in batches of, say, 100 training examples.  This allows us to handle the any size of data set and to parallelize the computation as well.
+in batches of, say, 100 training examples, and using them to update the current parameters \(\theta_j\)
+
+$$\theta_j \Longleftarrow \theta_j - \alpha {\partial J(\theta) \over \partial \theta_j}$$.
+
+Doing gradient descent in batches allows us to handle any size of data set and to parallelize the computation (another alternative is the noisier "stochastic" gradient descent where a single training example is used per update).
 
 __To be continued...__
 
