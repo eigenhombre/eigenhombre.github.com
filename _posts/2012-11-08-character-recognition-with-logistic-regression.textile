@@ -1,0 +1,124 @@
+---
+layout: post
+title: "Character Recognition with Logistic Regression"
+description: ""
+category: Machine Learning
+tags: [machine learning, math]
+draft: true
+---
+{% include JB/setup %}
+
+Yesterday, I "wrote some introductory remarks":/Machine%20Learning/2012/11/07/a-foray-into-machine-learning/ about machine learning.
+
+Today, let's use logistic regression to solve Kaggle's "digit recognition problem":http://www.kaggle.com/c/digit-recognizer.  Logistic regression won't be the best-performing machine learning algorithm to use for this, but it should serve to get us started.
+
+Solving this problem is equivalent to minimizing the regularized cost function
+
+$$J(\theta) = -{1 \over m} \sum_{i=1}^m y^{(i)} \log(h_\theta(x^{(i)})) + (1 - y^{(i)}) \log(1 - h_\theta(x^{(i)})) + {\lambda \over 2m} \sum_{j=1}^n \theta_j^2$$
+
+where <span> \( h_\theta(x^{(i)})  = g(\theta^T x^{(i)}) \) and \( g(z) \) is the sigmoid function \( {1 \over {1 + e^{-z}}} \).</span>  We want to pick the values \( \theta \) which minimize \(J(\theta)\).
+
+For the Coursera ML class, we did this problem in Octave (an open-source Matlab clone).  We shouldn't show that solution here, so that others can benefit from doing the exercise; instead, we'll do it in Clojure.
+
+We'll need to get the Kaggle training data file to start chewing on it, but first, let's create a new Clojure project (this is using 2.0 release of Leiningen):
+
+bc. lein new telldigits
+cd telldigits
+
+Now edit project.clj, including a dependency on "Incanter":http://incanter.org.  It is apparently common to download stand-alone installations of Incanter, but we would like to have the option of using other Clojure libraries such as "seesaw":https://github.com/daveray/seesaw, so we'll download the dependency directly:
+
+{% highlight clojure %}
+
+(defproject telldigits "0.1.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :dependencies [[org.clojure/clojure "1.4.0"]
+                 [incanter "1.4.0-SNAPSHOT"
+                 :exclusions [incanter/incanter-mongodb]]])
+
+{% endhighlight %}
+
+(Incanter has several matrix manipulation functions which we will use, though at this writing it's rather finicky during installation, which is why I am taking the 1.3.0-SNAPSHOT version and excluding the mongodb portion, which is currently broken.)
+
+Check that there are no dependency problems by running @lein deps@.
+
+Now we can actually start to do something.  Download the CVS file titled @train@ from "the Data Files page":http://www.kaggle.com/c/digit-recognizer/data, saving it in your home directory as @train.csv@.
+
+We will be working with @src/telldigits/core.clj@.
+
+The first challenge we face is working with the large files that are typical for machine learning.  The simplest function for reading a file is just to @(slurp "file.txt")@, but that loads the entire file into RAM at once and will generate out of memory errors.  "A little research":http://stackoverflow.com/questions/4118123/read-a-very-large-text-file-into-a-list-in-clojure/13312151#13312151 shows a way to use @clojure.java.io/reader@ and @lazy-seq@, avoiding the memory issue and opening and closing the file at the right time.  We therefore have the following function for converting a text large file into a lazy sequence of lines:
+
+{% highlight clojure %}
+
+(defn lazy-file-lines [filename]
+  ;; open a (probably large) file and make it a available as a lazy seq of lines
+  (letfn [(helper [rdr]
+                  (lazy-seq
+                    (if-let [line (.readLine rdr)]
+                      (cons line (helper rdr))
+                      (do (.close rdr) nil))))]
+         (helper (clojure.java.io/reader filename))))
+
+{% endhighlight %}
+
+The simplest thing we can do with this file is to see how many training examples there are in our file:
+
+{% highlight clojure %}
+
+(def ^:dynamic *trainfile* (str (System/getenv "HOME") "/train.csv"))
+
+(count (lazy-file-lines *trainfile*))
+;=> 42001
+
+{% endhighlight %}
+
+We could also count the number of integers in each line of the file and make sure that they are all equal to 785 (the documentation for the file says there should be one ouput label for each line, plus 28 * 28 input values):
+
+{% highlight clojure %}
+
+(defn split-for-ints [s]
+  "Split/parse a string of comma-separated integers"
+  (map #(Integer/parseInt %) (clojure.string/split s #",")))
+
+(->>
+  *trainfile*
+  (lazy-file-lines)      ;; Get file as seq
+  (drop 1)               ;; Drop first line, which is the text header
+  (map split-for-ints)   ;; Convert lines to lists of ints
+  (map count)            ;; Count the ints
+  distinct)              ;; Get all distinct counts
+;=> (785)
+
+{% endhighlight %}
+
+A small variation gives us the set of unique first entries in each row/line:
+
+{% highlight clojure %}
+
+(->>
+  *trainfile*
+  (lazy-file-lines)
+  (drop 1)
+  (map split-for-ints)
+  (map first)            ;; Get first element for each line,
+  distinct               ;; remove duplicates,
+  sort)                  ;; and sort them.
+;=> (0 1 2 3 4 5 6 7 8 9)
+{% endhighlight %}
+
+This is the set of 'true' \(y\) values ('labels') for each row; i.e., the digits we want to get our classifier to recognize.
+
+Now that we know how to do basic passes through the file, let's start to actually train our classifier.  We are going to minimize our cost function using batch gradient descent, which involves calculating the derivatives
+
+$${\partial J(\theta) \over \partial \theta_0}
+  = {1 \over m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}
+  \quad\quad\quad\quad\text{for $j = 0$}$$
+
+$${\partial J(\theta) \over \partial \theta_j}
+  = {1 \over m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)} + {\lambda \over m} \theta_j
+  \quad\text{for $j \ge 1$}$$
+
+__To be continued...__
+
