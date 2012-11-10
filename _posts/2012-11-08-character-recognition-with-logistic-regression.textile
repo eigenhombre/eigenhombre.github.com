@@ -25,7 +25,7 @@ We'll need to get the Kaggle training data file to start chewing on it, but firs
 bc. lein new telldigits
 cd telldigits
 
-Now edit project.clj, including a dependency on "Incanter":http://incanter.org.  It is apparently common to download stand-alone installations of Incanter, but we would like to have the option of using other Clojure libraries such as "seesaw":https://github.com/daveray/seesaw, so we'll download the dependency directly:
+Now edit project.clj, bringing in "Incanter":http://incanter.org, a Clojure-based math and statistics library.  It is apparently common to download stand-alone installations of Incanter, but we would like to have the option of using other Clojure libraries such as "seesaw":https://github.com/daveray/seesaw, so we'll include the Incanter libraries as a dependency in our @project.clj@:
 
 {% highlight clojure %}
 
@@ -44,7 +44,7 @@ Now edit project.clj, including a dependency on "Incanter":http://incanter.org. 
 
 Check that there are no dependency problems by running @lein deps@.
 
-Now we can actually start to do something.  Download the CVS file titled @train@ from "the Data Files page":http://www.kaggle.com/c/digit-recognizer/data, saving it in your home directory as @train.csv@.
+Now we can actually start to do something.  Download the CSV file titled @train@ from "the Data Files page":http://www.kaggle.com/c/digit-recognizer/data, saving it in your home directory as @train.csv@.
 
 We will be working with @src/telldigits/core.clj@.
 
@@ -74,6 +74,8 @@ The simplest thing we can do with this file is to see how many training examples
 
 {% endhighlight %}
 
+We see this training sample has 42000 examples (the first line is the CSV header).
+
 We could also count the number of integers in each line of the file and make sure that they are all equal to 785 (the documentation for the file says there should be one ouput label for each line, plus 28 * 28 input values):
 
 {% highlight clojure %}
@@ -85,7 +87,7 @@ We could also count the number of integers in each line of the file and make sur
 (->>
   *trainfile*
   (lazy-file-lines)      ;; Get file as seq
-  (drop 1)               ;; Drop first line, which is the text header
+  (drop 1)               ;; Drop first line, which is the CSV header
   (map split-for-ints)   ;; Convert lines to lists of ints
   (map count)            ;; Count the ints
   distinct)              ;; Get all distinct counts
@@ -110,7 +112,19 @@ A small variation gives us the set of unique first entries in each row/line:
 
 This is the set of 'true' \(y\) values ('labels') for each row; i.e., the digits we want to get our classifier to recognize.
 
-Now that we know how to do basic passes through the file, let's start to actually train our classifier.  We are going to minimize our cost function using batch gradient descent, which involves calculating the derivatives
+Now that we know how to do basic passes through the file, let's start to actually train our classifier.  First, we want to break our data into a set to be used for the actual training, and one for "cross-validation," where we tune parameters such as the learning rate for gradient descent, and the regularlization parameter.  We follow the rule of thumb to use about 30% of the available data for cross validation, and wrap the data in functions to delay evaluation of the lazy sequences:
+
+{% highlight clojure %}
+
+(defn data-seq []
+  (drop 1 (lazy-file-lines *trainfile*)))
+
+(defn train-seq [] (take 30000 (data-seq)))
+(defn cross-validation-seq [] (drop 30000 (data-seq)))
+
+{% endhighlight %}
+
+We are going to minimize our cost function using batch gradient descent, which involves calculating the derivatives
 
 $${\partial J(\theta) \over \partial \theta_0}
   = {1 \over m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)}
@@ -119,6 +133,8 @@ $${\partial J(\theta) \over \partial \theta_0}
 $${\partial J(\theta) \over \partial \theta_j}
   = {1 \over m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)}) x_j^{(i)} + {\lambda \over m} \theta_j
   \quad\text{for $j \ge 1$}$$
+
+in batches of, say, 100 training examples.  This allows us to handle the any size of data set and to parallelize the computation as well.
 
 __To be continued...__
 
