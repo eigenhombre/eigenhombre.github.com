@@ -48,7 +48,7 @@ Now we can actually start to do something.  Download the CSV file titled @train@
 
 We will be working with @src/telldigits/core.clj@.
 
-The first challenge we face is working with the large files that are typical for machine learning.  The simplest function for reading a file is just to @(slurp "file.txt")@, but that loads the entire file into RAM at once and will generate out of memory errors.  "A little research":http://stackoverflow.com/questions/4118123/read-a-very-large-text-file-into-a-list-in-clojure/13312151#13312151 shows a way to use @clojure.java.io/reader@ and @lazy-seq@, avoiding the memory issue and opening and closing the file at the right time.  We therefore have the following function for converting a text large file into a lazy sequence of lines:
+The first challenge we face is working with the large files that are typical for machine learning.  The simplest function for reading a file is just to @(slurp "file.txt")@, but that loads the entire file into RAM at once and will generate out of memory errors.  "A little research":http://stackoverflow.com/questions/4118123/read-a-very-large-text-file-into-a-list-in-clojure/13312151#13312151 shows a way to use @clojure.java.io/reader@ and @lazy-seq@, avoiding the memory issue and opening and closing the file at the right time.  We therefore have the following function for converting a large text file into a lazy sequence of lines:
 
 {% highlight clojure %}
 
