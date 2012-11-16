@@ -112,12 +112,12 @@ A small variation gives us the set of unique first entries in each row/line:
 
 This is the set of 'true' \(y\) values ('labels') for each row; i.e., the digits we want to get our classifier to recognize.
 
-Now that we know how to do basic passes through the file, let's start to actually train our classifier.  First, we want to break our data into a set to be used for the actual training, and one for "cross-validation," where we tune parameters such as the learning rate for gradient descent, and the regularlization parameter.  We follow the rule of thumb to use about 30% of the available data for cross validation, and wrap the data in functions to delay evaluation of the lazy sequences:
+Now that we know how to do basic passes through the file, let's start to actually train our classifier.  First, we want to break our data into a set to be used for the actual training, and one for "cross-validation," where we evaluate tuning of parameters such as the learning rate for gradient descent, and the regularlization parameter.  We follow the rule of thumb to use about 30% of the available data for cross validation, and wrap the data in functions to delay evaluation of the lazy sequences:
 
 {% highlight clojure %}
 
 (defn data-seq []
-  (drop 1 (lazy-file-lines *trainfile*)))
+  (map split-for-ints (drop 1 (lazy-file-lines *trainfile*))))
 
 (defn train-seq [] (take 30000 (data-seq)))
 (defn cross-validation-seq [] (drop 30000 (data-seq)))
@@ -139,6 +139,7 @@ in batches of, say, 100 training examples, and using them to update the current 
 $$\theta_j \Longleftarrow \theta_j - \alpha {\partial J(\theta) \over \partial \theta_j}.$$
 
 Doing gradient descent in batches allows us to handle any size of data set and to parallelize the computation.  (Another alternative is the noisier "stochastic" gradient descent where a single training example is used per update.)
+
 
 __To be continued...__
 

@@ -1,0 +1,28 @@
+---
+layout: post
+title: "Lightning fast startup times for Clojure programs"
+description: ""
+category: Clojure
+tags: [clojure]
+---
+{% include JB/setup %}
+
+Here at "Clojure/conj":http://clojure-conj.org, I just learned about "drip":https://github.com/flatland/drip, a tool for speeding up the startup times of your JVM programs.
+
+This is a tool that doesn't seem to be widely known enough so I'm writing about it here.  The basic idea is to start a JVM the first time your program runs and then __keep it around__; this was a feature of @cake@ which I missed when they merged with Leiningen.  When you run another JVM (Clojure, Scala, ...) program, it uses the already-fired-up JVM and, when the program exits, kills that one (in case you did something terrible to it), and starts another one, to be ready next time around.
+
+Because of the slow JVM startup times, I've been holding off using Clojure for scripting common tasks at the command line.  No more:
+
+bc.. $ time java -jar target/trydrip-0.1.0-SNAPSHOT-standalone.jar
+Hello, World!
+
+real   0m1.513s
+user   0m1.712s
+sys    0m0.140s
+
+$  time drip -jar target/trydrip-0.1.0-SNAPSHOT-standalone.jar
+Hello, World!
+
+real   0m0.372s
+user   0m0.075s
+sys    0m0.126s
