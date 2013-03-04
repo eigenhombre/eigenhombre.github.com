@@ -3,12 +3,12 @@ layout: page
 title: Software
 tagline: ... and other things that should be as simple as possible, but not simpler.
 ---
-
 {% include JB/setup %}
 
 ![image](images/5269103637_e8e1d7e684_m.jpg)
 
-Welcome to **John Jacobsen's technical blog**.
+Welcome to the technical blog of **John Jacobsen**, a software
+developer currently living in Chicago, IL.
 
 I have been a software developer since the late 1980s, mostly working
 in the field of high energy physics and particle astrophysics. My
@@ -42,6 +42,8 @@ otherwise":https://twitter.com/eigenhombre.
 
 ## Blog Posts
 
+{{ site.posts }}
+
 <ul class="posts">
   {% for post in site.posts %}
     {% if post.draft != true %}
@@ -52,4 +54,3 @@ otherwise":https://twitter.com/eigenhombre.
     {% endif %}
   {% endfor %}
 </ul>
-
