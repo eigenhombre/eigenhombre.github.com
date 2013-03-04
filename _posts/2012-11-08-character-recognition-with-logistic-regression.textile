@@ -8,7 +8,7 @@ draft: true
 ---
 {% include JB/setup %}
 
-Yesterday, I "wrote some introductory remarks":/Machine%20Learning/2012/11/07/a-foray-into-machine-learning/ about machine learning.
+Yesterday [actually a few weeks ago, now that I'm trying to actually finish this post], I "wrote some introductory remarks":/Machine%20Learning/2012/11/07/a-foray-into-machine-learning/ about machine learning.
 
 Today, let's use logistic regression to solve Kaggle's "digit recognition problem":http://www.kaggle.com/c/digit-recognizer.  Logistic regression won't be the best-performing machine learning algorithm to use for this, but it should serve to get us started.
 
@@ -25,7 +25,7 @@ We'll need to get the Kaggle training data file to start chewing on it, but firs
 bc. lein new telldigits
 cd telldigits
 
-Now edit project.clj, bringing in "Incanter":http://incanter.org, a Clojure-based math and statistics library.  It is apparently common to download stand-alone installations of Incanter, but we would like to have the option of using other Clojure libraries such as "seesaw":https://github.com/daveray/seesaw, so we'll include the Incanter libraries as a dependency in our @project.clj@:
+Now edit project.clj, bringing in "Incanter":http://incanter.org, a Clojure-based math and statistics library, which we will use for matrix manipulation.  It is apparently common to download stand-alone installations of Incanter, but we would like to have the option of using other Clojure libraries such as "seesaw":https://github.com/daveray/seesaw, so we'll include the Incanter libraries as a dependency in our @project.clj@:
 
 {% highlight clojure %}
 
@@ -35,12 +35,9 @@ Now edit project.clj, bringing in "Incanter":http://incanter.org, a Clojure-base
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [incanter "1.4.0-SNAPSHOT"
-                 :exclusions [incanter/incanter-mongodb]]])
+                 [incanter "1.4.0-SNAPSHOT"]])
 
 {% endhighlight %}
-
-(Incanter has several matrix manipulation functions which we will use, though at this writing it's rather finicky during installation, which is why I am taking the 1.3.0-SNAPSHOT version and excluding the mongodb portion, which is currently broken.)
 
 Check that there are no dependency problems by running @lein deps@.
 
@@ -112,7 +109,7 @@ A small variation gives us the set of unique first entries in each row/line:
 
 This is the set of 'true' \(y\) values ('labels') for each row; i.e., the digits we want to get our classifier to recognize.
 
-Now that we know how to do basic passes through the file, let's start to actually train our classifier.  First, we want to break our data into a set to be used for the actual training, and one for "cross-validation," where we evaluate tuning of parameters such as the learning rate for gradient descent, and the regularlization parameter.  We follow the rule of thumb to use about 30% of the available data for cross validation, and wrap the data in functions to delay evaluation of the lazy sequences:
+Now that we know how to do basic passes through the file, let's start to actually train our classifier.  First, we want to break our data into a set to be used for the actual training, and one for "cross-validation," where we evaluate tuning of parameters such as the learning rate for gradient descent, and the regularization parameter.  We follow the rule of thumb to use about 30% of the available data for cross validation, and wrap the data in functions to delay evaluation of the lazy sequences:
 
 {% highlight clojure %}
 
