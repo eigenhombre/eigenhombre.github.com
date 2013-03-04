@@ -7,13 +7,23 @@ tagline: ... and other things that should be as simple as possible, but not simp
 
 !images/5269103637_e8e1d7e684_m.jpg!
 
-Welcome to *John Jacobsen's technical blog*.
+Welcome to the technical blog of *John Jacobsen*, a software developer currently living in Chicago, IL.
 
-I have been a software developer since the late 1980s, mostly working in the field of high energy physics and particle astrophysics.  My current specialty is developing distributed and/or Web-based applications for scientific computing, though I have done a fair amount of low level software engineering (Linux device drivers and embedded systems) as well.
+I have been a software developer for more than two decades, mostly working in the field of *high energy physics* and *particle astrophysics*.  My current specialty is developing distributed and/or Web-based applications for scientific computing, though I have done a fair amount of low level software engineering (Linux device drivers and embedded systems) as well.
 
-I like to write elegant, powerful, maintainable code.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  I also practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I like Python, Clojure, other Lisps, Git, Eclipse, Emacs, and many, many more things.  I'm also an on-again, off-again "artist":http://johnj.com.
+For the past ten years I have worked primarily for clients on the IceCube Neutrino Telescope, the world's largest detector of astrophysical neutrinos recently constructed at Amundsen-Scott South Pole Station.  For the last five of these years, my biggest project has been as the lead programmer and architect of the IceCube Experiment Control and Monitoring system, known as IceCube Live.  This distributed system, created in Python and hosted at the South Pole and in Madison, Wisconsin, welds together a heterogeneous collection of subsystems together, and, using modern Web application tools, provides interactive sites used by detector operators, subsystem experts and data analysts to both control the instrument and to understand its current and historical performance.
 
-The site for my "consulting business":http://npxdesigns.com has more details.  I'm also on "StackOverflow":http://stackoverflow.com/users/611752/johnj and "GitHub":http://github.com/eigenhombre.
+I like to write *elegant, powerful, maintainable code*.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  When practical, I practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I have deep and extensive experience with Python, though I have recently been very enthusiastic about Clojure, a Lisp-based functional language implemented on top of the JVM, and have worked on "two":https://github.com/eigenhombre/PyClojure "implementations":https://github.com/halgari/clojure-py of Clojure in Python.
+
+Other interests include Machine Learning, logic programming ("MiniKanren":http://kanren.sourceforge.net/, "core.logic":https://github.com/clojure/core.logic), AI in general, and creating visualization tools (I am currently working on "a JavaScript charting library":https://github.com/eigenhombre/i3d3 using D3.js).  I'm also an on-again, off-again "visual artist":http://johnj.com (painting, drawing and photography).
+
+The site for my "consulting business":http://npxdesigns.com has more details.  See also:
+
+* "GitHub":http://github.com/eigenhombre, where I host multiple open source projects and contribute to several others;
+* "StackOverflow":http://stackoverflow.com/users/611752/johnj, where I answer questions about Python and Clojure;
+* "@eigenhombre":http://twitter.com/eigenhombre on Twitter;
+* My "LinkedIn":http://linkedin.com/in/eigenhombre profile;
+* My physics/computing "curriculum vitae":https://github.com/eigenhombre/cv.
 
 <iframe src="http://ghbtns.com/github-btn.html?user=eigenhombre&type=follow"
   allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="25px"></iframe>
@@ -24,6 +34,7 @@ Occasionally I will post about various side projects on the following blog.  I a
 class="twitter-follow-button" data-show-count="false">Follow
 @eigenhombre</a> <script src="//platform.twitter.com/widgets.js"
 type="text/javascript"></script>
+
 
 h2. Blog Posts
 
