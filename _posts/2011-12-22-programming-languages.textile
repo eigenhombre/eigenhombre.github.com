@@ -76,7 +76,7 @@ Anything .NET (Microsoft-centric).  PHP (even more ad-hoc than Perl).
 
 h2. Ruby
 
-Ruby is in a category of its own, because I don't really love the language, but I appreciate certain of its syntactic features, and I know people who are quite passionate about it (including my dad, who has written a comprehensive and full-featured family-tree-and-photo Web application in Ruby on Rails).  Also because it has made such an impact on the Web application world, through Rails.  Ruby itself seems to occupy a space somewhere between Perl and Python, borrowing the elegant parts of each more than the warts.  The main reason I have for exploring Ruby, however, is that it is the scripting language for "SketchUp":/drawing/sketchup/.
+Ruby is in a category of its own, because I don't really love the language, but I appreciate certain of its syntactic features, and I know people who are quite passionate about it (including my dad, who has written a comprehensive and full-featured family-tree-and-photo Web application in Ruby on Rails).  Also because it has made such an impact on the Web application world, through Rails.  Ruby itself seems to occupy a space somewhere between Perl and Python, borrowing the elegant parts of each more than the warts.  The main reason I have for exploring Ruby, however, is that it is the scripting language for "SketchUp":http://johnj.com/drawing/sketchup/.
 
 h2. The Language I Wish Existed
 
