@@ -135,8 +135,7 @@ in batches of, say, 100 training examples, and using them to update the current 
 
 $$\theta_j \Longleftarrow \theta_j - \alpha {\partial J(\theta) \over \partial \theta_j}.$$
 
-Doing gradient descent in batches allows us to handle any size of data set and to parallelize the computation.  (Another alternative is the noisier "stochastic" gradient descent where a single training example is used per update.)
+Doing gradient descent in batches allows us to handle any size of data set and to parallelize the computation.  (Another alternative is the noisier "stochastic" gradient descent where a single training example is used per update.) 
 
-
-__To be continued...__
+__(To be continued in future posts...)__
 
