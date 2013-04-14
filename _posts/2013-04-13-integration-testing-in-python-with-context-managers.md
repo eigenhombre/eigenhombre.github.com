@@ -159,11 +159,22 @@ omitted here):
 This strategy works, but it has a few significant drawbacks which get worse as
 a system grows in number of components and features:
 
-1. Subprocesses are expensive: orders of magnitude more expensive to start compared to starting threads, for example.  This becomes especially problematic as the number of tests increases, since it's important to keep your tests running fast so that you will be encouraged to run them often;
+1. Subprocesses are expensive: orders of magnitude more expensive to
+start compared to starting threads, for example. This becomes
+especially problematic as the number of tests increases, since it's
+important to keep your tests running fast so that you will be
+encouraged to run them often;
 
 2. The code is pretty verbose, with all the `setUp`s, `tearDown`s, `super`, etc.
 
-3. As your system grows in complexity, the state of the various subprocesses, database connections, etc. is spread throughout the class heirarchy, making things harder to reason about.  This is largely an effect of doing setup or teardown of resources far away from where those resources are actually used.
+3. As your system grows in complexity, the state of the various
+subprocesses, database connections, etc. is spread throughout the
+class heirarchy, making things harder to reason about. This is largely
+an effect of doing setup or teardown of resources far away from where
+those resources are actually used. An alternative is to have separate
+`TestCases` with their own `setUp` and `tearDown` for every
+combination of resources needed, but this will lead to even more
+verbosity and duplication of code.
 
 Problem 1 is addressed by running each component in its own thread
 rather than in a subprocess. To give you an idea of what sort of speed
@@ -198,8 +209,8 @@ processes. And it's much easier to interrogate the state of each
 component when it's running as a thread, than it is to query a
 subprocess (via e.g. RPC).
 
-Problems 2 and 3 are somewhat more difficult, and require a change of
-paradigms for our testing code. **Enter context managers!**
+Problems 2 and 3 require a change of paradigms for our testing code.
+**Enter context managers!**
 
 ## A brief introduction to context managers
 
@@ -300,8 +311,7 @@ Using our context is then as simple as:
 
 Context managers compose very nicely.  In Python 2.7 and above, the following works:
 
-    with file("/tmp/log", "w") as log, \
-         control_context() as ctrl:
+    with file("/tmp/log", "w") as log, control_context() as ctrl:
         print >> log, "control state is", ctrl.state()
 
 In Python 2.6, you can use `contextlib.nested` to do the same:
@@ -341,8 +351,8 @@ as test code to be executed):
                 return x
             time.sleep(interval)
 
-        raise NotDoneException("The following function never returned True:\n%s"
-                               % inspect.getsource(done))
+        raise AssertionError("The following function never returned True:\n%s"
+                             % inspect.getsource(done))
 
     def eq(x, y):
         assert x == y, '%s %s != %s %s!' % (type(x).__name__, x,
@@ -356,23 +366,30 @@ as test code to be executed):
             return ("Agent 1: running" in response and
                     "Agent 2: running" in response)
 
-        with dbserver_context() as db, \
-             control_context() as ctrl, \
+        with dbserver_context() as db,   \
+             control_context() as ctrl,  \
              client_context(id=1) as c1, \
              client_context(id=2) as c2:
             eq(cli("start agents"), "OK")
             wait_until(done)
 
 
-This is more or less a complete integration test for our system! I
-have added `wait_until` to poll until a condition obtains, or raise
-an exception; and a simple `eq` to substitute for
-`unittest.TestCase`'s `assertEqual`.
+The last function is more or less a complete, end-to-end integration
+test for our system! I have added `wait_until` to poll until a
+condition obtains, or raise an exception; and a simple `eq` to
+substitute for `unittest.TestCase`'s `assertEqual`.
 
 This is only one possible test involving components of our system. The
-key here is that *any combination* of setup and teardown operations
-are easy to obtain by composing them together as context managers. In
-my view this is simpler and easier to understand that the OO JUnit
-way.
+key here is that *any combination* of setup and teardown operations is
+easy to obtain by composing them together as context managers. In my
+view this is simpler and easier to understand than by setting up
+heirarchies of JUnit-style test classes.
 
-
+One tradeoff with this pattern is that it is can be less amenable to
+the "one-assert-per-test" philosophy. I claim that as the number and
+complexity of setup and teardown operations increases, it is less
+performant and more complicated to carry out the complete setup and
+teardown over and over again for every assert. I would rather arrange
+my code conceptually around the kinds of functionality being tested,
+wrapping related asserts in the context that they need, since I find it
+makes the code easier to reason about.
