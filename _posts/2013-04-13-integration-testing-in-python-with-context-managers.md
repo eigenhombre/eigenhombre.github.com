@@ -7,32 +7,43 @@ tags: ["python", "testing"]
 ---
 {% include JB/setup %}
 
-**Summary**: Complex sets of integration tests, each with several simultaneously-running components, can be made simple and fast by using context managers and threads rather than subprocesses and heirarchies of `unittest.TestCase` objects.
+**Summary**: Complex integration tests, each involving several
+  simultaneously-running components, can be made simpler and faster by
+  judicious use of context managers and threads rather than using
+  subprocesses and heirarchies of `unittest.TestCase` objects.
 
 I have been working on a large control and monitoring system for my
 clients on [the IceCube Neutrino Observatory](http://icecube.wisc.edu)
 at the geographic South Pole for the past few years. As the lead
-developer for this project, known as [IceCube Live](http://www.npxdesigns.com/projects/icecube-live/), I am partly
-responsible for the overall uptime of the detector, so I take testing
-seriously -- if the detector goes down, I can get a call from
-Antarctica in the middle of the night. Furthermore, with a few hundred
-features implemented in the code base, and several developers
-touching the code, the test coverage has to be good in order to allow
+developer for this control system, known as [IceCube Live](http://www.npxdesigns.com/projects/icecube-live/), I am partly
+responsible for the overall uptime of this expensive (US$270M)
+detector, so reliability matters (and, if the detector goes down, I
+might get a phone call from Antarctica in the middle of the night...).
+Furthermore, with a few hundred features implemented in the code base,
+several developers touching the code, and constantly evolving
+requirements, the test coverage has to be good in order to allow
 changes to be made to the system with any sort of confidence. IceCube
-Live was developed with an emphasis on TDD from the beginning, and my
-ideas about tests have evolved as the project grew from a small
-prototype into a critical system for the project. I'd like to present some of
-these ideas here in the hope that someone else might find them useful.
+Live was developed using [TDD](http://en.wikipedia.org/wiki/Test-driven_development)
+from the beginning, and my ideas about tests have evolved as the
+project grew from a small prototype into a critical system for the
+project. I'd like to present some of these ideas here in the hope that
+someone else might find them useful.
 
 Testing is most straightforward at the level of *unit tests*, where
 you can verify the behavior of individual functions and objects in
-relative isolation. However, as a system grows, the interactions
-between parts can come to dominate the complexity of the system, and
-integration testing is critical, particularly since subsystems that
-are well-tested in isolation may not talk to each other correctly.
-Automating these sorts of tests is a large part of one's testing
-burden, and doing it right can reduce the effort and cost of
-maintaining the test code base in the long run.
+relative isolation. Obviously these tests are your first line of
+defense, and they are usually the easiest to reason about and to
+write.
+
+In larger, distributed systems, the interactions between parts can
+dominate the overall complexity, and integration testing is critical,
+particularly since subsystems that are well-tested in isolation may
+still not talk to each other correctly. Doing these tests right and
+making them run fast (important so that developers actually run them
+frequently) can reduce the effort and cost of maintaining the code
+base in the long run.
+
+## A Sample System
 
 The following diagram shows a simplified system which mirrors much of
 the architecture of IceCube Live. The exact details of the design
