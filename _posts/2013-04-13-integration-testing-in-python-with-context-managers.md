@@ -272,8 +272,10 @@ threads-vs-processes testing, above:
     @contextlib.contextmanager
     def time_print(task_name):
         t = time.time()
-        yield
-        print task_name, "took", time.time() - t, "seconds."
+        try:
+            yield
+        finally:
+            print task_name, "took", time.time() - t, "seconds."
 
     with time_print("processes"):
         [doproc() for _ in range(500)]
@@ -311,9 +313,11 @@ Control simulator:
         ctrl = Control()
         thread = threading.Thread(target=ctrl.run)
         thread.start()
-        yield ctrl
-        ctrl.stop()
-        thread.join()
+        try:
+            yield ctrl
+        finally:
+            ctrl.stop()
+            thread.join()
 
 Using our context is then as simple as:
 
