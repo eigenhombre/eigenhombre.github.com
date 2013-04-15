@@ -395,10 +395,10 @@ condition obtains, or raise an exception; and a simple `eq` to
 substitute for `unittest.TestCase`'s `assertEqual`.
 
 This is only one possible test involving components of our system. The
-key here is that *any combination* of setup and teardown operations is
-easy to obtain by composing them together as context managers. In my
-view this is simpler and easier to understand than by setting up
-heirarchies of JUnit-style test classes.
+key here is that *any* nested combination of setup and teardown
+operations is easy to obtain by composing them together as context
+managers. In my view this is simpler and easier to understand than by
+setting up heirarchies of JUnit-style test classes.
 
 One tradeoff with this pattern is that it is can be less amenable to
 the "one-assert-per-test" philosophy. I claim that as the number and
