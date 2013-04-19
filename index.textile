@@ -50,4 +50,3 @@ h2. Blog Posts
     {% endif %}
   {% endfor %}
 </ul>
-
