@@ -2,10 +2,23 @@
 layout: post
 title: "Integration Testing in Python with Context Managers"
 description: ""
-category: 
+category:
 tags: ["python", "testing"]
 ---
 {% include JB/setup %}
+
+<pre>
+
+
+</pre>
+
+**UPDATE**: Since this post was rather long and complex, I am
+  currently breaking it up into several, more manageable chunks.
+
+<pre>
+
+
+</pre>
 
 **Summary**: Complex integration tests, each involving several
   simultaneously-running components, can be made simpler and faster by
