@@ -8,9 +8,9 @@ tags: ["python", "testing", "concurrency"]
 {% include JB/setup %}
 
 
-This post continues a series of posts about integration testing in
+*This post continues a series of posts about integration testing in
 Python. Introductory post is
-[here](/2013/04/18/thoughts-on-integration-testing/).
+[here](/2013/04/18/thoughts-on-integration-testing/).*
 
 Python has become notorious for being somewhat problematic when it
 comes to concurrency. The language supports threads, but performance
@@ -40,7 +40,9 @@ programs talk to each other as they should. Like your other tests, you
 want to automate these. And they should run as fast a possible to
 optimize the feedback cycle during development.
 
-A straightforward way to test these components is to run them all in separate programs (locally or distributed).  However, you'll get much better performance from your tests if you run them as local threads:
+A straightforward way to test these components is to run them all in
+separate programs (locally or distributed). However, you'll get much
+better performance from your tests if you run them as local threads:
 
 {% highlight python %}
 
@@ -86,6 +88,8 @@ when it's running as a thread, than it is to query a subprocess (via
 e.g. RPC). This greatly simplifies the assertions you have to make in
 your integration tests.
 
-In a future post we will explore the use of context managers for
+In future posts we will explore the use of context managers for
 organizing setup and teardown of complex tests cases involving
 multiple components.
+
+Next: [Introduction to Context Managers](/2013/04/20/introduction-to-context-managers/).

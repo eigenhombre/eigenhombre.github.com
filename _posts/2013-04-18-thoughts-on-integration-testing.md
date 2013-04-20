@@ -52,4 +52,8 @@ automated integration tests for IceCube.
 
 Next: [Processes vs. Threads for Integration Testing](/2013/04/19/processes-vs-threads-for-testing/)
 
+Other posts in this series:
+
+- [Introduction to Context Managers in Python](/2013/04/20/introduction-to-context-managers/)
+
 *Thanks to [Matt Rocklin](http://matthewrocklin.com) for feedback on the material in this series*.

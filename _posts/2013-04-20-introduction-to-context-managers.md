@@ -3,11 +3,14 @@ layout: post
 title: "Introduction to Context Managers in Python"
 description: ""
 category:
-tags: ["python"]
-draft: true
+tags: [python, testing]
+draft:
 ---
 {% include JB/setup %}
 
+*This is the third of a
+[series](/2013/04/18/thoughts-on-integration-testing/) of posts
+loosely associated with integration testing, mostly focused on Python.*
 
 Context managers are a way of allocating and releasing some sort of
 resource exactly where you need it (readers who are very familiar with
@@ -63,12 +66,15 @@ finally:
 
 {% endhighlight %}
 
-In each case a bit of boilerplate is eliminated, and the "context" of the
-file or the lock is acquired, used, and released cleanly. The cool
+In each case a bit of boilerplate is eliminated, and the "context" of
+the file or the lock is acquired, used, and released cleanly. The cool
 thing about context managers, however, is that you can easily make
-your own. The simplest way is with the `contextlib` library. Here is a
-context manager which you could use to time our
-threads-vs-processes testing, above:
+your own. Though there is a class-based way involving `__enter__` and
+`__exit__` special methods, the simplest way is using the `contextlib`
+library. Here is a context manager which you could use to time our
+[threads-vs-processes
+testing](/2013/04/19/processes-vs-threads-for-testing/), discussed
+previously:
 
 {% highlight python %}
 
@@ -94,3 +100,11 @@ with time_print("threads"):
 # threads took 0.11357998848 seconds.
 
 {% endhighlight %}
+
+What does all this have to do with testing? I have found that for
+complex integration tests where there is a lot of setup and teardown,
+context managers provide a helpful pattern for making compact,
+easy-to-understand code, by putting the "context" (state) needed for any given
+test close to where it is actually needed. More on that in the next
+post.
+
