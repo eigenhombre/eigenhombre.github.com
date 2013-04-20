@@ -13,9 +13,8 @@ draft:
 loosely associated with integration testing, mostly focused on Python.*
 
 Context managers are a way of allocating and releasing some sort of
-resource exactly where you need it (readers who are very familiar with
-context managers may want to skip this section). The simplest example
-is file access:
+resource exactly where you need it. The simplest example is file
+access:
 
 {% highlight python %}
 
