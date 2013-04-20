@@ -47,11 +47,11 @@ parts can dominate the overall complexity, and integration testing
 becomes critical: subsystems that are well-tested in
 isolation may still not talk to each other correctly.
 
-Writing integration tests well can be a challenge. The tests should run
-as quickly as possible, to encourage their frequent use during
-development. Proliferation of boilerplate code can also become
-problematic, because so many things are being combined together, with
-slight variation.
+Writing integration tests well can be a challenge. Though possibly
+complex, I/O bound, etc., the tests should run as quickly as possible,
+to encourage their frequent use during development. Proliferation of
+boilerplate code can also become problematic, because so many things
+are being combined together, with slight variation.
 
 Over the next few days/weeks, I plan to post a series of sort posts on
 a few patterns I've come to make heavy use of while developing
