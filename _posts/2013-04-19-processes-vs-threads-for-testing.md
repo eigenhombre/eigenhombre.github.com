@@ -37,7 +37,7 @@ or otherwise), and with each other via a messaging or RPC protocol
 While low-level (functional, unit) testing will perhaps be the bulk of
 your tests, integration tests are important to make sure all the
 programs talk to each other as they should. Like your other tests, you
-want to automate these. And they should run as fast a possible to
+want to automate these. And they should run as fast as possible to
 optimize the feedback cycle during development.
 
 A straightforward way to test these components is to run them all in
