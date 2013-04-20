@@ -41,8 +41,14 @@ want to automate these. And they should run as fast a possible to
 optimize the feedback cycle during development.
 
 A straightforward way to test these components is to run them all in
-separate programs (locally or distributed). However, you'll get much
-better performance from your tests if you run them as local threads:
+separate programs (locally or distributed), each in their own process.
+However, you're likely to get much better performance from your many
+short-running tests if you run the components as local threads in a
+single process. The components running in these threads would, of
+course, still talk to each other via RPC, ZeroMQ, etc., same as if
+they were processes. But for short tests the setup and teardown for
+threads is much faster. The most trivial example (assigning a value to
+a variabled) shows the difference dramatically:
 
 {% highlight python %}
 
@@ -76,7 +82,7 @@ That's a factor of about a hundred -- something you will most
 definitely notice in your test suite.
 
 Another advantage of this approach is that, when you write your code
-so that it can be run as a thread, you can put as many or few of these
+so that it can be run as threads, you can put as many or few of these
 threads in actual processes (programs) as you'd like. In other words,
 the coupling of processes to components is loosened. Your automated tests will
 force you to implement clean shutdown semantics for each thread
@@ -86,7 +92,19 @@ interruption).
 Finally, it's much easier to interrogate the state of each component
 when it's running as a thread, than it is to query a subprocess (via
 e.g. RPC). This greatly simplifies the assertions you have to make in
-your integration tests.
+your integration tests, since you don't have to send a message of some
+sort via RPC or message queues -- you can just query variables.
+
+I found, for the automated tests in IceCube Live, that making
+components that could be instantiated in threads (for testing) or in
+processes (for production) greatly sped up my test suite and
+simplified the actual tests quite a bit. I should note that, prior to
+release, there is still a final integration test done on a mirror test
+system which simulates actual data collection and makes sure IceCube
+Live can play along with other systems. The mirroring, however, is not
+exact, since the actual detector elements we deployed at South Pole
+are expensive and rely on a billion tons of crystal-clear ice to work
+as intended.
 
 In future posts we will explore the use of context managers for
 organizing setup and teardown of complex tests cases involving

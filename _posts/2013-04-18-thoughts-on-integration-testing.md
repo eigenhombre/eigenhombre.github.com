@@ -32,19 +32,26 @@ project grew from a small prototype into a critical system for the
 project. I'd like to present some of these ideas here in the hope that
 someone else might find them useful.
 
-Testing is most straightforward at the level of *unit tests*, where
-you can verify the behavior of individual functions and objects in
-relative isolation. Obviously these tests are your first line of
-defense, and they are usually the easiest to reason about and to
-write.
+There are many taxonomies of tests. Here we will discuss automated
+tests only. A simple scheme is to consider a continuum ranging from
+*unit tests* (testing purely isolated functions or components) to
+full-scale *integration tests* (where you put many things together and
+exercise their collective functionality). Unit tests are your first
+line of defense -- they are usually the easiest to reason about and to
+write. It's generally much easier to isolate and understand a bug
+exposed by a unit test than a large integration test, simply because
+there are fewer places where the problem could have occurred.
 
-In larger, distributed systems, the interactions between parts can
-dominate the overall complexity, and integration testing is critical,
-particularly since subsystems that are well-tested in isolation may
-still not talk to each other correctly. Doing these tests right and
-making them run fast (important so that developers actually run them
-frequently) can reduce the effort and cost of maintaining the code
-base in the long run.
+Nonetheless, in larger, distributed systems, the interactions between
+parts can dominate the overall complexity, and integration testing
+becomes critical: subsystems that are well-tested in
+isolation may still not talk to each other correctly.
+
+Writing integration tests well can be a challenge. The tests should run
+as quickly as possible, to encourage their frequent use during
+development. Proliferation of boilerplate code can also become
+problematic, because so many things are being combined together, with
+slight variation.
 
 Over the next few days/weeks, I plan to post a series of sort posts on
 a few patterns I've come to make heavy use of while developing
