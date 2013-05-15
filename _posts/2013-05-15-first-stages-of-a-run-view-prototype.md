@@ -36,5 +36,8 @@ run numbers, graphs of data rates, and allow specific display elements
 to link to other pages inside of IceCube Live. Also IceCube has very
 high uptime so any gaps should probably be shown in red.
 
+In the video zooming is being done with the mousewheel and panning is
+done by clicking and dragging.
+
 <iframe src="http://player.vimeo.com/video/66215209" width="600" height="400" frameborder="0"></iframe> 
 <p><a href="http://vimeo.com/66215209">Prototype time-based view for IceCube Live</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
