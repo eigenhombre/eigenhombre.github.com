@@ -3,7 +3,7 @@ layout: post
 title: "Early Prototype of a Zoomable Run Viewer"
 description: ""
 category: 
-tags: [python, javascript, django, icecube, neutrino]
+tags: [python, javascript, django, icecube, neutrino, d3]
 ---
 {% include JB/setup %}
 
