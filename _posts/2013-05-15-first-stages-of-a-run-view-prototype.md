@@ -58,7 +58,7 @@ Though a shorter work day today, I managed make some more progress on the protot
 
 4. Code cleanup
 
-The results are shown here.
+The results are shown here:
 
 <iframe src="http://player.vimeo.com/video/66295924" width="600" height="400" frameborder="0">xxx</iframe> 
 <p><a href="http://vimeo.com/66295924">Day 2 - IceCube Live time-based run view prototype</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
