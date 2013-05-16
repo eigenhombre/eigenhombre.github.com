@@ -7,6 +7,8 @@ tags: [python, javascript, django, icecube, neutrino, d3]
 ---
 {% include JB/setup %}
 
+## Day 1
+
 I have long wanted to create a zoomable, pannable Web-based view in 
 [IceCube Live](http://npxdesigns.com/projects/icecube-live/) which
 would show everything of relevance which happened in the IceCube
@@ -39,5 +41,20 @@ high uptime so any gaps should probably be shown in red.
 In the video zooming is being done with the mousewheel and panning is
 done by clicking and dragging.
 
+**Update** - Day 2 added, below.
+
 <iframe src="http://player.vimeo.com/video/66215209" width="600" height="400" frameborder="0"></iframe> 
 <p><a href="http://vimeo.com/66215209">Prototype time-based view for IceCube Live</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+
+## Day 2
+
+- Fixed wrapping of runs from one time band to the next
+- Zoom in and out more or less from whatever run is currently at the cursor (only works well when number of bands doesn't change)
+- Zoom in Y (whole time bands) as well as X direction
+- Code cleanup
+
+<iframe src="http://player.vimeo.com/video/66215209" width="600" height="400" frameborder="0"></iframe> 
+<p><a href="http://vimeo.com/66215209">Prototype time-based view for IceCube Live</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+
