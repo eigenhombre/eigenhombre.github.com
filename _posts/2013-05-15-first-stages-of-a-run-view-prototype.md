@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Early Prototype of a Zoomable Run Viewer"
+title: "Early Prototypes of a Zoomable Run Viewer for IceCube"
 description: ""
 category: 
 tags: [python, javascript, django, icecube, neutrino, d3]
@@ -43,18 +43,24 @@ done by clicking and dragging.
 
 **Update** - Day 2 added, below.
 
-<iframe src="http://player.vimeo.com/video/66215209" width="600" height="400" frameborder="0"></iframe> 
+<iframe src="http://player.vimeo.com/video/66215209" width="600" height="400" frameborder="0">xxx</iframe> 
 <p><a href="http://vimeo.com/66215209">Prototype time-based view for IceCube Live</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
-
 
 ## Day 2
 
-- Fixed wrapping of runs from one time band to the next
-- Zoom in and out more or less from whatever run is currently at the cursor (only works well when number of bands doesn't change)
-- Zoom in Y (whole time bands) as well as X direction
-- Code cleanup
+Though a shorter work day today, I managed make some more progress on the prototype:
 
-<iframe src="http://player.vimeo.com/video/66215209" width="600" height="400" frameborder="0"></iframe> 
-<p><a href="http://vimeo.com/66215209">Prototype time-based view for IceCube Live</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+1. Fixed wrapping of runs from one time band to the next
+
+2. Zoom in and out more or less from whatever run is currently at the cursor (only works well when number of bands doesn't change)
+
+3. Allow panning in Y (whole time bands) as well as X direction
+
+4. Code cleanup
+
+The results are shown here.
+
+<iframe src="http://player.vimeo.com/video/66295924" width="600" height="400" frameborder="0">xxx</iframe> 
+<p><a href="http://vimeo.com/66295924">Day 2 - IceCube Live time-based run view prototype</a> from <a href="http://vimeo.com/eigenhombre">John Jacobsen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
 
 
