@@ -52,7 +52,7 @@ translator from RNA to proteins:
 
 The table is literally cut-and-pasted from [the problem
 page](http://rosalind.info/problems/prot/) (click on "RNA codon
-table"). I think it's a good example of using macros as a little bit
-of syntactic sugar to make for elegant and readable code.
+table"). I think it's a good example of using macros to provide a little bit
+of syntactic sugar in order to make for elegant and readable code.
 
 This and my other solutions so far are [up on GitHub](https://github.com/eigenhombre/rosalind).
