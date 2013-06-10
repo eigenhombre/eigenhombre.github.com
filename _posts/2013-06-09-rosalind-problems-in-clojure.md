@@ -10,9 +10,13 @@ tags: [clojure, python, bioinformatics, macros]
 
 This weekend I've been having a lot of fun working the Bioinformatics
 problems from [Rosalind](http://rosalind.info/). Most people work them
-in Python, but so far they have been very amenable to Clojure except where
-BioPython libraries are used for online. In particular I like this short
-translator from RNA to proteins:
+in Python, but so far they have been very amenable to Clojure except
+where BioPython libraries are used for access to online databases. The
+problems have been straightforward so far but I have enjoyed the
+elegance and brevity that Clojure lends the solutions. 
+
+In particular, I like this short translator 
+[from RNA sequences to proteins](http://rosalind.info/problems/prot/):
 
 {% highlight clojure %}
 
@@ -50,9 +54,10 @@ translator from RNA to proteins:
 
 {% endhighlight %}
 
-The table is literally cut-and-pasted from [the problem
-page](http://rosalind.info/problems/prot/) (click on "RNA codon
-table"). I think it's a good example of using macros to provide a little bit
-of syntactic sugar in order to make for elegant and readable code.
+The body of the `proteins` table is literally cut-and-pasted from [the
+problem page](http://rosalind.info/problems/prot/) (click on "RNA
+codon table"). I think it's a good example of using macros to provide
+a little bit of syntactic sugar to make the code just a little more
+readable and elegant.
 
 This and my other solutions so far are [up on GitHub](https://github.com/eigenhombre/rosalind).
