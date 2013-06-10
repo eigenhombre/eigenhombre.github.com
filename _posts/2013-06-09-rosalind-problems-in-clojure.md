@@ -3,7 +3,7 @@ layout: post
 title: "Rosalind Problems in Clojure"
 description: ""
 category: 
-tags: [Clojure, Python, Bioinformatics, Macros]
+tags: [clojure, python, bioinformatics, macros]
 ---
 {% include JB/setup %}
 
