@@ -266,3 +266,5 @@ an entire chromosome, or some smaller region, thus satisfying (2)).
 The next post will focus on verification of correctness of this code;
 subsequent posts will begin to explore the characteristics of this
 data for various genomes, human or otherwise.
+
+NEXT: [Validataing the Genome Decoder](/2013/07/07/validating-the-genome-decoder/)

@@ -24,9 +24,19 @@ file](http://hgdownload-test.cse.ucsc.edu/goldenPath/sacCer3/bigZips/):
     chromFa.tar.gz
     tar xvzf chromFa.tar.gz
 
-There is one FASTA file per sequence. Back in the REPL, we can now spit out
-our own copy in the same format (carrying over `yeast` and other
-functions and vars from the previous post).
+There is one FASTA file per sequence, starting something like this:
+
+    >chrI
+    CCACACCACACCCACACACCCACACACCACACCACACACCACACCACACC
+    CACACACACACATCCTAACACTACCCTAACACAGCCCTAATCTAACCCTG
+    GCCAACCTGTCTCTCAACTTACCCTCCATTACCCTGCCTCCACTCGTTAC
+    CCTGTCCCATTCAACCATACCACTCCGAACCACCATCCATCCCTCTACTT
+    ACTACCACTCACCCACCGTTACCCTCCAATTACCCATATCCAACCCACTG
+    CCACTTACCCTACCATTACCCTACCATCCACCATGACCTACTCACCATAC
+
+Back in the REPL, we can now spit out our own copy in the same format
+(carrying over `yeast` and other functions and vars from the previous
+post).
 
 First we need a new directory for the FASTA files we'll generate:
 
