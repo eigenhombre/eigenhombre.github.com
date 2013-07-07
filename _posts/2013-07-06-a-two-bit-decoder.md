@@ -3,7 +3,7 @@ layout: post
 title: "A Two Bit Decoder"
 description: ""
 category: 
-tags: []
+tags: [clojure, genomics, bioinformatics]
 ---
 {% include JB/setup %}
 
