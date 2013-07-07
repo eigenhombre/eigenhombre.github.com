@@ -88,8 +88,9 @@ Did it work?
     cd /tmp/sacCer3_fasta
     for f in *.fa; do diff $f /tmp/decoded/$f; done
 
-No output -- it succeeded! This builds some confidence that we didn't
-screw anything up in the decoder.
+No output -- it succeeded! This builds more confidence that we didn't
+screw anything up in the decoder. (There are also a few other
+hard-coded unit tests in `test_core.clj`.)
 
 Comparing file sizes, the FASTA files are about 4 times larger than
 the original 2bit file. If you tar and compress both versions, the
