@@ -16,11 +16,11 @@ problems have been straightforward so far but I have enjoyed the
 elegance and brevity that Clojure lends the solutions. 
 
 In particular, I like this short translator 
-[from RNA sequences to proteins](http://rosalind.info/problems/prot/):
+[from RNA sequences to amino acids](http://rosalind.info/problems/prot/):
 
 {% highlight clojure %}
 
-;;; Translating RNA into Protein
+;;; Translating RNA into Amino Acids
 
 (defmacro deftable [tname & rest]
   `(def ~tname (apply hash-map '(~@rest))))

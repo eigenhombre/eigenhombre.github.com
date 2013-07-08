@@ -7,10 +7,10 @@ tags: [clojure, genomics, bioinformatics]
 ---
 {% include JB/setup %}
 
-Today we'll validate the genome decoder we described yesterday, once
-again with our friend the yeast *Saccharomyces cerevisiae* (you may
-want to enjoy a slice of freshly-baked bread and a stein of Pilsner
-with this post).
+Today we'll validate the genome decoder [we described
+yesterday](/2013/07/06/a-two-bit-decoder/), once again with our friend
+the yeast *Saccharomyces cerevisiae* (you may want to enjoy a slice of
+freshly-baked bread and a stein of Pilsner with this post).
 
 We are aided in this case by the availability of the SacCer3 genome in
 both 2bit and FASTA formats. We can get [the FASTA
