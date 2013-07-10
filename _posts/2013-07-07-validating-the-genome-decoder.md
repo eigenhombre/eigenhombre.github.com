@@ -101,6 +101,6 @@ be simpler to work with, and these days 4 GB isn't too terribly much
 data; nevertheless, we'll continue to use the 2bit file and decoder
 for our explorations.)
 
-Now we are ready to begin playing with the actual data -- starting in
-the next post.
+Now we are ready to begin playing with the actual data -- 
+[starting in the next post](http://eigenhombre.com/2013/07/10/getting-our-hands-dirty/).
 
