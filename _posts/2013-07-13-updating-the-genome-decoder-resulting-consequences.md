@@ -96,7 +96,7 @@ concatenating other lazy seqs, causing excessive memory consumption
 post](http://clojurian.blogspot.com/2012/11/beware-of-mapcat.html).
 Using that post's fully lazy (if slightly slower) version of `mapcat`
 fixed my memory leak as well. Though lazy seqs are awesome in many
-ways, one does have to be careful with gotchas such as this one.
+ways, one does have to be careful of gotchas such as this one.
 
 So, in the process of handling this relatively large dataset, we have
 discovered two rough edges of Clojure, namely with `mapcat` and
