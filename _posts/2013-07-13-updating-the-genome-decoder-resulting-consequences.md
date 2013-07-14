@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Updating the Genome Decoder; Resulting Consequences"
+title: "Updating the Genome Decoder"
 description: ""
 category: 
 tags: [clojure, genomics, bioinformatics]
@@ -193,8 +193,10 @@ Another tool which has proved useful is:
 {% endhighlight %}
 
 This threads one or more `funcs` through all the sequences in the file, as mapped out by
-the file headers.  This maxes out the CPU on my quad-core Macbook Pro
-and gives results significantly faster:
+the file headers.  The magic here is `pmap`, which is `map`
+parallelized onto separate threads across all available cores.
+`pseq` maxes out the CPU on my quad-core Macbook Pro and gives results
+significantly faster:
 
     Code: (->> yeast genome-sequence frequencies)
     Time: 33.090855 seconds
@@ -205,4 +207,4 @@ and gives results significantly faster:
     Result: {:C 2320576, :A 3766349, :T 3753080, :G 2317100}
 
 With our updated decoder and these new tools, we can continue our
-poking and prodding of genomes in subsequent posts.
+poking and prodding of the genome in subsequent posts.

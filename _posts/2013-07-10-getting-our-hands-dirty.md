@@ -214,3 +214,4 @@ and sequence handling functions such as `interleave`,
 once. And we have hardly scratched the surface of Clojure's tools for
 parallel computation, though we may make more use of these in coming posts.
 
+__Next__: [Updating the Decoder](/2013/07/13/updating-the-genome-decoder-resulting-consequences/)
