@@ -10,8 +10,9 @@ tags: [clojure, genomics, bioinformatics, visualization]
 
 After a long hiatus, let’s continue [our foray into amateur genomics
 with Clojure](/2013/07/05/exploratory-genomics-with-clojure/), in
-which we continue to encounter both elegant expressions of Clojure's
-power and some wrinkles in the Clojure ecosystem.
+which we continue to encounter elegant expressions of Clojure's power
+as well as a few additional wrinkles in the Clojure ecosystem (in this
+case, Incanter).
 
 In [our last
 post](/2013/07/13/updating-the-genome-decoder-resulting-consequences/),
@@ -75,10 +76,10 @@ needed.)
 
 ## Histogramming the data
 
-The plots in my previous posts were made by the <strike>simple</strike> easy
-expedient of copying data into a Numbers spreadsheet on my Mac. We’d like
-to do some more complex plotting, however, so let’s investigate a
-Clojure-based solution.
+The plots in my previous posts were made by the
+<strike>simple</strike> easy expedient of copying data into a Numbers
+spreadsheet on my Mac. We’d like to eventually do some more ambitious
+plotting, however, so let’s investigate a Clojure-based solution.
 
 [Incanter](http://incanter.org/) provides a broad set of Clojure-based
 utilities for data analysis, including matrices and linear algebra
@@ -200,7 +201,9 @@ principal difference with the Incanter implementation of histograms is
 that we provide our own set of bin heights and simply plot those. This
 follows a better separation of concerns anyways: our fairly simple
 binning function remains separate from the visual presentation of the
-bin positions and heights.
+bin positions and heights (we could, for example, add the counting of
+overflows and underflows -- this is left as an exercise to the
+reader).
 
 (`trim-zeros` exists to transform bin values of zero to small positive
 numbers to avoid taking the logarithm of zero, which is undefined.)
@@ -269,8 +272,8 @@ One complicating factor we neglected is the role of "N-blocks", which
 should be eliminated without introducing artificially longer lengths;
 e.g. `ANNNNA` with the Ns removed should be considered two 1-blocks
 rather than a two-block `AA` group. This simple modification to
-`get-lengths` is left as an exercise to the reader (they do not change
-the resulting distributions).
+`get-lengths` is left as another exercise to the reader (the change
+does not affect the resulting distributions).
 
 A real biologist could no doubt tell us a lot about these
 distributions; in any case, in the next blog post we will take up a
