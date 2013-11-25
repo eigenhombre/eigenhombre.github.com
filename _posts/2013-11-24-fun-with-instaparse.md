@@ -10,11 +10,12 @@ tags: [clojure, python]
 One of my favorite talks from this month's excellent
 [Clojure/conj](http://clojure-conj.org/) was [Carin
 Meier](http://gigasquid.github.io/)'s presentation, which combined
-storytelling, live coding, philosophy, the history of computing, and flying
-robotic drones. She used the relatively new [Instaparse
-library](https://github.com/Engelberg/instaparse) to create her own
-language to explore something called "Speech Acts," which I won't go
-into here (but do catch the video of her talk when it goes up).
+storytelling, live coding, philosophy, the history of computing, and
+flying robotic drones. She used the relatively new [Instaparse
+library](https://github.com/Engelberg/instaparse) to [create her own
+language](http://gigasquidsoftware.com/wordpress/?p=689) to explore
+something called "Speech Acts" (which I won't go into here, but do
+catch the video of her talk when it goes up).
 
 I don't have a classic CS background, but have long been a programming
 language enthusiast. About two years ago I had the opportunity to take
