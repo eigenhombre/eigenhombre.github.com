@@ -17,27 +17,29 @@ language](http://gigasquidsoftware.com/wordpress/?p=689) to explore
 something called "Speech Acts" (which I won't go into here, but do
 catch the video of her talk when it goes up).
 
-I don't have a classic CS background, but have long been a programming
-language enthusiast. About two years ago I had the opportunity to take
-the first ["write a compiler in Python"
-class](http://dabeaz.blogspot.com/2012/01/compiler-experiment-begins.html), which was
+I don't have a classic CS background, but have long been interested in
+the implementation of programming languages, even going so far as to
+write a simple parser for Lisp-style math expressions in Pascal many
+years ago. Last year I had the opportunity to take the first ["write a
+compiler in Python"
+class](http://dabeaz.blogspot.com/2012/01/compiler-experiment-begins.html)
 offered by [David Beazley](http://dabeaz.com) here in Chicago. His
 [PLY](http://www.dabeaz.com/ply/index.html) library is a great way to
-get started with implementing compilers for old or new languages in
-Python, and the relative ease of doing so, compared with classic C
-implementations described in the infamous [Dragon
+get started with implementing language parsers in Python, and the
+relative ease of doing so, compared with classic C implementations
+described in the infamous [Dragon
 Book](http://www.amazon.com/Compilers-Principles-Techniques-Alfred-Aho/dp/0201100886),
 inspired me to do some further [experimentation of my
 own](https://github.com/eigenhombre/PyClojure).
 
 With this background, and inspired by Carin's talk, I have been
 waiting for an opportunity to try out Instaparse, which is getting
-great press in the Clojure world. Instaparse takes a grammar, in the
-form of a string, as input, and gives you a parser in the language
+great press in the Clojure world. Instaparse takes a grammar as input
+(in the form of a string), and gives you a parser in the language
 specified by that grammar. It will also let you specify rules for
 transforming the resulting tree into something your Clojure program
-can use more directly (for example, by converting data types or removing
-unneeded elements from the parse tree).
+can use more directly (for example, by converting data types or
+removing unneeded elements from the parse tree).
 
 When the need arose this weekend to read in Python configuration files
 into a Clojure program, I decided the time was ripe. I also wanted to
@@ -50,12 +52,10 @@ The results are
 [here](http://eigenhombre.com/semi-literate-programming/parsepy.html),
 as well as on [GitHub](https://github.com/eigenhombre/parsepy).
 
-My impression, after doing this project in just a few hours, are (1)
-that literate programming[^1] is great fun; and (2) that Instaparse sets a
-new standard for power and expressiveness when converting structured
-text into abstract syntax trees. If you have a DSL or some other
+My impressions, after doing this project in just a few hours, are that
+(1) literate programming is great fun; and (2) Instaparse sets a new
+standard for power and expressiveness when converting structured text
+into abstract syntax trees. If you have a DSL or some other
 text-based, formal language you want to parse, and you are either
 literate in Clojure or interested in becoming so, Instaparse would be
 a great tool to check out.
-
-[^1]: Such as it is; I'm certain that Knuth would have a thing or two to criticize about my example.
