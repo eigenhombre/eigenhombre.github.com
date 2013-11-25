@@ -17,11 +17,11 @@ language](http://gigasquidsoftware.com/wordpress/?p=689) to explore
 something called "Speech Acts" (which I won't go into here, but do
 catch the video of her talk when it goes up).
 
-I don't have a classic CS background, but have long been interested in
-the implementation of programming languages, even going so far as to
-write a simple parser for Lisp-style math expressions in Pascal many
-years ago. Last year I had the opportunity to take the first ["write a
-compiler in Python"
+My university work was in physics (and art) rather than CS, but I have
+long been interested in the implementation of programming languages,
+even going so far as to write a simple parser for Lisp-style math
+expressions in Pascal many years ago. Last year I had the opportunity
+to take the first ["write a compiler in Python"
 class](http://dabeaz.blogspot.com/2012/01/compiler-experiment-begins.html)
 offered by [David Beazley](http://dabeaz.com) here in Chicago. His
 [PLY](http://www.dabeaz.com/ply/index.html) library is a great way to
