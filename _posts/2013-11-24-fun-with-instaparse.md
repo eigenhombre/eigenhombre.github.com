@@ -36,8 +36,8 @@ great press in the Clojure world. Instaparse takes a grammar, in the
 form of a string, as input, and gives you a parser in the language
 specified by that grammar. It will also let you specify rules for
 transforming the resulting tree into something your Clojure program
-can use more directly (for example, converting `"1234"` to the integer
-`1234`).
+can use more directly (for example, by converting data types or removing
+unneeded elements from the parse tree).
 
 When the need arose this weekend to read in Python configuration files
 into a Clojure program, I decided the time was ripe. I also wanted to
@@ -48,11 +48,14 @@ library called [Marginalia](https://github.com/gdeer81/marginalia)
 
 The results are
 [here](http://eigenhombre.com/semi-literate-programming/parsepy.html),
-as well as on [GitHub](https://github.com/eigenhombre/parsepy). My
-impression, after doing this project in just a few hours, are (1) that
-literate programming is great fun; and (2) that Instaparse sets a new
-standard for power and expressiveness when converting structured text
-into abstract syntax trees. If you have a DSL or some other
+as well as on [GitHub](https://github.com/eigenhombre/parsepy).
+
+My impression, after doing this project in just a few hours, are (1)
+that literate programming[^1] is great fun; and (2) that Instaparse sets a
+new standard for power and expressiveness when converting structured
+text into abstract syntax trees. If you have a DSL or some other
 text-based, formal language you want to parse, and you are either
 literate in Clojure or interested in becoming so, Instaparse would be
 a great tool to check out.
+
+[^1]: Such as it is; I'm certain that Knuth would have a thing or two to criticize about my example.
