@@ -9,7 +9,7 @@ tags: [clojure, python]
 
 One of my favorite talks from this month's excellent
 [Clojure/conj](http://clojure-conj.org/) was [Carin
-Meier](http://gigasquidsoftware.com)'s presentation, which combined
+Meier](http://gigasquid.github.io/)'s presentation, which combined
 storytelling, live coding, philosophy, the history of computing, and flying
 robotic drones. She used the relatively new [Instaparse
 library](https://github.com/Engelberg/instaparse) to create her own
