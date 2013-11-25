@@ -43,7 +43,7 @@ The results are
 [here](http://eigenhombre.com/semi-literate-programming/parsepy.html),
 as well as on [GitHub](https://github.com/eigenhombre/parsepy). My
 impression, after doing this project in just a few hours, are (1) that
-literate programming is great fun; and that (2) Instaparse sets a new
+literate programming is great fun; and (2) that Instaparse sets a new
 standard for power and expressiveness when converting structured text
 into abstract syntax trees. If you have a DSL or some other
 text-based, formal language you want to parse, and you are either
