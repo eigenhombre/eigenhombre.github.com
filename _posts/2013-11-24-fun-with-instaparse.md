@@ -31,10 +31,10 @@ own](https://github.com/eigenhombre/PyClojure).
 
 With this background, and inspired by Carin's talk, I have been
 waiting for an opportunity to try out Instaparse, which is getting
-great press in the Clojure world. When the need arose to read in
-Python configuration files into a Clojure program, I decided the time
-was ripe. I also wanted to document the journey using some form of
-[literate
+great press in the Clojure world. When the need arose this weekend to
+read in Python configuration files into a Clojure program, I decided
+the time was ripe. I also wanted to document the journey using some
+form of [literate
 programming](http://en.wikipedia.org/wiki/Literate_programming). A
 library called [Marginalia](https://github.com/gdeer81/marginalia)
 (Michael Fogus *et. al.*) made this pretty easy.
