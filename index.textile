@@ -30,7 +30,7 @@ In the course of my career I have traveled ten times to the South Pole and have 
 
 I like to write *elegant, powerful, maintainable code*.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  When practical, I practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I have deep and extensive experience with Python, though I have recently been very enthusiastic about Clojure, a Lisp-based functional language implemented on top of the JVM and in JavaScript, and have worked on "two":https://github.com/eigenhombre/PyClojure "implementations":https://github.com/halgari/clojure-py of Clojure in Python.
 
-Other interests include Machine Learning, logic programming ("MiniKanren":http://kanren.sourceforge.net/, "core.logic":https://github.com/clojure/core.logic), AI in general, and creating visualization tools (I am currently working on "a JavaScript charting library":https://github.com/eigenhombre/i3d3 using D3.js).  I'm also an on-again, off-again "visual artist":http://johnj.com (painting, drawing and photography).
+Other interests include machine learning, logic programming ("MiniKanren":http://kanren.sourceforge.net/, "core.logic":https://github.com/clojure/core.logic), AI in general, and creating visualization tools (I am currently working on "a JavaScript charting library":https://github.com/eigenhombre/i3d3 using D3.js).  I'm also an on-again, off-again "visual artist":http://johnj.com (painting, drawing and photography).
 
 The site for my "consulting business":http://npxdesigns.com has more details.  See also:
 
