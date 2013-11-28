@@ -23,7 +23,8 @@ even going so far as to write a simple parser for Lisp-style math
 expressions in Pascal many years ago. Last year I had the opportunity
 to take the first ["write a compiler in Python"
 class](http://dabeaz.blogspot.com/2012/01/compiler-experiment-begins.html)
-offered by [David Beazley](http://dabeaz.com) here in Chicago. His
+offered by [David Beazley](http://dabeaz.com) here in Chicago, in
+which we implemented a subset of the Go language. His
 [PLY](http://www.dabeaz.com/ply/index.html) library is a great way to
 get started with implementing language parsers in Python, and the
 relative ease of doing so, compared with classic C implementations
