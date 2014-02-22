@@ -71,7 +71,13 @@ jenome.core> (float (/ 3137161264 12157105))
 258.05167
 {% endhighlight %}
 
-So we have our first bit of insight into human vs. yeast genomes: we humans
+(Update 2/14/2014: [Matthew Wampler-Doty](https://github.com/xcthulhu) came up with a more elegant `count'`: 
+{% highlight clojure %}
+(defn count' [s] (reduce (fn [x _] (inc x)) 0 s))
+{% endhighlight %}
+which is about 25% faster than my slightly more naïve version.)
+
+We now have our first bit of insight into human vs. yeast genomes: we humans
 have about 260x more base pairs than yeast do.
 
 The next question is, What are the relative proportions of occurrence

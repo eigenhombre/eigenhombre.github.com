@@ -56,4 +56,3 @@ Pushed to [Clojars](https://clojars.org/lein-script) and
 [GitHub](https://github.com/eigenhombre/lein-script). (You need to
 update `.lein/profiles.clj` as shown in the GitHub project for this to
 work.)
-
