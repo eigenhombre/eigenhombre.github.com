@@ -1,0 +1,56 @@
+body {
+    background-color: whitesmoke;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: lightgrey;
+    shape-rendering: black;
+}
+.axis text, .label, .note {
+    font-family: sans-serif;
+    fill: grey;
+}
+.axis text {
+    font-size: 11px;
+}
+.label {
+    font-size: 12px;
+    fill: #333;
+}
+.note {
+    font-size: 12px;
+}
+.plot {
+    float: left;
+}
+
+div.tooltip {  // Adapted from http://bl.ocks.org/mbostock/1087001
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 12px;
+  padding: 5px;
+  font: 10px sans-serif;
+  background: #ddd;
+  border: solid 1px #aaa;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.title {
+  text-anchor: middle;
+  font-family: sans-serif;
+  fill: grey;
+}
+
+div.plot {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2em;
+  border: 1px solid mistyrose;
+}
+
+.syntaxhighlighter .clojure.plain {
+    color: #999 !important;
+}
+

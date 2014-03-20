@@ -1,0 +1,1 @@
+([:dependencies ([marginalia "0.7.1"] [org.clojure/clojure "1.5.1"] [org.clojure/data.json "0.2.3"] [clj-time/clj-time "0.6.0"] [clj-ssh/clj-ssh "0.5.7"] [org.clojure/tools.nrepl "0.2.3"] [clojure-complete/clojure-complete "0.2.3"])])
