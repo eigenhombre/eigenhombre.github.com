@@ -9,7 +9,7 @@ tags: [clojure]
 
 **Synopsis**: *I talk about the value of paredit in Emacs and show a trick which allows you to insert the result of any given Clojure expression directly underneath that expression.*
 
-As I said in the [first post](/2014/07/03/an-advanced-clojure-workflow/), a good set of tools can make a big difference in productivity and enjoyment while working in any language, and Clojure is certainly no exception.  The most important tool in your toolbox, regardless of language, is your editor. Editing Lisp code in particular is much more natural with the right editor setup.
+As I said in the [first post](/clojure/2014/07/03/an-advanced-clojure-workflow/), a good set of tools can make a big difference in productivity and enjoyment while working in any language, and Clojure is certainly no exception.  The most important tool in your toolbox, regardless of language, is your editor. Editing Lisp code in particular is much more natural with the right editor setup.
 
 I have been using Emacs since the 1990s, though I still consider myself a novice (Emacs is that way).  Though [good](http://lighttable.com) [alternatives](http://code.google.com/p/counterclockwise/) exist, [over half of the Clojure community has adopted Emacs](http://cemerick.com/2013/11/18/results-of-the-2013-state-of-clojure-clojurescript-survey/) despite its lack of polish and its Himalayan learning curve.  Emacs is massively customizable, with hundreds of plugins available, and can be extended to just about any degree using [its own flavor of Lisp](http://en.wikipedia.org/wiki/Emacs_Lisp).
 

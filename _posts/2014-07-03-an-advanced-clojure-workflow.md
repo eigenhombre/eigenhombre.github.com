@@ -21,4 +21,4 @@ My setup has evolved over time and I expect it will be different by the time mos
 
 These tools and techniques provide a sort of "sweet-spot" -- they help me be productive in the language, and I find them fun to use together.  Your mileage may vary -- I have seen people be productive with vastly different workflows and toolsets.
 
-Without further ceremony, let's go straight to the first post, about [customizing Emacs for Clojure](/2014/07/05/emacs-customization-for-clojure/).
+Without further ceremony, let's go straight to the first post, about [customizing Emacs for Clojure](/clojure/2014/07/05/emacs-customization-for-clojure/).
