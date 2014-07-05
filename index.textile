@@ -22,22 +22,24 @@ h3. Recent Blog Posts ("all posts":#blogposts)
   {% endfor %}
 </ul>
 
-I have created software for more than two decades, mostly working in the field of *high energy physics* and *particle astrophysics*.  My current specialty is distributed, Web-based applications for scientific computing, though I have done a fair amount of low level software engineering (Linux device drivers and embedded systems), as well as data mining/analysis and simulation.
+I'm a software developer with a background in physics and art and a passion for writing awesome programs in Clojure.
 
-For the past ten years I have worked primarily for clients on the "IceCube Neutrino Telescope":http://icecube.wisc.edu, the world's largest detector of astrophysical neutrinos, which was recently constructed at Amundsen-Scott South Pole Station.  For the last five of these years, my biggest project has been as the lead programmer and architect of the IceCube Experiment Control and Monitoring system, known as *IceCube Live*.  This distributed system, created in Python and hosted at the South Pole and in Madison, Wisconsin, welds together a heterogeneous collection of subsystems together across a network of 200 or so servers at a data center at the Pole, and, using modern Web application tools, provides interactive sites used by detector operators, subsystem experts and data analysts in both hemispheres to control the instrument and to understand its current and historical performance.
+I am currently a *Senior Software Architect at "OpinionLab":http://opinionlab.com* in Chicago.  I have created software for more than two decades in industry and in the fields of high energy physics and particle astrophysics, and have built a wide range of systems, including front-end Web applications, control systems, Linux device drivers, embedded systems for physics detectors, data mining / analysis, and numerical simulations.
 
-In the course of my career I have traveled ten times to the South Pole and have written "extensive blog posts":http://johnj.com/pole about the experience.
+I like to write *elegant, powerful, maintainable code*.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  (Almost all the code I've written in the last decade is still in production use.) When practical, I practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.
 
-I like to write *elegant, powerful, maintainable code*.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  When practical, I practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.  I have deep and extensive experience with Python, though I have recently been very enthusiastic about Clojure, a Lisp-based functional language implemented on top of the JVM and in JavaScript, and have worked on "two":https://github.com/eigenhombre/PyClojure "implementations":https://github.com/halgari/clojure-py of Clojure in Python.
+In the ten years prior to starting at OpinionLab (2014), I worked primarily for clients on the "IceCube Neutrino Telescope":http://icecube.wisc.edu, the world's largest detector of astrophysical neutrinos, which was recently constructed at the Amundsen-Scott South Pole Station.  For the last five of these years, I was the lead programmer and architect of the IceCube Experiment Control and Monitoring system, known as *IceCube Live*.  This distributed system, created in Python and hosted at the South Pole and in Madison, Wisconsin, welds together a heterogeneous collection of subsystems together across a network of 200 or so servers at a data center at the Pole, and, using modern Web application tools, provides interactive sites used by detector operators, subsystem experts and data analysts in both hemispheres to control the instrument and to understand its current and historical performance. During this work for IceCube I traveled ten times to the South Pole and "wrote extensively":http://johnj.com/pole about the experience.
+
+I have originated or contributed to several Open Source projects, including "two":https://github.com/eigenhombre/PyClojure "implementations":https://github.com/halgari/clojure-py of Clojure in Python, "Hy":https://github.com/eigenhombre/hy (another Lisp dialect based in Python), a "continuous testing tool":https://github.com/eigenhombre/continuous-testing-helper, and "the Toolz project":https://github.com/pytoolz/toolz, a library for functional programming in Python.
 
 Other interests include machine learning, logic programming ("MiniKanren":http://kanren.sourceforge.net/, "core.logic":https://github.com/clojure/core.logic), AI in general, and creating visualization tools (I am currently working on "a JavaScript charting library":https://github.com/eigenhombre/i3d3 using D3.js).  I'm also an on-again, off-again "visual artist":http://johnj.com (painting, drawing and photography).
 
-The site for my "consulting business":http://npxdesigns.com has more details.  See also:
+Links:
 
-* "GitHub":http://github.com/eigenhombre, where I host multiple open source projects and contribute to several others;
-* "StackOverflow":http://stackoverflow.com/users/611752/johnj, where I answer questions about Python and Clojure;
-* "@eigenhombre":http://twitter.com/eigenhombre on Twitter;
-* My "LinkedIn":http://linkedin.com/in/eigenhombre profile;
+* "GitHub":http://github.com/eigenhombre
+* "StackOverflow":http://stackoverflow.com/users/611752/johnj
+* "@eigenhombre":http://twitter.com/eigenhombre on Twitter
+* My "LinkedIn":http://linkedin.com/in/eigenhombre profile
 * My physics/computing "curriculum vitae":https://github.com/eigenhombre/cv.
 
 <iframe src="http://ghbtns.com/github-btn.html?user=eigenhombre&type=follow"

@@ -92,6 +92,11 @@ p {
     line-height: 21px;
 }
 
+ul li {
+    font-size: 15px;
+    line-height: 21px;
+}
+
 ul.posts li {
     font-size: 14px;
 }
