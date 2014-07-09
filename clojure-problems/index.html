@@ -3032,10 +3032,20 @@ net.brehaut.ClojureTools = (function (SH) {
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">expectations</td><td class="dotted"><hr /></td><td class="dep-version">1.3.3</td></tr><tr><td class="dep-name">org.clojure/tools.trace</td><td class="dotted"><hr /></td><td class="dep-version">0.7.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#probs4clojure.core-test">probs4clojure.core-test</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#probs4clojure.core-test" name="probs4clojure.core-test"><h1 class="project-name">probs4clojure.core-test</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns probs4clojure.core-test
   (:require [midje.sweet :refer :all]
-            [probs4clojure.core :refer :all]))</pre></td></tr><tr><td class="docs"><p>  Present and test a solution to a 4clojure.com problem by taking the
-  first expression, substituting it for __ in all subsequent
-  expressions, and evaluating each resulting expression for truthiness
-  (i.e., evaluating the resulting Midje fact).</p>
+            [probs4clojure.core :refer :all]))</pre></td></tr><tr><td class="docs"><h3>Solutions to [4clojure.com](http://4clojure.com) problems</h3>
+
+<p>Worked and (towards the end, at least) documented with
+<a href="http://gdeer81.github.io/marginalia/">Marginalia</a>.</p>
+
+<p><strong>Spoiler Alert</strong> -- at least <em>try</em> to solve the problems yourself
+**first!!!  They are much better that way.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><script type="text/javascript"
+ src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>  Present and test a solution to a <a href="http://4clojure.com">4clojure.com</a>
+  problem by taking the first expression, substituting it for __ in
+  all subsequent expressions, and evaluating each resulting expression
+  for truthiness (i.e., evaluating the resulting Midje fact).</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro solves
   [expr &amp; tests]
   (let [replacef# (fn [t] (clojure.walk/postwalk-replace {'__ expr} t))
@@ -3649,7 +3659,52 @@ OLD:
   (= false (__ true))
   (= true (__ false true false))
   (= false (__ true true true))
-  (= true (__ true true true false)))</pre></td></tr><tr><td class="docs"><h3>Problem 86: <a href="http://www.4clojure.com/problem/86">Happy Numbers</a></h3>
+  (= true (__ true true true false)))</pre></td></tr><tr><td class="docs"><h3>Problem 84: <a href="http://www.4clojure.com/problem/84">Transitive Closure</a></h3>
+
+<p>Abstract examples: if \([a, b]\) and \([b, c]\) are given, then
+\([a, c]\) should be added to the inputs in the result.  If
+\([a, b]\), \([b, c]\) and \([c, d]\) are given, then \([a,
+c]\), \([b, d]\) and \([a, d]\) should be added to the inputs.</p>
+
+<p>I took a fairly brute force approach to this.  <code>grow-1</code> is a single
+step forward where, for any of the pairs in the input, I find all
+other pairs in the input whose first element equals the second
+element of the original pair; <code>grow-1</code> concats these new pairs with the
+original collection of pairs in the input.</p>
+
+<p><code>grow</code> iterates on <code>grow-1</code> until no change is found; i.e., the
+resulting set is maximal.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [s]
+    (letfn [(grow-1 [pairs]
+              (let [pairs (vec pairs)
+                    pairs' (for [[a b] pairs
+                                 [bb cc] pairs :when (= b bb)]
+                             [a cc])]
+                (set (concat pairs pairs'))))
+            (grow [pairs]
+              (let [pairs' (grow-1 pairs)]
+                (if (= pairs' pairs)
+                  (set pairs)
+                  (recur pairs'))))]
+      (grow s)))
+  (let [divides #{[8 4] [9 3] [4 2] [27 9]}]
+    (= (__ divides) #{[4 2] [8 4] [8 2] [9 3] [27 9] [27 3]}))
+  (let [more-legs
+        #{[&quot;cat&quot; &quot;man&quot;] [&quot;man&quot; &quot;snake&quot;] [&quot;spider&quot; &quot;cat&quot;]}]
+    (= (__ more-legs)
+       #{[&quot;cat&quot; &quot;man&quot;] [&quot;cat&quot; &quot;snake&quot;] [&quot;man&quot; &quot;snake&quot;]
+         [&quot;spider&quot; &quot;cat&quot;] [&quot;spider&quot; &quot;man&quot;] [&quot;spider&quot; &quot;snake&quot;]}))
+  (let [progeny
+        #{[&quot;father&quot; &quot;son&quot;] [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]}]
+    (= (__ progeny)
+     #{[&quot;father&quot; &quot;son&quot;] [&quot;father&quot; &quot;grandson&quot;]
+       [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]})))</pre></td></tr><tr><td class="docs"><h3>Problem 86: <a href="http://www.4clojure.com/problem/86">Happy Numbers</a></h3>
+
+<p>Here <code>f</code> implements the "particular formula" described in the
+problem text; we iterate until the result is either 1 (happy), or a
+repeated value is found again (sad).  To check the latter we
+maintain a dictionary <code>seen</code> of previous values.</p>
 </td><td class="codes"><pre class="brush: clojure">(solves
   (fn [n]
     (let [f (fn [x]
@@ -3687,11 +3742,198 @@ sets before combining them.</p>
   (= (__ #{} #{4 5 6}) #{4 5 6})
   (= (__ #{[1 2] [2 3]} #{[2 3] [3 4]}) #{[1 2] [3 4]}))</pre></td></tr><tr><td class="docs"><h3>Problem 89: <a href="http://www.4clojure.com/problem/89">Graph Tour</a></h3>
 
-<p>WIP</p>
-</td><td class="codes"><pre class="brush: clojure">(let [G [[1 2] [2 3] [3 4] [4 1]]]
-  (loop [[[a b] &amp; edges] G
-         chain []
-         ]))</pre></td></tr><tr><td class="docs"><h3>Problem 103: <a href="http://www.4clojure.com/problem/103">Generating k-combinations</a></h3>
+<p>The problem is manageable with the following graph theoretical
+result from <a href="http://en.wikipedia.org/wiki/Eulerian_path">Wikipedia</a>
+that "an undirected graph has an Eulerian trail [a walk that uses
+each edge exactly once] if and only if no more than two vertices
+has an odd degree [number of edges coming out of it] and it if all
+its vertices... belong to a simply-connected component."</p>
+
+<p>The connectedness property can be obtained by doing a traversal of
+the graph (in this case, depth-first) and tracking whether each
+node was visited.  The degree of the vertices can be obtained that
+way as well by tracking which vertices have which neighbor.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [pairs]
+    (letfn [(pairs-to-neighbor-list-map [pairs]
+              (loop [[[k v] &amp; pairs] pairs
+                     g {}]
+                (if-not k
+                  g
+                  (let [g (update-in g [k :neighbors] conj v)
+                        g (update-in g [v :neighbors] conj k)]
+                    (recur pairs g)))))
+
+            (set-explored [g i]
+              (assoc-in g [i :explored] true))
+
+            (explored [g i]
+              (get-in g [i :explored]))
+
+            (get-neighbors [g i]
+              (get-in g [i :neighbors]))
+
+            (dfs [g i]
+              (let [g (set-explored g i)
+                    js (get-neighbors g i)]
+                (loop [g g, [j &amp; js] js]
+                  (cond
+                   (not j)        g
+                   (explored g j) (recur g js)
+                   :else          (recur (dfs g j) js)))))
+
+            (all-connected [g]
+              (let [v (first (keys g))
+                    exp (dfs g v)]
+                (every? (partial = true) (map :explored (vals exp)))))
+
+            (degree [v] (-&gt; v :neighbors count))
+
+            (num-odd-vertices [g]
+              (count (filter (comp odd? degree) (vals g))))]
+      (let [g (pairs-to-neighbor-list-map pairs)]
+        (and (&lt;= (num-odd-vertices g) 2)
+             (all-connected g)))))
+
+        (= true (__ [[:a :b]]))
+        (= false (__ [[:a :a] [:b :b]]))
+        (= false (__ [[:a :b] [:a :b] [:a :c] [:c :a]
+                      [:a :d] [:b :d] [:c :d]]))
+        (= true (__ [[1 2] [2 3] [3 4] [4 1]]))
+        (= true (__ [[:a :b] [:a :c] [:c :b] [:a :e]
+                     [:b :e] [:a :d] [:b :d] [:c :e]
+                     [:d :e] [:c :f] [:d :f]]))
+        (= false (__ [[1 2] [2 3] [2 4] [2 5]])))</pre></td></tr><tr><td class="docs"><h3>Problem 90: <a href="http://www.4clojure.com/problem/90">Cartesian Product</a></h3>
+
+<p><code>for</code> gives us the needed functionality very easily.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+ (fn [sa sb]
+   (set (for [a sa, b sb] [a b])))
+
+  (= (__ #{&quot;ace&quot; &quot;king&quot; &quot;queen&quot;} #{&quot;♠&quot; &quot;♥&quot; &quot;♦&quot; &quot;♣&quot;})
+   #{[&quot;ace&quot;   &quot;♠&quot;] [&quot;ace&quot;   &quot;♥&quot;] [&quot;ace&quot;   &quot;♦&quot;] [&quot;ace&quot;   &quot;♣&quot;]
+     [&quot;king&quot;  &quot;♠&quot;] [&quot;king&quot;  &quot;♥&quot;] [&quot;king&quot;  &quot;♦&quot;] [&quot;king&quot;  &quot;♣&quot;]
+     [&quot;queen&quot; &quot;♠&quot;] [&quot;queen&quot; &quot;♥&quot;] [&quot;queen&quot; &quot;♦&quot;] [&quot;queen&quot; &quot;♣&quot;]})
+  (= (__ #{1 2 3} #{4 5})
+   #{[1 4] [2 4] [3 4] [1 5] [2 5] [3 5]})
+  (= 300 (count (__ (into #{} (range 10))
+                  (into #{} (range 30))))))</pre></td></tr><tr><td class="docs"><h3>Problem 91: <a href="http://www.4clojure.com/problem/91">Graph Connectivity</a></h3>
+
+<p>We already determined connectedness in Problem 90.  The only
+required variation is to coerce the input set to a vector so the
+initial loop destructuring form works.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [pairs]
+    (letfn [(pairs-to-neighbor-list-map [pairs]
+              (loop [[[k v] &amp; pairs] pairs
+                     g {}]
+                (if-not k
+                  g
+                  (let [g (update-in g [k :neighbors] conj v)
+                        g (update-in g [v :neighbors] conj k)]
+                    (recur pairs g)))))
+
+            (set-explored [g i]
+              (assoc-in g [i :explored] true))
+
+            (explored [g i]
+              (get-in g [i :explored]))
+
+            (get-neighbors [g i]
+              (get-in g [i :neighbors]))
+
+            (dfs [g i]
+              (let [g (set-explored g i)
+                    js (get-neighbors g i)]
+                (loop [g g, [j &amp; js] js]
+                  (cond
+                   (not j)        g
+                   (explored g j) (recur g js)
+                   :else          (recur (dfs g j) js)))))
+
+            (all-connected [g]
+              (let [v (first (keys g))
+                    exp (dfs g v)]
+                (every? (partial = true) (map :explored (vals exp)))))]
+
+      (-&gt;&gt; pairs
+           (into [])
+           pairs-to-neighbor-list-map
+           all-connected)))
+
+  (= true (__ #{[:a :a]}))
+  (= true (__ #{[:a :b]}))
+  (= false (__ #{[1 2] [2 3] [3 1]
+               [4 5] [5 6] [6 4]}))
+  (= true (__ #{[1 2] [2 3] [3 1]
+              [4 5] [5 6] [6 4] [3 4]}))
+  (= false (__ #{[:a :b] [:b :c] [:c :d]
+               [:x :y] [:d :a] [:b :e]}))
+  (= true (__ #{[:a :b] [:b :c] [:c :d]
+              [:x :y] [:d :a] [:b :e] [:x :a]})))</pre></td></tr><tr><td class="docs"><h3>Problem 94: <a href="http://www.4clojure.com/problem/94">Game of Life</a></h3>
+
+<p>We accept a vector of strings as our "board representation."  The
+problem is, essentially, For any given spot, how many neighbors do
+I have?  This is made easier by the fact that we can easily address any
+cell in the board representation with <code>get-in</code>.  For example, if <code>b</code> is the
+first board, <code>(get-in b [2 2])</code> is <code>\#</code>, <code>(get-in b [0 0])</code> is
+<code>\space</code>, and <code>(get-in b [-1 -5])</code> is <code>nil</code>.</p>
+
+<p>With the lookup method understood, the rest of the work is looping
+over all the rows and columns, then for each position count
+neighbor values by looking at the character at +/- one x or y
+value, except for the position in question.  Then the rule for
+whether the cell should live or die is trivial to apply.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [b]
+    (for [j (range (count (first b)))]
+      (let [row-chars (for [i (range (count b))]
+                        (let [nn (count
+                                  (for [ny (range (dec j) (+ 2 j))
+                                        nx (range (dec i) (+ 2 i))
+                                        :when (and (= \# (get-in b [ny nx]))
+                                                   (or (not= ny j)
+                                                       (not= nx i)))]
+                                    [ny nx (= \# (get-in b [ny nx]))]))
+                              reborn (if (= \# (get-in b [j i]))
+                                       (#{2 3} nn)
+                                       (#{3} nn))]
+                          (if reborn \# \space)))]
+        (apply str row-chars))))
+  (= (__ [&quot;      &quot;
+          &quot; ##   &quot;
+          &quot; ##   &quot;
+          &quot;   ## &quot;
+          &quot;   ## &quot;
+          &quot;      &quot;])
+     [&quot;      &quot;
+      &quot; ##   &quot;
+      &quot; #    &quot;
+      &quot;    # &quot;
+      &quot;   ## &quot;
+      &quot;      &quot;])
+  (= (__ [&quot;     &quot;
+          &quot;     &quot;
+          &quot; ### &quot;
+          &quot;     &quot;
+          &quot;     &quot;])
+     [&quot;     &quot;
+      &quot;  #  &quot;
+      &quot;  #  &quot;
+      &quot;  #  &quot;
+      &quot;     &quot;])
+  (= (__ [&quot;      &quot;
+          &quot;      &quot;
+          &quot;  ### &quot;
+          &quot; ###  &quot;
+          &quot;      &quot;
+          &quot;      &quot;])
+     [&quot;      &quot;
+      &quot;   #  &quot;
+      &quot; #  # &quot;
+      &quot; #  # &quot;
+      &quot;  #   &quot;
+      &quot;      &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 103: <a href="http://www.4clojure.com/problem/103">Generating k-combinations</a></h3>
 
 <p>Note: these both scale rather badly.  Benchmark with, e.g.,:</p>
 </td><td class="codes"><pre class="brush: clojure">(comment (doseq [i (range 12)]
@@ -3727,7 +3969,41 @@ complexity than my solutions.</p>
                            #{0 3 4} #{1 2 3} #{1 2 4} #{1 3 4} #{2 3 4}})
   (= (__ 4 #{[1 2 3] :a &quot;abc&quot; &quot;efg&quot;}) #{#{[1 2 3] :a &quot;abc&quot; &quot;efg&quot;}})
   (= (__ 2 #{[1 2 3] :a &quot;abc&quot; &quot;efg&quot;}) #{#{[1 2 3] :a} #{[1 2 3] &quot;abc&quot;} #{[1 2 3] &quot;efg&quot;}
-                                        #{:a &quot;abc&quot;} #{:a &quot;efg&quot;} #{&quot;abc&quot; &quot;efg&quot;}}))</pre></td></tr><tr><td class="docs"><p>Problem 137:</p>
+                                        #{:a &quot;abc&quot;} #{:a &quot;efg&quot;} #{&quot;abc&quot; &quot;efg&quot;}}))</pre></td></tr><tr><td class="docs"><h3>Problem 106: <a href="http://www.4clojure.com/problem/106">Number Maze</a></h3>
+
+<p>This problem is similar to searching for the shortest path through
+an undirected graph, a problem for which breadth-first search is
+well-suited.  For every "layer" in the search (each layer
+corresponds to a successive number of allowed operations) we
+calculate the next layer by applying all the allowed operations to
+the values in the current layer.  The layers can grow large
+relatively quickly, but converting the sequence to a set on each
+iteration reduces the size substantially for large layers.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [n0 n1]
+    (letfn [(apply-ops [ns]
+              (mapcat ops-on-num ns))
+            (ops-on-num [n]
+              (if (even? n)
+                [(* 2 n) (/ n 2) (+ 2 n)]
+                [(* 2 n) (+ 2 n)]))]
+
+      (loop [c 1, ns [n0]]
+        (if (some #{n1} ns)
+          c
+          (let [next-ns (apply-ops ns)]
+            (recur (inc c)
+                   (set (apply-ops ns))))))))
+
+  (= 1 (__ 1 1))   ; 1
+  (= 3 (__ 3 12))  ; 3 6 12
+  (= 3 (__ 12 3))  ; 12 6 3
+  (= 3 (__ 5 9))   ; 5 7 9
+  (= 9 (__ 9 2))   ; 9 18 20 10 12 6 8 4 2
+  (= 5 (__ 9 12))) ; 9 11 22 24 12</pre></td></tr><tr><td class="docs"><h3>Problem 137: <a href="http://www.4clojure.com/problem/137">Digits and Bases</a></h3>
+
+<p>This is a simple matter of dividing modulo the base and shifting
+out low-order digits.  Alternatively, could do as a lazy seq.</p>
 </td><td class="codes"><pre class="brush: clojure">(solves (fn [n base]
           (loop [n n, ret []]
             (if (zero? n)
@@ -3834,22 +4110,26 @@ left half of the number before recombining.</p>
   (= true
      (apply &lt; (take 6666 (__ 9999999))))
   (= (nth (__ 0) 10101)
-     9102019))</pre></td></tr><tr><td class="docs"><p>Problem 177:</p>
+     9102019))</pre></td></tr><tr><td class="docs"><h3>Problem 177: <a href="http://www.4clojure.com/problem/177">Balancing Brackets</a></h3>
+
+<p>After a couple of tries on this I realized that stripping out
+non-parenthetic characters and then successively eliminating empty,
+balanced pairs of parens/braces/brackets would do the trick.</p>
 </td><td class="codes"><pre class="brush: clojure">(solves (fn [s]
           (empty?
            (loop [s (clojure.string/replace s #&quot;[^\(\)\{\}\[\]]&quot; &quot;&quot;)]
              (let [r (clojure.string/replace s #&quot;\(\)|\{\}|\[\]&quot; &quot;&quot;)]
                (if (= r s) s (recur r))))))
-  (__ &quot;This string has no brackets.&quot;)
-  (__ &quot;class Test {
+        (__ &quot;This string has no brackets.&quot;)
+        (__ &quot;class Test {
       public static void main(String[] args) {
         System.out.println(\&quot;Hello world.\&quot;);
       }
     }&quot;)
-  (not (__ &quot;(start, end]&quot;))
-  (not (__ &quot;())&quot;))
-  (not (__ &quot;[ { ] } &quot;))
-  (__ &quot;([]([(()){()}(()(()))(([[]]({}()))())]((((()()))))))&quot;)
-  (not (__ &quot;([]([(()){()}(()(()))(([[]]({}([)))())]((((()()))))))&quot;))
-  (not (__ &quot;[&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+        (not (__ &quot;(start, end]&quot;))
+        (not (__ &quot;())&quot;))
+        (not (__ &quot;[ { ] } &quot;))
+        (__ &quot;([]([(()){()}(()(()))(([[]]({}()))())]((((()()))))))&quot;)
+        (not (__ &quot;([]([(()){()}(()(()))(([[]]({}([)))())]((((()()))))))&quot;))
+        (not (__ &quot;[&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
        SyntaxHighlighter.all()</script></body></html>
