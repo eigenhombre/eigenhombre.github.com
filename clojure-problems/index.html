@@ -3029,1107 +3029,1432 @@ net.brehaut.ClojureTools = (function (SH) {
   };
 })(SyntaxHighlighter);
 </script><title>probs4clojure -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">probs4clojure</h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>FIXME: write description</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">expectations</td><td class="dotted"><hr /></td><td class="dep-version">1.3.3</td></tr><tr><td class="dep-name">org.clojure/tools.trace</td><td class="dotted"><hr /></td><td class="dep-version">0.7.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#probs4clojure.core-test">probs4clojure.core-test</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#probs4clojure.core-test" name="probs4clojure.core-test"><h1 class="project-name">probs4clojure.core-test</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns probs4clojure.core-test
-  (:require [midje.sweet :refer :all]
-            [probs4clojure.core :refer :all]))</pre></td></tr><tr><td class="docs"><h3>Solutions to [4clojure.com](http://4clojure.com) problems</h3>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">expectations</td><td class="dotted"><hr /></td><td class="dep-version">1.3.3</td></tr><tr><td class="dep-name">org.clojure/tools.trace</td><td class="dotted"><hr /></td><td class="dep-version">0.7.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#probs4clojure.core">probs4clojure.core</a></li><li><a href="#probs4clojure.core">probs4clojure.core</a></li><li><a href="#"></a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#probs4clojure.core" name="probs4clojure.core"><h1 class="project-name">probs4clojure.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns probs4clojure.core
+  (:use expectations))</pre></td></tr><tr><td class="docs"><p>  Infinite Matrix</p>
 
-<p>Worked and (towards the end, at least) documented with
-<a href="http://gdeer81.github.io/marginalia/">Marginalia</a>.</p>
+<p>Difficulty: Medium
+Topics: seqs recursion math</p>
 
-<p><strong>Spoiler Alert</strong> -- at least <em>try</em> to solve the problems yourself
-**first!!!  They are much better that way.</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><script type="text/javascript"
- src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>  Present and test a solution to a <a href="http://4clojure.com">4clojure.com</a>
-  problem by taking the first expression, substituting it for __ in
-  all subsequent expressions, and evaluating each resulting expression
-  for truthiness (i.e., evaluating the resulting Midje fact).</p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro solves
-  [expr &amp; tests]
-  (let [replacef# (fn [t] (clojure.walk/postwalk-replace {'__ expr} t))
-        newtests# (map replacef# tests)]
-    `(fact (and ~@newtests#) =&gt; truthy)))</pre></td></tr><tr><td class="docs"><p>  Handy little debug macro</p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro dbg
-  [x]
-  `(println '~x &quot;=&quot; ~x))</pre></td></tr><tr><td class="docs"><p>Problem 1:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves true (= __ true))</pre></td></tr><tr><td class="docs"><p>Problem 2:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 4
- (= (- 10 (* 2 3)) __))</pre></td></tr><tr><td class="docs"><p>Problem 3:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves &quot;HELLO WORLD&quot;
- (= __ (.toUpperCase &quot;hello world&quot;)))</pre></td></tr><tr><td class="docs"><p>Problem 4:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves  ;; solution less amenable to `solves` macro, added inline...
- (= (list :a :b :c) '(:a :b :c)))</pre></td></tr><tr><td class="docs"><p>Problem 5:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves '(1 2 3 4)
- (= __ (conj '(2 3 4) 1))
- (= __ (conj '(3 4) 2 1)))</pre></td></tr><tr><td class="docs"><p>Problem 6:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [:a :b :c]
- (= (list :a :b :c) (vec '(:a :b :c)) (vector :a :b :c)))</pre></td></tr><tr><td class="docs"><p>Problem 7:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [1 2 3 4]
- (= __ (conj [1 2 3] 4))
- (= __ (conj [1 2] 3 4)))</pre></td></tr><tr><td class="docs"><p>Problem 8:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #{:a :b :c :d}
- (= __ (set '(:a :a :b :c :c :c :c :d :d)))
- (= __ (clojure.set/union #{:a :b :c} #{:b :c :d})))</pre></td></tr><tr><td class="docs"><p>Problem 9:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 2
- (= #{1 2 3 4} (conj #{1 4 3} __)))</pre></td></tr><tr><td class="docs"><p>Problem 10:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 20
- (= __ ((hash-map :a 10, :b 20, :c 30) :b))
- (= __ (:b {:a 10, :b 20, :c 30})))</pre></td></tr><tr><td class="docs"><p>Problem 11:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [:b 2]
- (= {:a 1, :b 2, :c 3} (conj {:a 1} __ [:c 3])))</pre></td></tr><tr><td class="docs"><p>Problem 12:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 3
- (= __ (first '(3 2 1)))
- (= __ (second [2 3 4]))
- (= __ (last (list 1 2 3))))</pre></td></tr><tr><td class="docs"><p>Problem 13:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [20 30 40]
- (= __ (rest [10 20 30 40])))</pre></td></tr><tr><td class="docs"><p>Problem 14:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 8
- (= __ ((fn add-five [x] (+ x 5)) 3))
- (= __ ((fn [x] (+ x 5)) 3))
- (= __ (#(+ % 5) 3))
- (= __ ((partial + 5) 3)))</pre></td></tr><tr><td class="docs"><p>Problem 15:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(* 2 %)
- (= (__ 2) 4)
- (= (__ 3) 6)
- (= (__ 11) 22)
- (= (__ 7) 14))</pre></td></tr><tr><td class="docs"><p>Problem 16:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(format &quot;Hello, %s!&quot; %)
- (= (__ &quot;Dave&quot;) &quot;Hello, Dave!&quot;)
- (= (__ &quot;Jenn&quot;) &quot;Hello, Jenn!&quot;)
- (= (__ &quot;Rhea&quot;) &quot;Hello, Rhea!&quot;))</pre></td></tr><tr><td class="docs"><p>Problem 17:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [6 7 8]
-        (= __ (map #(+ % 5) '(1 2 3))))</pre></td></tr><tr><td class="docs"><p>Problem 18:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [6 7]
- (= __ (filter #(&gt; % 5) '(3 4 5 6 7))))</pre></td></tr><tr><td class="docs"><p>Problem 19:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(first (reverse %))
- (= (__ [1 2 3 4 5]) 5)
- (= (__ '(5 4 3)) 3)
- (= (__ [&quot;b&quot; &quot;c&quot; &quot;d&quot;]) &quot;d&quot;))</pre></td></tr><tr><td class="docs"><p>Problem 20:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(second (reverse %))
- (= (__ (list 1 2 3 4 5)) 4)
- (= (__ [&quot;a&quot; &quot;b&quot; &quot;c&quot;]) &quot;b&quot;)
- (= (__ [[1 2] [3 4]]) [1 2]))</pre></td></tr><tr><td class="docs"><p>Problem 21:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s n] (first (drop n s)))
- (= (__ '(4 5 6 7) 2) 6)
- (= (__ [:a :b :c] 0) :a)
- (= (__ [1 2 3 4] 1) 2)
- (= (__ '([1 2] [3 4] [5 6]) 2) [5 6]))</pre></td></tr><tr><td class="docs"><p>Problem 22:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(apply + (map (fn [_] 1) %))
- (= (__ '(1 2 3 3 1)) 5)
- (= (__ &quot;Hello World&quot;) 11)
- (= (__ [[1 2] [3 4] [5 6]]) 3)
- (= (__ '(13)) 1)
- (= (__ '(:a :b :c)) 3))</pre></td></tr><tr><td class="docs"><p>Problem 23:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s]
-          (let [svec (into [] s)]
-            (for [i (range (count svec) 0 -1)]
-              (get svec (dec i)))))
- (= (__ [1 2 3 4 5]) [5 4 3 2 1])
- (= (__ (sorted-set 5 7 2 7)) '(7 5 2))
- (= (__ [[1 2][3 4][5 6]]) [[5 6][3 4][1 2]]))</pre></td></tr><tr><td class="docs"><p>Problem 24:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s] (apply + s))
- (= (__ [1 2 3]) 6)
- (= (__ (list 0 -2 5 5)) 8)
- (= (__ #{4 2 1}) 7)
- (= (__ '(0 0 -1)) -1)
- (= (__ '(1 10 3)) 14))</pre></td></tr><tr><td class="docs"><p>Problem 25:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(filter odd? %)
- (= (__ #{1 2 3 4 5}) '(1 3 5))
- (= (__ [4 2 1 6]) '(1))
- (= (__ [2 2 4 6]) '())
- (= (__ [1 1 1 3]) '(1 1 1 3)))</pre></td></tr><tr><td class="docs"><p>Problem 26:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [n]
-          (take n (map first (iterate (fn [[a b]] [b (+ a b)]) [1 1]))))
- (= (__ 3) '(1 1 2))
- (= (__ 6) '(1 1 2 3 5 8))
- (= (__ 8) '(1 1 2 3 5 8 13 21)))</pre></td></tr><tr><td class="docs"><p>Problem 27:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s]
-          (let [pivot (-&gt; s count (#(/ % 2)) int)
-                rhs (take pivot s)
-                lhs (take pivot (reverse s))]
-            (= rhs lhs)))
- (false? (__ '(1 2 3 4 5)))
- (true? (__ &quot;racecar&quot;))
- (true? (__ [:foo :bar :foo]))
- (true? (__ '(1 1 3 3 1 1)))
- (false? (__ '(:a :b :c))))</pre></td></tr><tr><td class="docs"><p>Problem 28:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn flat [[h &amp; t :as l]]
-          (when (seq l)
-            (if (coll? h)
-              (concat (flat h)
-                      (flat t))
-              (cons h (flat t)))))
- (= (__ '((1 2) 3 [4 [5 6]])) '(1 2 3 4 5 6))
- (= (__ [&quot;a&quot; [&quot;b&quot;] &quot;c&quot;]) '(&quot;a&quot; &quot;b&quot; &quot;c&quot;))
- (= (__ '((((:a))))) '(:a)))</pre></td></tr><tr><td class="docs"><p>Problem 29:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s] (apply str (filter #(. Character isUpperCase %) s)))
- (= (__ &quot;HeLlO, WoRlD!&quot;) &quot;HLOWRD&quot;)
- (empty? (__ &quot;nothing&quot;))
- (= (__ &quot;$#A(*&amp;987Zf&quot;) &quot;AZ&quot;))</pre></td></tr><tr><td class="docs"><p>Problem 30:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(-&gt;&gt; %
-              (partition-by identity)
-              (map first))
- (= (apply str (__ &quot;Leeeeeerrroyyy&quot;)) &quot;Leroy&quot;)
- (= (__ [1 1 2 3 3 2 2 3]) '(1 2 3 2 3))
- (= (__ [[1 2] [1 2] [3 4] [1 2]]) '([1 2] [3 4] [1 2])))</pre></td></tr><tr><td class="docs"><p>Problem 31:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (partial partition-by identity)
- (= (__ [1 1 2 1 1 1 3 3]) '((1 1) (2) (1 1 1) (3 3)))
- (= (__ [:a :a :b :b :c]) '((:a :a) (:b :b) (:c)))
- (= (__ [[1 2] [1 2] [3 4]]) '(([1 2] [1 2]) ([3 4]))))</pre></td></tr><tr><td class="docs"><p>Problem 32:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (partial mapcat (fn [x] [x x]))
- (= (__ [1 2 3]) '(1 1 2 2 3 3))
- (= (__ [:a :a :b :b]) '(:a :a :a :a :b :b :b :b))
- (= (__ [[1 2] [3 4]]) '([1 2] [1 2] [3 4] [3 4]))
- (= (__ [[1 2] [3 4]]) '([1 2] [1 2] [3 4] [3 4])))</pre></td></tr><tr><td class="docs"><p>Problem 33:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s n] (mapcat #(repeat n %) s))
- (= (__ [1 2 3] 2) '(1 1 2 2 3 3))
- (= (__ [:a :b] 4) '(:a :a :a :a :b :b :b :b))
- (= (__ [4 5 6] 1) '(4 5 6))
- (= (__ [[1 2] [3 4]] 2) '([1 2] [1 2] [3 4] [3 4]))
- (= (__ [[1 2] [3 4]] 2) '([1 2] [1 2] [3 4] [3 4])))</pre></td></tr><tr><td class="docs"><p>Problem 34:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s e] (take (- e s) (iterate inc s)))
- (= (__ 1 4) '(1 2 3))
- (= (__ -2 2) '(-2 -1 0 1))
- (= (__ 5 8) '(5 6 7)))</pre></td></tr><tr><td class="docs"><p>Problem 35:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 7
- (= __ (let [x 5] (+ 2 x)))
- (= __ (let [x 3, y 10] (- y x)))
- (= __ (let [x 21] (let [y 3] (/ x y)))))</pre></td></tr><tr><td class="docs"><p>Problem 36:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [x 7, y 3, z 1]
- (= 10 (let __ (+ x y)))
- (= 4 (let __ (+ y z)))
- (= 1 (let __ z)))</pre></td></tr><tr><td class="docs"><p>Problem 37:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves &quot;ABC&quot;
- (= __ (apply str (re-seq #&quot;[A-Z]+&quot; &quot;bA1B3Ce &quot;))))</pre></td></tr><tr><td class="docs"><p>Problem 38:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [&amp; s] (reduce (fn [a b] (if (&gt; a b) a b)) s))
- (= (__ 1 8 3 4) 8)
- (= (__ 30 20) 30)
- (= (__ 45 67 11) 67))</pre></td></tr><tr><td class="docs"><p>Problem 39:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (partial mapcat vector)
- (= (__ [1 2 3] [:a :b :c]) '(1 :a 2 :b 3 :c))
- (= (__ [1 2] [3 4 5 6]) '(1 3 2 4))
- (= (__ [1 2 3 4] [5]) [1 5])
- (= (__ [30 20] [25 15]) [30 25 20 15]))</pre></td></tr><tr><td class="docs"><p>Problem 40:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [d x] (rest (mapcat (fn [xx] [d xx]) x)))
- (= (__ 0 [1 2 3]) [1 0 2 0 3])
- (= (apply str (__ &quot;, &quot; [&quot;one&quot; &quot;two&quot; &quot;three&quot;])) &quot;one, two, three&quot;)
- (= (__ :z [:a :b :c :d]) [:a :z :b :z :c :z :d]))</pre></td></tr><tr><td class="docs"><p>Problem 41:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s n] (mapcat #(if (= (count %) n) (drop-last %) %)
-                         (partition-all n s)))
- (= (__ [1 2 3 4 5 6 7 8] 3) [1 2 4 5 7 8])
- (= (__ [:a :b :c :d :e :f] 2) [:a :c :e])
- (= (__ [1 2 3 4 5 6] 4) [1 2 3 5 6]))</pre></td></tr><tr><td class="docs"><p>Problem 42:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(apply *' (range 1 (inc %)))
- (= (__ 1) 1)
- (= (__ 3) 6)
- (= (__ 5) 120)
- (= (__ 8) 40320))</pre></td></tr><tr><td class="docs"><p>Problem 43:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s n]
-          (map (fn [i]
-                 (map (fn [ss] (nth ss i))
-                      (partition n s)))
-               (range n)))
- (= (__ [1 2 3 4 5 6] 2) '((1 3 5) (2 4 6)))
- (= (__ (range 9) 3) '((0 3 6) (1 4 7) (2 5 8)))
- (= (__ (range 10) 5) '((0 5) (1 6) (2 7) (3 8) (4 9))))</pre></td></tr><tr><td class="docs"><p>Problem 44:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [pos s]
-          (map (fn [i] (nth s (mod (+ pos i) (count s))))
-               (range (count s))))
- (= (__ 2 [1 2 3 4 5]) '(3 4 5 1 2))
- (= (__ -2 [1 2 3 4 5]) '(4 5 1 2 3))
- (= (__ 6 [1 2 3 4 5]) '(2 3 4 5 1))
- (= (__ 1 '(:a :b :c)) '(:b :c :a))
- (= (__ -4 '(:a :b :c)) '(:c :a :b)))</pre></td></tr><tr><td class="docs"><p>Problem 45:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [1 4 7 10 13]
- (= __ (take 5 (iterate #(+ 3 %) 1))))</pre></td></tr><tr><td class="docs"><p>Problem 46:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [f] (fn [&amp; args] (apply f (reverse args))))
- (= 3 ((__ nth) 2 [1 2 3 4 5]))
- (= true ((__ &gt;) 7 8))
- (= 4 ((__ quot) 2 8))
- (= [1 2 3] ((__ take) [1 2 3 4 5] 3)))</pre></td></tr><tr><td class="docs"><p>Problem 47:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 4
- (contains? #{4 5 6} __)
- (contains? [1 1 1 1 1] __)
- (contains? {4 :a 2 :b} __)
- (not (contains? '(1 2 4) __)))</pre></td></tr><tr><td class="docs"><p>Problem 48:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves 6
- (= __ (some #{2 7 6} [5 6 7 8]))
- (= __ (some #(when (even? %) %) [5 6 7 8])))</pre></td></tr><tr><td class="docs"><p>Problem 49:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [n s] (list (take n s) (drop n s)))
- (= (__ 3 [1 2 3 4 5 6]) [[1 2 3] [4 5 6]])
- (= (__ 1 [:a :b :c :d]) [[:a] [:b :c :d]])
- (= (__ 2 [[1 2] [3 4] [5 6]]) [[[1 2] [3 4]] [[5 6]]]))</pre></td></tr><tr><td class="docs"><p>Problem 50:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(-&gt;&gt; %
-              (group-by type)
-              vals)
- (= (set (__ [1 :a 2 :b 3 :c])) #{[1 2 3] [:a :b :c]})
- (= (set (__ [:a &quot;foo&quot;  &quot;bar&quot; :b])) #{[:a :b] [&quot;foo&quot; &quot;bar&quot;]})
- (= (set (__ [[1 2] :a [3 4] 5 6 :b])) #{[[1 2] [3 4]] [:a :b] [5 6]}))</pre></td></tr><tr><td class="docs"><p>Problem 51:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [1 2 3 4 5]
-        (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b &amp; c :as d] __] [a b c d])))</pre></td></tr><tr><td class="docs"><p>Problem 52:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [c e]
-        (= [2 4] (let [[a b c d e f g] (range)] __)))</pre></td></tr><tr><td class="docs"><p>Problem 53:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s] (let [deltas (map (fn [[a b]] [(- b a) a b]) (partition 2 1 s))
-                     series (partition-by first deltas)
-                     longest-length (-&gt;&gt; series
-                                         (group-by count)
-                                         keys
-                                         (apply max))
-                     desired-sequence (-&gt;&gt; series
-                                           (filter #(= (count %) longest-length))
-                                           first)
-                     start (second (first desired-sequence))
-                     end (int (nth (last desired-sequence) 2))]
-                 (range start (inc end))))
- (= (__ [1 0 1 2 3 0 4 5]) [0 1 2 3])
- (= (__ [5 6 1 3 2 7]) [5 6])
- (= (__ [2 3 3 4 5]) [3 4 5])
- (= (__ [7 6 5 4]) []))</pre></td></tr><tr><td class="docs"><p>Problem 54:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn f [c s]
-          (lazy-seq
-           (let [nxt (take c s)]
-             (when (and (seq s) (= (count nxt) c))
-               (cons (take c s) (f c (drop c s)))))))
- (= (__ 3 (range 9)) '((0 1 2) (3 4 5) (6 7 8)))
- (= (__ 2 (range 8)) '((0 1) (2 3) (4 5) (6 7)))
- (= (__ 3 (range 8)) '((0 1 2) (3 4 5))))</pre></td></tr><tr><td class="docs"><p>Problem 55:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(-&gt;&gt; %
-              (group-by identity)
-              (map (fn [[k v]] [k (count v)]))
-              (into {}))
- (= (__ [1 1 2 3 2 1 1]) {1 4, 2 2, 3 1})
- (= (__ [:b :a :b :a :b]) {:a 2, :b 3})
- (= (__ '([1 2] [1 3] [1 3])) {[1 2] 1, [1 3] 2}))</pre></td></tr><tr><td class="docs"><p>Problem 56:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s]
-          (loop [ret []
-                 s s
-                 seen #{}]
-            (if-not (seq s)
-              ret
-              (recur (if-not (seen (first s)) (conj ret (first s)) ret)
-                     (rest s)
-                     (conj seen (first s))))))
- (= (__ [1 2 1 3 1 2 4]) [1 2 3 4])
- (= (__ [:a :a :b :b :c :c]) [:a :b :c])
- (= (__ '([2 4] [1 2] [1 3] [1 3])) '([2 4] [1 2] [1 3]))
- (= (__ (range 50)) (range 50)))</pre></td></tr><tr><td class="docs"><p>Problem 57:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves [5 4 3 2 1]
-        (= __ ((fn foo [x] (when (&gt; x 0) (conj (foo (dec x)) x))) 5)))</pre></td></tr><tr><td class="docs"><p>Problem 58:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn outer [f &amp; fs]
-          (if fs
-            (fn [&amp; x] (f (apply (apply outer fs) x)))
-            (fn [&amp; xs] (apply f xs))))
- (= [3 2 1] ((__ rest reverse) [1 2 3 4]))
- (= 5 ((__ (partial + 3) second) [1 2 3 4]))
- (= true ((__ zero? #(mod % 8) +) 3 5 7 9))
- (= &quot;HELLO&quot; ((__ #(.toUpperCase %) #(apply str %) take) 5 &quot;hello world&quot;)))</pre></td></tr><tr><td class="docs"><p>Problem 59:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [&amp; fns]
-          (fn [&amp; xs]
-            (for [f fns] (apply f xs))))
- (= [21 6 1] ((__ + max min) 2 3 5 1 6 4))
- (= [&quot;HELLO&quot; 5] ((__ #(.toUpperCase %) count) &quot;hello&quot;))
- (= [2 6 4] ((__ :a :c :b) {:a 2, :b 4, :c 6, :d 8 :e 10})))</pre></td></tr><tr><td class="docs"><p>Problem 60:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn reduxions
-          ([op prev s]
-             (lazy-seq
-              (if (seq s)
-                (cons prev (reduxions op (op prev (first s)) (rest s)))
-                [prev])))
-          ([op s]
-             (reduxions op (op (first s)) (rest s))))
- (= (take 5 (__ + (range))) [0 1 3 6 10])
- (= (__ conj [1] [2 3 4]) [[1] [1 2] [1 2 3] [1 2 3 4]])
- (= (last (__ * 2 [3 4 5])) (reduce * 2 [3 4 5]) 120))</pre></td></tr><tr><td class="docs"><p>Problem 61:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves #(into {} (map vector %1 %2))
- (= (__ [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3})
- (= (__ [1 2 3 4] [&quot;one&quot; &quot;two&quot; &quot;three&quot;]) {1 &quot;one&quot;, 2 &quot;two&quot;, 3 &quot;three&quot;})
- (= (__ [:foo :bar] [&quot;foo&quot; &quot;bar&quot; &quot;baz&quot;]) {:foo &quot;foo&quot;, :bar &quot;bar&quot;}))</pre></td></tr><tr><td class="docs"><p>Problem 62:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn itr [f x]
-          (lazy-seq
-           (cons x (itr f (f x)))))
- (= (take 5 (__ #(* 2 %) 1)) [1 2 4 8 16])
- (= (take 100 (__ inc 0)) (take 100 (range)))
- (= (take 9 (__ #(inc (mod % 3)) 1)) (take 9 (cycle [1 2 3]))))</pre></td></tr><tr><td class="docs"><p>Problem 63:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [pred s]
-          (-&gt;&gt; s
-               (map (fn [x] {(pred x) [x]}))
-               (apply (partial merge-with concat))))
- (= (__ #(&gt; % 5) [1 3 6 8]) {false [1 3], true [6 8]})
- (= (__ #(apply / %) [[1 2] [2 4] [4 6] [3 6]])
-    {1/2 [[1 2] [2 4] [3 6]], 2/3 [[4 6]]})
- (= (__ count [[1] [1 2] [3] [1 2 3] [2 3]])
-    {1 [[1] [3]], 2 [[1 2] [2 3]], 3 [[1 2 3]]}))</pre></td></tr><tr><td class="docs"><p>Problem 64:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves +
-  (= 15 (reduce __ [1 2 3 4 5]))
-  (=  0 (reduce __ []))
-  (=  6 (reduce __ 1 [2 3])))</pre></td></tr><tr><td class="docs"><p>Problem 65</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s]
-          (let [e (empty s)]
-            (if (identical? '() e)
-              :list
-              ({#{} :set, {} :map, [] :vector} e))))
-        (= :map (__ {:a 1, :b 2}))
-        (= :list (__ (range (rand-int 20))))
-        (= :vector (__ [1 2 3 4 5 6]))
-        (= :set (__ #{10 (rand-int 5)}))
-        (= [:map :set :vector :list] (map __ [{} #{} [] ()])))</pre></td></tr><tr><td class="docs"><p>Problem 66</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [a b]
-          (loop [a a, b b]
-            (cond
-             (= a b) a
-             (&gt; a b) (recur (- a b) b)
-             :else (recur a (- b a)))))
-        (= (__ 2 4) 2)
-        (= (__ 10 5) 5)
-        (= (__ 5 7) 1)
-        (= (__ 1023 858) 33))</pre></td></tr><tr><td class="docs"><p>Problem 67</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  #(take %
-         (remove
-          (fn [n]
-            (some (fn [x] (= (rem n x) 0))
-                  (range 2 n)))
-          (drop 2 (range))))
- (= (__ 2) [2 3])
- (= (__ 5) [2 3 5 7 11])
- (= (last (__ 100)) 541))</pre></td></tr><tr><td class="docs"><p>Problem 68</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  [7 6 5 4 3]
-  (= __
-     (loop [x 5
-            result []]
-       (if (&gt; x 0)
-         (recur (dec x) (conj result (+ 2 x)))
-         result))))</pre></td></tr><tr><td class="docs"><p>Problem 69
-OLD:
-(fn [fun &amp; maps]
-  (let [pairs (apply concat
-                     (for [mm maps]
-                       (for [[k, v] mm] [k v])))]
-    (loop [p pairs, ret {}]
-      (if (seq p)
-        (let [[k, v] (first p),
-              lookup (ret k)
-              insert (if lookup (fun lookup v) v)]
-          (recur (rest p)
-                 (conj ret (assoc {} k insert))))
-        ret))))</p>
+<p>In what follows, m, n, s, t denote nonnegative integers, f denotes a function that accepts two arguments and is defined for all nonnegative integers in both arguments.</p>
+
+<p>In mathematics, the function f can be interpreted as an infinite matrix with infinitely many rows and columns that, when written, looks like an ordinary matrix but its rows and columns cannot be written down completely, so are terminated with ellipses. In Clojure, such infinite matrix can be represented as an infinite lazy sequence of infinite lazy sequences, where the inner sequences represent rows.</p>
+
+<p>Write a function that accepts 1, 3 and 5 arguments</p>
+
+<p>with the argument f, it returns the infinite matrix A that has the entry in the i-th row and the j-th column equal to f(i,j) for i,j = 0,1,2,...;; 
+with the arguments f, m, n, it returns the infinite matrix B that equals the remainder of the matrix A after the removal of the first m rows and the first n columns;; 
+with the arguments f, m, n, s, t, it returns the finite s-by-t matrix that consists of the first t entries of each of the first s rows of the matrix B or, equivalently, that consists of the first s entries of each of the first t columns of the matrix B.</p>
+
+<p>(= (take 5 (map #(take 6 %) (__ str)))
+   [["00" "01" "02" "03" "04" "05"]
+    ["10" "11" "12" "13" "14" "15"]
+    ["20" "21" "22" "23" "24" "25"]
+    ["30" "31" "32" "33" "34" "35"]
+    ["40" "41" "42" "43" "44" "45"]])</p>
+
+<p>(= (take 6 (map #(take 5 %) (__ str 3 2)))
+   [["32" "33" "34" "35" "36"]
+    ["42" "43" "44" "45" "46"]
+    ["52" "53" "54" "55" "56"]
+    ["62" "63" "64" "65" "66"]
+    ["72" "73" "74" "75" "76"]
+    ["82" "83" "84" "85" "86"]])</p>
+
+<p>(= (__ * 3 5 5 7)
+   [[15 18 21 24 27 30 33]
+    [20 24 28 32 36 40 44]
+    [25 30 35 40 45 50 55]
+    [30 36 42 48 54 60 66]
+    [35 42 49 56 63 70 77]])</p>
+
+<p>(= (__ #(/ % (inc %2)) 1 0 6 4)
+   [[1/1 1/2 1/3 1/4]
+    [2/1 2/2 2/3 1/2]
+    [3/1 3/2 3/3 3/4]
+    [4/1 4/2 4/3 4/4]
+    [5/1 5/2 5/3 5/4]
+    [6/1 6/2 6/3 6/4]])</p>
+
+<p>(= (class (__ (juxt bit-or bit-xor)))
+   (class (__ (juxt quot mod) 13 21))
+   (class (lazy-seq)))</p>
+
+<p>(= (class (nth (__ (constantly 10946)) 34))
+   (class (nth (__ (constantly 0) 5 8) 55))
+   (class (lazy-seq)))</p>
+
+<p>(= (let [m 377 n 610 w 987
+         check (fn [f s] (every? true? (map-indexed f s)))
+         row (take w (nth (__ vector) m))
+         column (take w (map first (__ vector m n)))
+         diagonal (map-indexed #(nth %2 %) (__ vector m n w w))]
+     (and (check #(= %2 [m %]) row)
+          (check #(= %2 [(+ m %) n]) column)
+          (check #(= %2 [(+ m %) (+ n %)]) diagonal)))
+   true)</p>
 </td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [op &amp; maps]
-    (letfn [(f [op, m, o]
-              (let [km (set (keys m))
-                    ko (set (keys o))
-                    common-keys (clojure.set/intersection km ko)
-                    unique-m (clojure.set/difference km common-keys)
-                    unique-o (clojure.set/difference ko common-keys)]
-                (merge (into {} (for [k common-keys]
-                                  [k (op (m k) (o k))]))
-                       (into {} (for [k unique-m] [k (m k)]))
-                       (into {} (for [k unique-o] [k (o k)])))))]
-      (reduce (partial f op) maps)))
-  (= (__ * {:a 2, :b 3, :c 4} {:a 2} {:b 2} {:c 5})
-     {:a 4, :b 6, :c 20})
-  (= (__ - {1 10, 2 20} {1 3, 2 10, 3 15})
-     {1 7, 2 10, 3 15})
-  (= (__ concat {:a [3], :b [6]} {:a [4 5], :c [8 9]} {:b [7]})
-     {:a [3 4 5], :b [6 7], :c [8 9]}))</pre></td></tr><tr><td class="docs"><p>Problem 70</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
- (fn [s]
-   (-&gt; s
-       (clojure.string/replace #&quot;[\.\!\,\-\_]&quot; &quot;&quot;)
-       (clojure.string/split #&quot;\s+&quot;)
-       (-&gt;&gt; (sort #(.compareToIgnoreCase %1 %2)))))
- (= (__  &quot;Have a nice day.&quot;)
-    [&quot;a&quot; &quot;day&quot; &quot;Have&quot; &quot;nice&quot;])
- (= (__  &quot;Clojure is a fun language!&quot;)
-    [&quot;a&quot; &quot;Clojure&quot; &quot;fun&quot; &quot;is&quot; &quot;language&quot;])
- (= (__  &quot;Fools fall for foolish follies.&quot;)
-    [&quot;fall&quot; &quot;follies&quot; &quot;foolish&quot; &quot;Fools&quot; &quot;for&quot;]))</pre></td></tr><tr><td class="docs"><p>Problem 71</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  last
-  (= (__ (sort (rest (reverse [2 5 4 1 3 6]))))
-     (-&gt; [2 5 4 1 3 6] (reverse) (rest) (sort) (__))
-     5))</pre></td></tr><tr><td class="docs"><p>Problem 72</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (partial reduce +)
-  (= (__ (map inc (take 3 (drop 2 [2 5 4 1 3 6]))))
-     (-&gt;&gt; [2 5 4 1 3 6] (drop 2) (take 3) (map inc) (__))
-     11))</pre></td></tr><tr><td class="docs"><p>Problem 73</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [b]
-    (some (fn [p]
-            (if (or
-                 ;; diag:
-                 (every? #{p}
-                         (for [i (range 3)]
-                           ((b i) i)))
-                 ;; anti-diag:
-                 (every? #{p}
-                         (for [i (range 3)]
-                           ((b i) (- 2 i))))
-                 ;; across:
-                 (some (fn [i]
-                         (every? #{p} (for [j (range 3)] ((b i) j))))
-                     (range 3))
-                 ;; down:
-                 (some (fn [i]
-                         (every? #{p} (for [j (range 3)] ((b j) i))))
-                       (range 3)))
-              p))
-          [:x :o]))
+</td><td class="codes"><pre class="brush: clojure">(take 6
+      (take 5 (for [i (range)]
+                (for [j (range)] [i j]))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(let [f str]
+  (take 5 (for [i (range)]
+            (take 6 (for [j (range)] (apply f (list i j)))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn myrange
+  ([start end]
+    (lazy-seq
+      (if (&lt; start end)
+        (cons start (myrange (inc start) end))
+        [])))
+  ([start]
+    (lazy-seq
+      (cons start (myrange (inc start)))))
+  ([]
+    (myrange 0)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(= (take 5 (myrange))
+   [0 1 2 3 4])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(= (take 5 (myrange 5))
+   [5 6 7 8 9])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(= (myrange 5 10)
+   [5 6 7 8 9])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#probs4clojure.core" name="probs4clojure.core"><h1 class="project-name">probs4clojure.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns probs4clojure.core
+  (:use expectations))</pre></td></tr><tr><td class="docs"><p>See also test/probs4clojure/core_test.clj for more recent solutions...</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><h1>92: Read Roman numerals</h1>
 
-  (= nil (__ [[:e :e :e]
-              [:e :e :e]
-              [:e :e :e]]))
-  (= :x (__ [[:x :e :o]
-             [:x :e :e]
-             [:x :e :o]]))
-  (= :o (__ [[:e :x :e]
-             [:o :o :o]
-             [:x :e :x]]))
-  (= nil (__ [[:x :e :o]
-              [:x :x :e]
-              [:o :x :o]]))
-  (= :x (__ [[:x :e :e]
-             [:o :x :e]
-             [:o :e :x]]))
-  (= :o (__ [[:x :e :o]
-             [:x :o :e]
-             [:o :e :x]]))
-  (= nil (__ [[:x :o :x]
-              [:x :o :x]
-              [:o :x :o]])))</pre></td></tr><tr><td class="docs"><p>Problem 74</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [s]
-    (letfn [(is-square [n]
-              (let [r (Math/sqrt n)
-                    r (int r)]
-                (= (* r r) n)))]
-      (-&gt; s
-          (clojure.string/split #&quot;,&quot;)
-          (-&gt;&gt; (map (fn [s] (Integer/parseInt s)))
-               (filter is-square)
-               (map str)
-               (clojure.string/join &quot;,&quot;)))))
-  (= (__ &quot;4,5,6,7,8,9&quot;) &quot;4,9&quot;)
-  (= (__ &quot;15,16,25,36,37&quot;) &quot;16,25,36&quot;))</pre></td></tr><tr><td class="docs"><p>Problem 75</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [n]
-    (if (= 1 n)
-      1
-      (letfn [(gcd [a b]
-                (loop [a a, b b]
-                  (cond
-                   (= a b) a
-                   (&gt; a b) (recur (- a b) b)
-                   :else (recur a (- b a)))))]
-        (-&gt;&gt; n
-             (range 1)
-             (map (partial gcd n))
-             (filter (partial = 1))
-             count))))
-  (= (__ 1) 1)
-  (= (__ 10) (count '(1 3 7 9)) 4)
-  (= (__ 40) 16)
-  (= (__ 99) 60))</pre></td></tr><tr><td class="docs"><p>Problem 76</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (= [1 3 5 7 9 11]
-     (letfn
-         [(foo [x y] #(bar (conj x y) y))
-          (bar [x y] (if (&gt; (last x) 10)
-                       x
-                       #(foo x (+ 2 y))))]
-       (trampoline foo [] 1))))</pre></td></tr><tr><td class="docs"><p>Problem 77</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [words]
-    (-&gt;&gt;
-      (map (fn [w] (set (filter #(= (sort w) (sort %)) words))) words)
-      (remove #(= (count %) 1))
-      set))
-  (= (__ [&quot;meat&quot; &quot;mat&quot; &quot;team&quot; &quot;mate&quot; &quot;eat&quot;])
-     #{#{&quot;meat&quot; &quot;team&quot; &quot;mate&quot;}})
-  (= (__ [&quot;veer&quot; &quot;lake&quot; &quot;item&quot; &quot;kale&quot; &quot;mite&quot; &quot;ever&quot;])
-     #{#{&quot;veer&quot; &quot;ever&quot;} #{&quot;lake&quot; &quot;kale&quot;} #{&quot;mite&quot; &quot;item&quot;}}))</pre></td></tr><tr><td class="docs"><p>Problem 78</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [f &amp; rest]
-    (if (fn? f)
-      (recur (apply f rest) nil)
-      f))
-  (= (letfn [(triple [x] #(sub-two (* 3 x)))
-             (sub-two [x] #(stop?(- x 2)))
-             (stop? [x] (if (&gt; x 50) x #(triple x)))]
-       (__ triple 2))
-     82)
-  (= (letfn [(my-even? [x] (if (zero? x) true #(my-odd? (dec x))))
-             (my-odd? [x] (if (zero? x) false #(my-even? (dec x))))]
-       (map (partial __ my-even?) (range 6)))
-     [true false true false true false]))</pre></td></tr><tr><td class="docs"><p>Problem 79</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [s]
-    (let [nested-paths (loop [[r &amp; rs] (reverse s)
-                              ret []]
-                         (if-not (seq ret)
-                           (recur rs (map vector r))
-                           (if r
-                             (recur rs
-                                    (let [p (partition 2 1 ret)]
-                                      (for [[a [l1 l2]] (map vector r p)]
-                                        [(conj l1 a) (conj l2 a)])))
-                             ret)))
-          f (fn f [[r l &amp; a]]
-              [(concat r a) (concat l a)])
-          g (fn g [x] (if-not (coll? (ffirst x))
-                      x
-                      (g (mapcat f x))))]
-      (-&gt;&gt; nested-paths
-           g
-           (group-by (partial apply +))
-           (sort-by first)
-           ffirst)))
-  (= 7 (__ '([1]
-             [2 4]
-             [5 1 4]
-             [2 3 4 5]))) ; 1-&gt;2-&gt;1-&gt;3
-  (= 20 (__ '([3]
-              [2 4]
-              [1 9 3]
-              [9 9 2 4]
-              [4 6 6 7 8]
-              [5 7 3 5 1 4])))) ; 3-&gt;4-&gt;3-&gt;2-&gt;7-&gt;1</pre></td></tr><tr><td class="docs"><p>Problem 80:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [n]
-    (let [subs (filter #(zero? (rem n %)) (range 1 n))
-          sum (apply + subs)]
-      (= sum n)))
- (= (__ 6) true)
- (= (__ 7) false)
- (= (__ 496) true)
- (= (__ 500) false)
- (= (__ 8128) true))</pre></td></tr><tr><td class="docs"><p>Problem 81:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [a b]
-    (set (filter #(and (a %) (b %)) (set (concat a b)))))
-  (= (__ #{0 1 2 3} #{2 3 4 5}) #{2 3})
-  (= (__ #{0 1 2} #{3 4 5}) #{})
-  (= (__ #{:a :b :c :d} #{:c :e :a :f :d}) #{:a :c :d}))</pre></td></tr><tr><td class="docs"><p>Problem 82:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [s]
-    (letfn [(perms [s]  ;; Find all permutations of a sequence
-              (if (= (count s) 1)
-                (list s)
-                (apply concat
-                       (for [x s]
-                         (map (partial cons x)
-                              (perms (remove #{x} s)))))))
-            (shrink-half [as bs]  ;; Remove equal leading parts
-              (loop [[a &amp; aa :as as] as, [b &amp; bb :as bs] bs]
-                (cond
-                 (and (nil? a) (nil? b)) [[] []]
-                 (= a b) (recur aa bb)
-                 :else [as bs])))
-            (shrink-both [as bs]  ;; Remove equal leading and trailing parts
-              (-&gt;&gt; (shrink-half as bs)
-                   (map reverse)
-                   (apply shrink-half)))
-            (valid-delta [as bs]  ;; Deltas are valid if stripped portions
-                                  ;; do not vary by more than a character
-              (-&gt;&gt; (shrink-both as bs)
-                   (map count)
-                   (apply max)
-                   (&gt; 2)))
-            (found-one? [s]
-              (every? (partial apply valid-delta) s))]
-      (let [permutations-in-pairs (map (partial partition 2 1) (perms s))]
-        (boolean (some found-one? permutations-in-pairs)))))
-  (= true (__ #{&quot;hat&quot; &quot;coat&quot; &quot;dog&quot; &quot;cat&quot; &quot;oat&quot; &quot;cot&quot; &quot;hot&quot; &quot;hog&quot;}))
-  (= false (__ #{&quot;cot&quot; &quot;hot&quot; &quot;bat&quot; &quot;fat&quot;}))
-  (= false (__ #{&quot;to&quot; &quot;top&quot; &quot;stop&quot; &quot;tops&quot; &quot;toss&quot;}))
-  (= true (__ #{&quot;spout&quot; &quot;do&quot; &quot;pot&quot; &quot;pout&quot; &quot;spot&quot; &quot;dot&quot;}))
-  (= true (__ #{&quot;share&quot; &quot;hares&quot; &quot;shares&quot; &quot;hare&quot; &quot;are&quot;}))
-  (= false (__ #{&quot;share&quot; &quot;hares&quot; &quot;hare&quot; &quot;are&quot;})))</pre></td></tr><tr><td class="docs"><p>Problem 83:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [&amp; bs]
-    (boolean (and (some true? bs)
-                  (not (every? true? bs)))))
-  (= false (__ false false))
-  (= true (__ true false))
-  (= false (__ true))
-  (= true (__ false true false))
-  (= false (__ true true true))
-  (= true (__ true true true false)))</pre></td></tr><tr><td class="docs"><h3>Problem 84: <a href="http://www.4clojure.com/problem/84">Transitive Closure</a></h3>
+<p>Difficulty: Hard
+Topics: strings math</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Roman numerals are easy to recognize, but not everyone knows all
+the rules necessary to work with them. Write a function to parse a
+Roman-numeral string and return the number it represents. </p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>You can assume that the input will be well-formed, in upper-case,
+and follow the subtractive principle. You don't need to handle any
+numbers greater than MMMCMXCIX (3999), the largest number
+representable with ordinary letters.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= 14 (__ "XIV"))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= 827 (__ "DCCCXXVII"))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= 3999 (__ "MMMCMXCIX"))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= 48 (__ "XLVIII"))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn read-roman [goal]
+  (let [mnums (sorted-map-by &gt;
+                             1000 &quot;M&quot;
+                             900  &quot;CM&quot;
+                             500  &quot;D&quot;
+                             400  &quot;CD&quot;
+                             100  &quot;C&quot;
+                             90   &quot;XC&quot;
+                             50   &quot;L&quot;
+                             40   &quot;XL&quot;
+                             10   &quot;X&quot;
+                             9    &quot;IX&quot;
+                             5    &quot;V&quot;
+                             4    &quot;IV&quot;
+                             1    &quot;I&quot;)
+        s-starts-with (fn [slong sshort]
+                        (= sshort (take (count sshort) slong)))]
+    (loop [in (seq goal)
+           chain (keys mnums)
+           ret 0]
+      (if-not (seq in)
+        ret
+        (let [cnum (first chain)
+              cseq (seq (mnums cnum))
+              has-it (s-starts-with in cseq)
+              next-in (if has-it (drop (count cseq) in) in)
+              rc (rest chain)
+              next-chain (if (empty? rc) 
+                           (keys mnums) 
+                           rc)]
+          (if-not has-it
+            (recur next-in next-chain ret)
+            (recur next-in next-chain (+ ret cnum))))))))</pre></td></tr><tr><td class="docs"><p>Problem 73: Analyze a Tic-Tac-Toe Board</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Difficulty: Hard
+Topics: game</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>A tic-tac-toe board is represented by a two dimensional vector. X
+is represented by :x, O is represented by :o, and empty is
+represented by :e. A player wins by placing three Xs or three Os in
+a horizontal, vertical, or diagonal row. Write a function which
+analyzes a tic-tac-toe board and returns :x if X has won, :o if O
+has won, and nil if neither player has won.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= nil (__ [[:e :e :e]
+            [:e :e :e]
+            [:e :e :e]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :x (__ [[:x :e :o]
+           [:x :e :e]
+           [:x :e :o]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :o (__ [[:e :x :e]
+           [:o :o :o]
+           [:x :e :x]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= nil (__ [[:x :e :o]
+            [:x :x :e]
+            [:o :x :o]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :x (__ [[:x :e :e]
+           [:o :x :e]
+           [:o :e :x]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :o (__ [[:x :e :o]
+           [:x :o :e]
+           [:o :e :x]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= nil (__ [[:x :o :x]
+            [:x :o :x]
+            [:o :x :o]]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">((fn winner [board]
+   (letfn [(fcombos [board]
+             (concat
+              ;; by rows
+              (for [j (range 3)]
+                (for [i (range 3)]
+                  ((board i) j)))
+              
+              ;; by columns
+              (for [i (range 3)]
+                (for [j (range 3)]
+                  ((board i) j)))
+              
+              ;; crosswise
+              (list (for [i (range (count board))]
+                      (nth (board i) i)))
+              
+              (list (for [i (range (count board))]
+                      (nth (board i) (- 2 i))))))]
+     (cond
+      (reduce #(or %1 %2) (map #(apply = (list* :x %)) (fcombos board))) :x
+      (reduce #(or %1 %2) (map #(apply = (list* :o %)) (fcombos board))) :o)))
 
-<p>Abstract examples: if \([a, b]\) and \([b, c]\) are given, then
-\([a, c]\) should be added to the inputs in the result.  If
-\([a, b]\), \([b, c]\) and \([c, d]\) are given, then \([a,
-c]\), \([b, d]\) and \([a, d]\) should be added to the inputs.</p>
+  [[:x :o :x]
+   [:o :o :o]
+   [:o :x :x]])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(winner [[:x :o :x]
+         [:x :o :x]
+         [:o :x :x]])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(winner [[:o :e :e]
+         [:o :x :e]
+         [:o :e :x]])</pre></td></tr><tr><td class="docs"><p>Problem 53
+Difficulty: Hard
+Topics: seqs</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Given a vector of integers, find the longest consecutive sub-sequence of increasing numbers. If two sub-sequences have the same length, use the one that occurs first. An increasing sub-sequence must have a length of 2 or greater to qualify.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ [1 0 1 2 3 0 4 5]) [0 1 2 3])</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ [5 6 1 3 2 7]) [5 6])</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ [2 3 3 4 5]) [3 4 5])</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ [7 6 5 4]) [])</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def f
+  (fn [in]
+    (let [pairs (partition-all 2 1 in)
+          find-incs (for [[a b] pairs] [a b (= (inc a) b)])
+          find-mono (partition-by #(nth % 2) find-incs)
+          mono-only (filter #(nth (first %) 2) find-mono)
+          lengthmap (group-by count mono-only)
+          longest (if-not (seq lengthmap) 0 (apply max (keys lengthmap)))
+          best (first (lengthmap longest))]
+      (if-not best [] (cons (ffirst best) (map second best))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(f [2 3 3 4 5])
+(f [7 6 5 4])</pre></td></tr><tr><td class="docs"><p>Problem 171
+Intervals</p>
 
-<p>I took a fairly brute force approach to this.  <code>grow-1</code> is a single
-step forward where, for any of the pairs in the input, I find all
-other pairs in the input whose first element equals the second
-element of the original pair; <code>grow-1</code> concats these new pairs with the
-original collection of pairs in the input.</p>
+<p>Difficulty: Medium
+Topics: </p>
 
-<p><code>grow</code> iterates on <code>grow-1</code> until no change is found; i.e., the
-resulting set is maximal.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [s]
-    (letfn [(grow-1 [pairs]
-              (let [pairs (vec pairs)
-                    pairs' (for [[a b] pairs
-                                 [bb cc] pairs :when (= b bb)]
-                             [a cc])]
-                (set (concat pairs pairs'))))
-            (grow [pairs]
-              (let [pairs' (grow-1 pairs)]
-                (if (= pairs' pairs)
-                  (set pairs)
-                  (recur pairs'))))]
-      (grow s)))
-  (let [divides #{[8 4] [9 3] [4 2] [27 9]}]
-    (= (__ divides) #{[4 2] [8 4] [8 2] [9 3] [27 9] [27 3]}))
-  (let [more-legs
-        #{[&quot;cat&quot; &quot;man&quot;] [&quot;man&quot; &quot;snake&quot;] [&quot;spider&quot; &quot;cat&quot;]}]
-    (= (__ more-legs)
-       #{[&quot;cat&quot; &quot;man&quot;] [&quot;cat&quot; &quot;snake&quot;] [&quot;man&quot; &quot;snake&quot;]
-         [&quot;spider&quot; &quot;cat&quot;] [&quot;spider&quot; &quot;man&quot;] [&quot;spider&quot; &quot;snake&quot;]}))
-  (let [progeny
-        #{[&quot;father&quot; &quot;son&quot;] [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]}]
-    (= (__ progeny)
-     #{[&quot;father&quot; &quot;son&quot;] [&quot;father&quot; &quot;grandson&quot;]
-       [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]})))</pre></td></tr><tr><td class="docs"><h3>Problem 86: <a href="http://www.4clojure.com/problem/86">Happy Numbers</a></h3>
+<p>Write a function that takes a sequence of integers and returns a sequence of "intervals". Each interval is a a vector of two integers, start and end, such that all integers between start and end (inclusive) are contained in the input sequence.</p>
 
-<p>Here <code>f</code> implements the "particular formula" described in the
-problem text; we iterate until the result is either 1 (happy), or a
-repeated value is found again (sad).  To check the latter we
-maintain a dictionary <code>seen</code> of previous values.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [n]
-    (let [f (fn [x]
-              (-&gt;&gt; x
-                   str
-                   (map #(Integer/parseInt (str %)))
-                   (map #(* % %))
-                   (apply +)))
-          s (iterate f n)]
-      (loop [seen #{}
-             [x &amp; xs] s]
-        (cond
-         (= x 1) true
-         (seen x) false
-         :else (recur (conj seen x) xs)))))
-  (= (__ 7) true)
-  (= (__ 986543210) true)
-  (= (__ 2) false)
-  (= (__ 3) false))</pre></td></tr><tr><td class="docs"><h3>Problem 87:</h3>
+<p>(= (__ [1 2 3]) [[1 3]])</p>
 
-<p>Doesn't exist!</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><h3>Problem 88: <a href="http://www.4clojure.com/problem/88">Symmetric Difference</a></h3>
+<p>(= (__ [10 9 8 1 2 3]) [[1 3] [8 10]])</p>
 
-<p>The problem is simple if you use the <code>clojure.set</code> library and the
-<code>remove</code> function to eliminate the intersection elements from both
-sets before combining them.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [s1 s2]
-    (let [both (clojure.set/intersection s1 s2)]
-      (set (clojure.set/union (remove both s1)
-                              (remove both s2)))))
+<p>(= (__ [1 1 1 1 1 1 1]) [[1 1]])</p>
 
-  (= (__ #{1 2 3 4 5 6} #{1 3 5 7}) #{2 4 6 7})
-  (= (__ #{:a :b :c} #{}) #{:a :b :c})
-  (= (__ #{} #{4 5 6}) #{4 5 6})
-  (= (__ #{[1 2] [2 3]} #{[2 3] [3 4]}) #{[1 2] [3 4]}))</pre></td></tr><tr><td class="docs"><h3>Problem 89: <a href="http://www.4clojure.com/problem/89">Graph Tour</a></h3>
+<p>(= (__ []) [])</p>
 
-<p>The problem is manageable with the following graph theoretical
-result from <a href="http://en.wikipedia.org/wiki/Eulerian_path">Wikipedia</a>
-that "an undirected graph has an Eulerian trail [a walk that uses
-each edge exactly once] if and only if no more than two vertices
-has an odd degree [number of edges coming out of it] and it if all
-its vertices... belong to a simply-connected component."</p>
+<p>(= (__ [19 4 17 1 3 10 2 13 13 2 16 4 2 15 13 9 6 14 2 11])
+       [[1 4] [6 6] [9 11] [13 17] [19 19]])</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">((fn [l]
+   (if-not (seq l)
+     []
+     (let [sorted (distinct (sort l))]
+       (loop [s sorted, ret [], a (first s), b a]
+         (if (seq s)
+           (if (&gt; (first s) (inc b))
+             (recur (rest s)
+                    (conj ret [a b])
+                    (first s)
+                    (first s))
+             (recur (rest s)
+                    ret
+                    a
+                    (first s)))
+           (conj ret [a b]))))))
+  [19 4 17 1 3 10 2 13 13 2 16 4 2 15 13 9 6 14 2 11])</pre></td></tr><tr><td class="docs"><p>173
+Intro to Destructuring 2</p>
 
-<p>The connectedness property can be obtained by doing a traversal of
-the graph (in this case, depth-first) and tracking whether each
-node was visited.  The degree of the vertices can be obtained that
-way as well by tracking which vertices have which neighbor.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [pairs]
-    (letfn [(pairs-to-neighbor-list-map [pairs]
-              (loop [[[k v] &amp; pairs] pairs
-                     g {}]
-                (if-not k
-                  g
-                  (let [g (update-in g [k :neighbors] conj v)
-                        g (update-in g [v :neighbors] conj k)]
-                    (recur pairs g)))))
+<p>Difficulty: Easy
+Topics: Destructuring</p>
 
-            (set-explored [g i]
-              (assoc-in g [i :explored] true))
+<p>Sequential destructuring allows you to bind symbols to parts of
+sequential things (vectors, lists, seqs, etc.): (let [bindings* ]
+exprs*) Complete the bindings so all let-parts evaluate to 3.</p>
 
-            (explored [g i]
-              (get-in g [i :explored]))
+<p>(= 3
+  (let [[<em>_] [+ (range 3)]] (apply _</em>))
+  (let [[[<strong>] b] [[+ 1] 2]] (</strong> b))
+  (let [[<strong>] [inc 2]] (</strong>)))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(= 3
+  (let [[f x] [+ (range 3)]] (apply f x))
+  (let [[[f x] b] [[+ 1] 2]] (f x b))
+  (let [[f x] [inc 2]] (f x)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">&quot;
+#158 Decurry
 
-            (get-neighbors [g i]
-              (get-in g [i :neighbors]))
+Difficulty:Medium
+Topics:partial-functions
 
-            (dfs [g i]
-              (let [g (set-explored g i)
-                    js (get-neighbors g i)]
-                (loop [g g, [j &amp; js] js]
-                  (cond
-                   (not j)        g
-                   (explored g j) (recur g js)
-                   :else          (recur (dfs g j) js)))))
 
-            (all-connected [g]
-              (let [v (first (keys g))
-                    exp (dfs g v)]
-                (every? (partial = true) (map :explored (vals exp)))))
+Write a function that accepts a curried function of unknown arity
+n. Return an equivalent function of n arguments.  You may wish to
+read this: http://en.wikipedia.org/wiki/Currying
+&quot;</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn g [f]
+  (fn l [&amp; xs]
+    (loop [f f
+           [x &amp; xs] xs]
+      (if-not (seq? xs)
+        (f x)
+        (recur (f x) xs)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 10 ((g (fn [a]
+             (fn [b]
+               (fn [c]
+                 (fn [d]
+                   (+ a b c d))))))
+       1 2 3 4))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 24 ((g (fn [a]
+             (fn [b]
+               (fn [c]
+                 (fn [d]
+                   (* a b c d))))))
+       1 2 3 4))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 25 ((g (fn [a]
+             (fn [b]
+               (* a b))))
+       5 5))</pre></td></tr><tr><td class="docs"><h1>131: Sum Some Set Subsets</h1>
 
-            (degree [v] (-&gt; v :neighbors count))
+<p>Difficulty:Medium
+Topics:math</p>
 
-            (num-odd-vertices [g]
-              (count (filter (comp odd? degree) (vals g))))]
-      (let [g (pairs-to-neighbor-list-map pairs)]
-        (and (&lt;= (num-odd-vertices g) 2)
-             (all-connected g)))))
+<p>Given a variable number of sets of integers, create a function
+which returns true iff all of the sets have a non-empty subset with
+an equivalent summation.</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn gg [&amp; ss]
+  &quot;
+  Certainly there is a more elegant way to do this, but the approach is:
+  - form a set of non-empty subsets of each sequence; this is done by
+    creating a set of true or false variables indicating whether each element
+    is in the subset;
+  - sum each of these subsets;
+  - look for a nonempty intersection of sums across the sequences.
+  &quot;
+  (letfn [(tmult [s]
+            (if (seq s)
+              (for [el s, tf [true false]] (conj el tf))
+              [[true] [false]]))
+          (subsets [s]
+            (let [v (vec s)
+                  n (count s)
+                  tfs (nth (iterate tmult []) n)
+                  sets (filter (complement empty?)
+                               (for [bits tfs]
+                                 (filter (complement nil?)
+                                         (for [i (range n)]
+                                           (if (nth bits i)
+                                             (nth v i))))))]
+              sets))
+          (sums [s]
+            (map #(apply + %) (subsets s)))
+          (intersection [a b]
+            (set (for [el b :when (contains? a el)] el)))
+          (intersections [ss]
+            (reduce intersection ss))]
+    (let [allsums (map (comp set sums) ss)
+          common (intersections allsums)]
+      (not (empty? common)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true  (gg #{-1 1 99}
+             #{-2 2 888}
+             #{-3 3 7777})) ; ex. all sets have a subset which sums to zero</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect false (gg #{1}
+                  #{2}
+                  #{3}
+                  #{4}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true  (gg #{1}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect false (gg #{1 -3 51 9}
+             #{0}
+             #{9 2 81 33}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true  (gg #{1 3 5}
+             #{9 11 4}
+             #{-3 12 3}
+             #{-3 4 -2 10}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect false (gg #{-1 -2 -3 -4 -5 -6}
+             #{1 2 3 4 5 6 7 8 9}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true  (gg #{1 3 5 7}
+             #{2 4 6 8}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true  (gg #{-1 3 -5 7 -9 11 -13 15}
+             #{1 -3 5 -7 9 -11 13 -15}
+             #{1 -1 2 -2 4 -4 8 -8}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true  (gg #{-10 9 -8 7 -6 5 -4 3 -2 1}
+                          #{10 -9 8 -7 6 -5 4 -3 2 -1}))</pre></td></tr><tr><td class="docs"><p>The Big Divide</p>
 
-        (= true (__ [[:a :b]]))
-        (= false (__ [[:a :a] [:b :b]]))
-        (= false (__ [[:a :b] [:a :b] [:a :c] [:c :a]
-                      [:a :d] [:b :d] [:c :d]]))
-        (= true (__ [[1 2] [2 3] [3 4] [4 1]]))
-        (= true (__ [[:a :b] [:a :c] [:c :b] [:a :e]
-                     [:b :e] [:a :d] [:b :d] [:c :e]
-                     [:d :e] [:c :f] [:d :f]]))
-        (= false (__ [[1 2] [2 3] [2 4] [2 5]])))</pre></td></tr><tr><td class="docs"><h3>Problem 90: <a href="http://www.4clojure.com/problem/90">Cartesian Product</a></h3>
+<p>Difficulty:Medium
+Topics:math</p>
 
-<p><code>for</code> gives us the needed functionality very easily.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
- (fn [sa sb]
-   (set (for [a sa, b sb] [a b])))
+<p>Write a function which calculates the sum of all natural numbers
+under n (first argument) which are evenly divisible by at least one
+of a and b (second and third argument). Numbers a and b are
+guaranteed to be coprimes.</p>
 
-  (= (__ #{&quot;ace&quot; &quot;king&quot; &quot;queen&quot;} #{&quot;♠&quot; &quot;♥&quot; &quot;♦&quot; &quot;♣&quot;})
-   #{[&quot;ace&quot;   &quot;♠&quot;] [&quot;ace&quot;   &quot;♥&quot;] [&quot;ace&quot;   &quot;♦&quot;] [&quot;ace&quot;   &quot;♣&quot;]
-     [&quot;king&quot;  &quot;♠&quot;] [&quot;king&quot;  &quot;♥&quot;] [&quot;king&quot;  &quot;♦&quot;] [&quot;king&quot;  &quot;♣&quot;]
-     [&quot;queen&quot; &quot;♠&quot;] [&quot;queen&quot; &quot;♥&quot;] [&quot;queen&quot; &quot;♦&quot;] [&quot;queen&quot; &quot;♣&quot;]})
-  (= (__ #{1 2 3} #{4 5})
-   #{[1 4] [2 4] [3 4] [1 5] [2 5] [3 5]})
-  (= 300 (count (__ (into #{} (range 10))
-                  (into #{} (range 30))))))</pre></td></tr><tr><td class="docs"><h3>Problem 91: <a href="http://www.4clojure.com/problem/91">Graph Connectivity</a></h3>
+<p>Note: Some test cases have a very large n, so the most obvious
+solution will exceed the time limit.</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn gg
+  [T a b]
+  (letfn
+      [(sumrange [m] (/ (* m (inc m)) 2))
+       (sumproducts [T a]
+         (* a (sumrange (bigint (/ (dec (bigint T)) a)))))]
+    (- (+ (sumproducts T a) (sumproducts T b))
+       (sumproducts T (* a b)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 0 (gg 3 17 11))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 23 (gg 10 3 5))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 233168 (gg 1000 3 5))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect &quot;2333333316666668&quot;
+        (str (gg 100000000 3 5)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect &quot;110389610389889610389610&quot;
+        (str (gg (* 10000 10000 10000) 7 11)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect &quot;1277732511922987429116&quot;
+        (str (gg (* 10000 10000 10000) 757 809)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect &quot;4530161696788274281&quot;
+        (str (gg (* 10000 10000 1000) 1597 3571)))</pre></td></tr><tr><td class="docs"><p>Sequs Horribilis</p>
 
-<p>We already determined connectedness in Problem 90.  The only
-required variation is to coerce the input set to a vector so the
-initial loop destructuring form works.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [pairs]
-    (letfn [(pairs-to-neighbor-list-map [pairs]
-              (loop [[[k v] &amp; pairs] pairs
-                     g {}]
-                (if-not k
-                  g
-                  (let [g (update-in g [k :neighbors] conj v)
-                        g (update-in g [v :neighbors] conj k)]
-                    (recur pairs g)))))
+<p>Difficulty:Medium
+Topics:seqs</p>
 
-            (set-explored [g i]
-              (assoc-in g [i :explored] true))
+<p>Create a function which takes an integer and a nested collection of
+integers as arguments. Analyze the elements of the input collection
+and return a sequence which maintains the nested structure, and
+which includes all elements starting from the head whose sum is
+less than or equal to the input integer.</p>
 
-            (explored [g i]
-              (get-in g [i :explored]))
+<p>(=  (__ 10 [1 2 [3 [4 5] 6] 7])
+    '(1 2 (3 (4))))</p>
 
-            (get-neighbors [g i]
-              (get-in g [i :neighbors]))
+<p>(=  (__ 30 [1 2 [3 [4 [5 [6 [7 8]] 9]] 10] 11])
+    '(1 2 (3 (4 (5 (6 (7)))))))</p>
 
-            (dfs [g i]
-              (let [g (set-explored g i)
-                    js (get-neighbors g i)]
-                (loop [g g, [j &amp; js] js]
-                  (cond
-                   (not j)        g
-                   (explored g j) (recur g js)
-                   :else          (recur (dfs g j) js)))))
+<p>(=  (__ 9 (range))
+    '(0 1 2 3))</p>
 
-            (all-connected [g]
-              (let [v (first (keys g))
-                    exp (dfs g v)]
-                (every? (partial = true) (map :explored (vals exp)))))]
+<p>(=  (__ 1 [[[[[1]]]]])
+    '(((((1))))))</p>
 
-      (-&gt;&gt; pairs
-           (into [])
-           pairs-to-neighbor-list-map
-           all-connected)))
+<p>(=  (__ 0 [1 2 [3 [4 5] 6] 7])
+    '())</p>
 
-  (= true (__ #{[:a :a]}))
-  (= true (__ #{[:a :b]}))
-  (= false (__ #{[1 2] [2 3] [3 1]
-               [4 5] [5 6] [6 4]}))
-  (= true (__ #{[1 2] [2 3] [3 1]
-              [4 5] [5 6] [6 4] [3 4]}))
-  (= false (__ #{[:a :b] [:b :c] [:c :d]
-               [:x :y] [:d :a] [:b :e]}))
-  (= true (__ #{[:a :b] [:b :c] [:c :d]
-              [:x :y] [:d :a] [:b :e] [:x :a]})))</pre></td></tr><tr><td class="docs"><h3>Problem 94: <a href="http://www.4clojure.com/problem/94">Game of Life</a></h3>
+<p>(=  (__ 0 [0 0 [0 [0]]])
+    '(0 0 (0 (0))))</p>
 
-<p>We accept a vector of strings as our "board representation."  The
-problem is, essentially, For any given spot, how many neighbors do
-I have?  This is made easier by the fact that we can easily address any
-cell in the board representation with <code>get-in</code>.  For example, if <code>b</code> is the
-first board, <code>(get-in b [2 2])</code> is <code>\#</code>, <code>(get-in b [0 0])</code> is
-<code>\space</code>, and <code>(get-in b [-1 -5])</code> is <code>nil</code>.</p>
+<p>(=  (__ 1 [-10 [1 [2 3 [4 5 [6 7 [8]]]]]])
+       '(-10 (1 (2 3 (4)))))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn ff [T s]
+  (letfn [(inner [T s S]
+            (loop [s s, S S, ret []]
+              (let [[x &amp; xs] s
+                    nS (if (or (coll? x) (nil? x)) S (+ x S))
+                    [fs fS] (if (coll? x) (inner T x nS) [x nS])]
+                (if (and (seq s) (&lt;= fS T))
+                  (recur xs fS (conj ret fs))
+                  [ret S]))))]
+    ((inner T s 0) 0)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect  (ff 10 [1 2 [3 [4 5] 6] 7])
+         '(1 2 (3 (4))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect  (ff 30 [1 2 [3 [4 [5 [6 [7 8]] 9]] 10] 11])
+         '(1 2 (3 (4 (5 (6 (7)))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect  (ff 9 (range))
+         '(0 1 2 3))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (ff 1 [[[[[1]]]]])
+        '(((((1))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect  (ff 0 [1 2 [3 [4 5] 6] 7])
+         '())</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect  (ff 0 [0 0 [0 [0]]])
+         '(0 0 (0 (0))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect  (ff 1 [-10 [1 [2 3 [4 5 [6 7 [8]]]]]])
+         '(-10 (1 (2 3 (4)))))</pre></td></tr><tr><td class="docs"><p>Universal Computation Engine</p>
 
-<p>With the lookup method understood, the rest of the work is looping
-over all the rows and columns, then for each position count
-neighbor values by looking at the character at +/- one x or y
-value, except for the position in question.  Then the rule for
-whether the cell should live or die is trivial to apply.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [b]
-    (for [j (range (count (first b)))]
-      (let [row-chars (for [i (range (count b))]
-                        (let [nn (count
-                                  (for [ny (range (dec j) (+ 2 j))
-                                        nx (range (dec i) (+ 2 i))
-                                        :when (and (= \# (get-in b [ny nx]))
-                                                   (or (not= ny j)
-                                                       (not= nx i)))]
-                                    [ny nx (= \# (get-in b [ny nx]))]))
-                              reborn (if (= \# (get-in b [j i]))
-                                       (#{2 3} nn)
-                                       (#{3} nn))]
-                          (if reborn \# \space)))]
-        (apply str row-chars))))
-  (= (__ [&quot;      &quot;
-          &quot; ##   &quot;
-          &quot; ##   &quot;
-          &quot;   ## &quot;
-          &quot;   ## &quot;
-          &quot;      &quot;])
-     [&quot;      &quot;
-      &quot; ##   &quot;
-      &quot; #    &quot;
-      &quot;    # &quot;
-      &quot;   ## &quot;
-      &quot;      &quot;])
-  (= (__ [&quot;     &quot;
-          &quot;     &quot;
-          &quot; ### &quot;
-          &quot;     &quot;
-          &quot;     &quot;])
-     [&quot;     &quot;
-      &quot;  #  &quot;
-      &quot;  #  &quot;
-      &quot;  #  &quot;
-      &quot;     &quot;])
-  (= (__ [&quot;      &quot;
-          &quot;      &quot;
-          &quot;  ### &quot;
-          &quot; ###  &quot;
-          &quot;      &quot;
-          &quot;      &quot;])
-     [&quot;      &quot;
-      &quot;   #  &quot;
-      &quot; #  # &quot;
-      &quot; #  # &quot;
-      &quot;  #   &quot;
-      &quot;      &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 103: <a href="http://www.4clojure.com/problem/103">Generating k-combinations</a></h3>
+<p>Difficulty:Medium
+Topics:functions</p>
 
-<p>Note: these both scale rather badly.  Benchmark with, e.g.,:</p>
-</td><td class="codes"><pre class="brush: clojure">(comment (doseq [i (range 12)]
-           (print i &quot;...&quot;)
-           (time (println (f i (range i))))))</pre></td></tr><tr><td class="docs"><p>Engelberg's <a href="https://github.com/clojure/math.combinatorics/blob/master/src/main/clojure/clojure/math/combinatorics.clj">math.combinatorics
-implementation</a>
-relies heavily on Knuth, but seems to have much better time
-complexity than my solutions.</p>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>OLD:</p>
-</td><td class="codes"><pre class="brush: clojure">(comment (fn [k s]
-           (set
-            (filter #(= (count %) k)
-                    (loop [n k, ret (map hash-set s)]
-                      (if (zero? n)
-                        ret
-                        (recur (dec n)
-                               (for [v ret, x s]
-                                 (conj v x)))))))))</pre></td></tr><tr><td class="docs"><p>New solution:</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [k s]
+<p>Given a mathematical formula in prefix notation, return a function
+that calculates the value of the formula. The formula can contain
+nested calculations using the four basic mathematical operators,
+numeric constants, and symbols representing variables. The returned
+function has to accept a single parameter containing the map of
+variable names to their values.</p>
+
+<p>(= 2 ((__ '(/ a b))
+      '{b 8 a 16}))</p>
+
+<p>(= 8 ((__ '(+ a b 2))
+      '{a 2 b 4}))</p>
+
+<p>(= [6 0 -4]
+   (map (__ '(* (+ 2 a)
+                (- 10 b)))
+        '[{a 1 b 8}
+          {b 5 a -2}
+          {a 2 b 11}]))</p>
+
+<p>(= 1 ((__ '(/ (+ x 2)
+              (* 3 (+ y 1))))
+            '{x 4 y 1}))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn f [expr]
+  (cond
+   (number? expr) (fn [m] expr)
+   (symbol? expr) (fn [m] (m expr))
+   :else (fn [m]
+           (let [[op &amp; args] expr
+                 mapseq (map #((f %) m) args)
+                 opmap {'/ /, '* *, '+ +, '- -}]  ;; FIXME -- maybe a cleaner way?
+             (apply (opmap op) (map #((f %) m) args))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 3 ((f 'a) '{a 3}))
+(expect 2 ((f 2) '{}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 2 ((f '(/ a b))
+           '{b 8 a 16}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 8 ((f '(+ a b 2))
+           '{a 2 b 4}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 1 ((f '(/ (+ x 2)
+                  (* 3 (+ y 1))))
+           '{x 4 y 1}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect [6 0 -4]
+        (map (f '(* (+ 2 a)
+                    (- 10 b)))
+             '[{a 1 b 8}
+               {b 5 a -2}
+               {a 2 b 11}]))</pre></td></tr><tr><td class="docs"><p>Prime Sandwich</p>
+
+<p>Difficulty:Medium
+Topics:math</p>
+
+<p>A balanced prime is a prime number which is also the mean of the
+primes directly before and after it in the sequence of valid
+primes. Create a function which takes an integer n, and returns
+true iff it is a balanced prime.</p>
+
+<p>(= false (__ 4))</p>
+
+<p>(= true (__ 563))</p>
+
+<p>(= 1103 (nth (filter __ (range)) 15))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn is-balanced-prime [x]
+  (letfn [(is-prime [x]
+            (not (some #(= (rem x %) 0) (range 2 x))))
+          (next-prime [x]
+            (first (filter is-prime (drop (inc x) (range)))))
+          (prev-prime [x]
+            (first (filter is-prime (range (dec x) 0 -1))))]
+    (and (&gt; x 2)
+         (is-prime x)
+         (let [prev-prime (prev-prime x)
+               next-prime (next-prime x)]
+           (= x (/ (+ prev-prime next-prime) 2))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect false (is-balanced-prime 4))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true (is-balanced-prime 563))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (nth (filter is-balanced-prime (range)) 15)
+        1103)</pre></td></tr><tr><td class="docs"><p>Oscilrate</p>
+
+<p>Difficulty:Medium
+Topics:sequences</p>
+
+<p>Write an oscillating iterate: a function that takes an initial
+value and a variable number of functions. It should return a lazy
+sequence of the functions applied to the value in order, restarting
+from the first function after it hits the end.</p>
+
+<p>(= (take 3 (__ 3.14 int double)) [3.14 3 3.0])</p>
+
+<p>(= (take 5 (__ 3 #(- % 3) #(+ 5 %))) [3 0 5 2 7])</p>
+
+<p>(= (take 12 (__ 0 inc dec inc dec inc)) [0 1 0 1 0 1 2 1 2 1 2 3])</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn f [x &amp; s]
+  (letfn [(g [x s]
+            (lazy-seq
+               (cons x
+                     (g ((first s) x)
+                        (next s)))))]
+    (g x (cycle s))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (take 3 (f 3.14 int double)) [3.14 3 3.0])
+(expect (take 5 (f 3 #(- % 3) #(+ 5 %))) [3 0 5 2 7])
+(expect (take 12 (f 0 inc dec inc dec inc)) [0 1 0 1 0 1 2 1 2 1 2 3])</pre></td></tr><tr><td class="docs"><p>Insert between two items</p>
+
+<p>Difficulty:Medium
+Topics:seqs core-functions</p>
+
+<p>Write a function that takes a two-argument predicate, a value, and
+a collection; and returns a new collection where the value is
+inserted between every two items that satisfy the predicate.</p>
+
+<p>(= '(1 :less 6 :less 7 4 3) (__ &lt; :less [1 6 7 4 3]))</p>
+
+<p>(= '(2) (__ > :more [2]))</p>
+
+<p>(= [0 1 :x 2 :x 3 :x 4]  (__ #(and (pos? %) (&lt; % %2)) :x (range 5)))</p>
+
+<p>(empty? (__ > :more ()))</p>
+
+<p>(= [0 1 :same 1 2 3 :same 5 8 13 :same 21]
+   (take 12 (->> [0 1]
+                 (iterate (fn [[a b]] [b (+ a b)]))
+                 (map first) ; fibonacci numbers
+                 (__ (fn [a b] ; both even or both odd
+                       (= (mod a 2) (mod b 2)))
+                                          :same))))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn f [pred kw s]
+  (if (seq s)
+    (let [p (partition 2 1 s)]
+      (concat [(first s)]
+              (apply concat (for [[a b] p]
+                              (if (pred a b)
+                                [kw b]
+                                [b])))))
+    ()))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect '(1 :less 6 :less 7 4 3) (f &lt; :less [1 6 7 4 3]))
+(expect '(2) (f &gt; :more [2]))
+(expect [0 1 :x 2 :x 3 :x 4]  (f #(and (pos? %) (&lt; % %2)) :x (range 5)))
+(expect (empty? (f &gt; :more ())) true)
+(expect [0 1 :same 1 2 3 :same 5 8 13 :same 21]
+        (take 12 (-&gt;&gt; [0 1]
+                      (iterate (fn [[a b]] [b (+ a b)]))
+                      (map first) ; fibonacci numbers
+                      (f (fn [a b] ; both even or both odd
+                           (= (mod a 2) (mod b 2)))
+                         :same))))</pre></td></tr><tr><td class="docs"><p>Global take-while</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Difficulty:Medium
+Topics:seqs higher-order-functions</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>take-while is great for filtering sequences, but it limited: you can
+only examine a single item of the sequence at a time. What if you need
+to keep track of some state as you go over the sequence?</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Write a function which accepts an integer n, a predicate p, and a
+sequence. It should return a lazy sequence of items in the list up to,
+but not including, the nth item that satisfies the predicate.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= [2 3 5 7 11 13]
+   (__ 4 #(= 2 (mod % 3))
+       [2 3 5 7 11 13 17 19 23]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= ["this" "is" "a" "sentence"]
+   (__ 3 #(some #{\i} %)
+       ["this" "is" "a" "sentence" "i" "wrote"]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= ["this" "is"]
+   (__ 1 #{"a"}
+                ["this" "is" "a" "sentence" "i" "wrote"]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn f
+  [n p s]
+  (lazy-seq
+   (loop [s s, ret [], np 0]
+     (if (and (&lt; np n) (not (and (= np (dec n)) (p (first s)))))
+       (recur (rest s)
+              (conj ret (first s))
+              (if (p (first s)) (inc np) np))
+       ret))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(println (f 4 #(= 2 (mod % 3)) [2 3 5 7 11 13 17 19 23]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(println
+   (f 3 #(some #{\i} %)
+       [&quot;this&quot; &quot;is&quot; &quot;a&quot; &quot;sentence&quot; &quot;i&quot; &quot;wrote&quot;]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(println
+   (f 1 #{&quot;a&quot;}
+                [&quot;this&quot; &quot;is&quot; &quot;a&quot; &quot;sentence&quot; &quot;i&quot; &quot;wrote&quot;]))</pre></td></tr><tr><td class="docs"><p>initially:
+n 4  s [2 3 5 7 11 13 17 19 23]</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>initially:
+n 4  s [2 3 5 7 11 13 17 19 23]</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>loop begin:</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>s [2 3 5 7 11 13 17 19 23] ret []        np 0   (&lt; np n) true</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>recur
+    [3 5 7 11 13 17 19 23]     [2]       np 1
+                                                (&lt; np n) true
+      [5 7 11 13 17 19 23]     [2 3]     np 1
+                                                (&lt; np n) true
+        [7 11 13 17 19 23]     [2 3 5]   np 2
+                                                (&lt; np n) true
+          [11 13 17 19 23]     [2 3 5 7] np 2
+                                                (&lt; np n) true
+             [13 17 19 23]     [2 3 5 7 11]
+                                         np 3
+                                                (&lt; np n) true
+                [17 19 23]     [2 3 5 7 11 13]
+                                         np 3
+                                                (&lt; np n) true
+                   [19 23]     [2 3 5 7 11 13 17]
+                                         np 4
+                                                (&lt; np n) false
+                         ----->[2 3 5 7 11 13 17]</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Comparisons</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Difficulty:Elementary
+Topics:</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>For any orderable data type it's possible to derive all of the basic
+comparison operations (&lt;, ≤, =, ≠, ≥, and >) from a single operation
+(any operator but = or ≠ will work). Write a function that takes three
+arguments, a less than operator for the data and two items to
+compare. The function should return a keyword describing the
+relationship between the two items. The keywords for the relationship
+between x and y are as follows:</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>x = y → :eq
+x > y → :gt
+x &lt; y → :lt</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :gt (__ &lt; 5 1))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :eq (__ (fn [x y] (&lt; (count x) (count y))) "pear" "plum"))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :lt (__ (fn [x y] (&lt; (mod x 5) (mod y 5))) 21 3))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= :gt (__ > 0 2))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn f
+  [op x y]
+  (let [a (op x y)
+        b (op y x)]
+    (cond (= [false false] [a b]) :eq
+          (= [true false] [a b]) :lt
+          (= [false true] [a b]) :gt)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect :gt (f &lt; 5 1))
+(expect :eq (f (fn [x y] (&lt; (count x) (count y))) &quot;pear&quot; &quot;plum&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect :lt (f (fn [x y] (&lt; (mod x 5) (mod y 5))) 21 3))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect :gt (f &gt; 0 2))</pre></td></tr><tr><td class="docs"><p> Difficulty:    Medium
+ Topics:    strings math</p>
+
+<p> This is the inverse of Problem 92, but much easier. Given an integer
+ smaller than 4000, return the corresponding roman numeral in uppercase,
+ adhering to the subtractive principle.</p>
+
+<p> (= "I" (__ 1))</p>
+
+<p> (= "XXX" (__ 30))</p>
+
+<p> (= "IV" (__ 4))</p>
+
+<p> (= "CXL" (__ 140))</p>
+
+<p> (= "DCCCXXVII" (__ 827))</p>
+
+<p> (= "MMMCMXCIX" (__ 3999))</p>
+
+<p> (= "XLVIII" (__ 48))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn R [i]
+  (let [romans (into (sorted-map-by #(&gt; %1 %2))
+                     {1000 &quot;M&quot;
+                      900  &quot;CM&quot;
+                      500  &quot;D&quot;
+                      400  &quot;CD&quot;
+                      100  &quot;C&quot;
+                      90   &quot;XC&quot;
+                      50   &quot;L&quot;
+                      40   &quot;XL&quot;
+                      10   &quot;X&quot;
+                      9    &quot;IX&quot;
+                      5    &quot;V&quot;
+                      4    &quot;IV&quot;
+                      1    &quot;I&quot;})
+        allchars (loop [remain i, charlist [], romans romans, ret []]
+                   (let [[n char] (first romans)
+                         x (quot remain n)
+                         nx-chars (concat charlist (repeat x char))]
+                     (if (seq (rest romans))
+                       (recur (- remain (* x n))
+                              nx-chars
+                              (rest romans)
+                              (concat ret nx-chars))
+                       nx-chars)))]
+    (apply str (concat allchars))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect &quot;I&quot; (R 1))
+(expect &quot;II&quot; (R 2))
+(expect &quot;III&quot; (R 3))
+(expect &quot;IV&quot; (R 4))
+(expect &quot;V&quot; (R 5))
+(expect &quot;VI&quot; (R 6))
+(expect &quot;VII&quot; (R 7))
+(expect &quot;VIII&quot; (R 8))
+(expect &quot;IX&quot; (R 9))
+(expect &quot;X&quot; (R 10))
+(expect &quot;XX&quot; (R 20))
+(expect &quot;XLVIII&quot; (R 48))
+(expect &quot;L&quot; (R 50))
+(expect &quot;C&quot; (R 100))
+(expect &quot;CL&quot; (R 150))
+(expect &quot;CXL&quot; (R 140))
+(expect &quot;CC&quot; (R 200))
+(expect &quot;M&quot; (R 1000))
+(expect &quot;MD&quot; (R 1500))
+(expect &quot;MM&quot; (R 2000))
+(expect &quot;MMM&quot; (R 3000))
+(expect &quot;CXL&quot; (R 140))
+(expect &quot;DCCCXXVII&quot; (R 827))
+(expect &quot;MMMCMXCIX&quot; (R 3999))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">#{1 2}</pre></td></tr><tr><td class="docs"><p> (= 3 (__ [3 4 5]))</p>
+
+<p> (= 4 (__ [1 2 3 4 5 6 7] [0.5 3/2 4 19]))</p>
+
+<p> (= 7 (__ (range) (range 0 100 7/6) [2 3 5 7 11 13]))</p>
+
+<p> (= 64 (__ (map #(* % % %) (range)) ;; perfect cubes
+           (filter #(zero? (bit-and % (dec %))) (range)) ;; powers of 2
+           (iterate inc 20))) ;; at least as large as 20</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(defn d [seqs]
+ (let [pairs (zipmap (map first seqs) seqs)
+       firsts (map first seqs)
+       least (apply min firsts)
+       most (apply max firsts)]
+   (if (apply = firsts)
+     (first firsts)
+     (recur (apply (partial drop2most most))))))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(defn xc [&amp; seqs]
+ (d seqs))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn c [&amp; seqs]
+  (let [firsts (map first seqs)
+        biggest (apply max firsts)
+        trim #(if (&gt; biggest (first %)) (rest %) %)]
+    (if (apply = firsts)
+      (first firsts)
+      (recur (map trim seqs)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect 4 (c [1 2 3 4 5 6 7] [0.5 3/2 4 19]))
+(expect 7 (c (range) (range 0 100 7/6) [2 3 5 7 11 13]))
+(expect 3 (c [3 4 5]))
+(expect 64 (c (map #(* % % %) (range)) ;; perfect cubes
+            (filter #(zero? (bit-and % (dec %))) (range)) ;; powers of 2
+            (iterate inc 20))) ;; at least as large as 20</pre></td></tr><tr><td class="docs"><p>at least as large as 20</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p> Difficulty:    Medium
+ Topics:    math</p>
+
+<p> Write a function which returns a sequence of digits of a non-negative number
+ (first argument) in numerical system with an arbitrary base (second argument).
+ Digits should be represented with their integer values, e.g. 15 would be
+ [1 5] in base 10, [1 1 1 1] in base 2 and [15] in base 16.</p>
+
+<p> (= [1 2 3 4 5 0 1] (__ 1234501 10))</p>
+
+<p> (= [0] (__ 0 11))</p>
+
+<p> (= [1 0 0 1] (__ 9 2))</p>
+
+<p> (= <a href="__ n n">1 0] (let [n (rand-int 100000)</a>))</p>
+
+<p> (= [16 18 5 24 15 1] (<em>_ Integer/MAX</em>VALUE 42))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def f
+  (fn [n base]
+    (loop [n n
+           ret []]
+      (let [dig (rem n base)
+            nxt (int (Math/floor (/ n base)))]
+        (if (zero? nxt)
+          (cons dig ret)
+          (recur nxt (cons dig ret)))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect [1 2 3 4 5 0 1] (f 1234501 10))
+(expect [16 18 5 24 15 1] (f Integer/MAX_VALUE 42))</pre></td></tr><tr><td class="docs"><p> Difficulty:    Easy
+ Topics:    seqs</p>
+
+<p> Transform a sequence into a sequence of pairs containing the original
+ elements along with their index.</p>
+
+<p> (= (__ [:a :b :c]) [[:a 0] [:b 1] [:c 2]])</p>
+
+<p> (= (__ [0 1 3]) '((0 0) (1 1) (3 2)))</p>
+
+<p> (= (__ [[:foo] {:bar :baz}]) [[[:foo] 0] [{:bar :baz} 1]])</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>HINT: http://stackoverflow.com/questions/4830900/how-do-i-find-the-index-of-an-item-in-a-vector</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def x (fn [l]
+         (for [[x y] (map-indexed vector l)]
+           [y x])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(println (for [[x y] (map-indexed vector [:a :b :c])]
+           [y x]))
+(println (x [:a :b :c]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (x [:a :b :c]) [[:a 0] [:b 1] [:c 2]])
+(expect (x [0 1 3]) '((0 0) (1 1) (3 2)))</pre></td></tr><tr><td class="docs"><p>Map Defaults</p>
+
+<p>Difficulty: Elementary
+Topics: seqs</p>
+
+<p>When retrieving values from a map, you can specify default values in case
+the key is not found:</p>
+
+<p>(= 2 (:foo {:bar 0, :baz 1} 2))</p>
+
+<p>However, what if you want the map itself to contain the default values?
+Write a function which takes a default value and a sequence of keys and
+constructs a map.</p>
+
+<p>(= (__ 0 [:a :b :c]) {:a 0 :b 0 :c 0})</p>
+
+<p>(= (__ "x" [1 2 3]) {1 "x" 2 "x" 3 "x"})</p>
+
+<p>(= (__ [:a :b] [:foo :bar]) {:foo [:a :b] :bar [:a :b]})</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def f (fn f [default keys]
+        (let [vals (repeat default)]
+          (zipmap keys vals))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (f 0 [:a :b :c]) {:a 0 :b 0 :c 0})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (f &quot;x&quot; [1 2 3]) {1 &quot;x&quot; 2 &quot;x&quot; 3 &quot;x&quot;})</pre></td></tr><tr><td class="docs"><p>Difficulty: Elementary
+Topics: logic</p>
+
+<p>In Clojure, only nil and false representing the values of logical falsity in conditional tests - anything else is logical truth.</p>
+
+<p>(= __ (if-not false 1 0))</p>
+
+<p>(= __ (if-not nil 1 0))</p>
+
+<p>(= __ (if true 1 0))</p>
+
+<p>(= __ (if [] 1 0))</p>
+
+<p>(= __ (if [0] 1 0))</p>
+
+<p>(= __ (if 0 1 0))</p>
+
+<p>(= __ (if 1 1 0))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">1
+</pre></td></tr><tr><td class="docs"><p>Sequence of pronunciations</p>
+
+<p>Difficulty:Medium
+Topics:seqs</p>
+
+<p>Write a function that returns a lazy sequence of "pronunciations"
+of a sequence of numbers. A pronunciation of each element in the
+sequence consists of the number of repeating identical numbers and
+the number itself. For example, [1 1] is pronounced as [2 1] ("two
+ones"), which in turn is pronounced as [1 2 1 1] ("one two, one
+one").</p>
+
+<p>Your function should accept an initial sequence of numbers, and
+return an infinite lazy sequence of pronunciations, each element
+being a pronunciation of the previous element.</p>
+
+<p>(= [[1 1] [2 1] [1 2 1 1]] (take 3 (__ [1])))</p>
+
+<p>(= [3 1 2 4] (first (__ [1 1 1 4 4])))</p>
+
+<p>(= [1 1 1 3 2 1 3 2 1 1] (nth (__ [1]) 6))</p>
+
+<p>(= 338 (count (nth (__ [3 2]) 15)))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn pronunseq [s]
+  (letfn [(next-term [s]
+            (loop [l s
+                   prev nil
+                   ret []]
+              (if (seq l)
+                (let [[newval &amp; rst] l,
+                      cntpos (- (count ret) 2)
+                      oldcnt (get ret cntpos)
+                      same? (= prev newval)]
+                  (recur rst
+                         newval
+                         (if same?
+                           (assoc ret cntpos (inc oldcnt))
+                           (vec (concat ret [1 newval])))))
+                ret)))]
+    (rest (iterate next-term s))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (take 3 (pronunseq [1])) [[1 1] [2 1] [1 2 1 1]])
+(expect (count (nth (pronunseq [3 2]) 15)) 338)</pre></td></tr><tr><td class="docs"><p>Partially Flatten a Sequence</p>
+
+<p>Difficulty:Medium
+Topics:seqs</p>
+
+<p>Write a function which flattens any nested combination of
+sequential things (lists, vectors, etc.), but maintains the lowest
+level sequential items. The result should be a sequence of
+sequences with only one level of nesting.</p>
+
+<p>(= (__ [["Do"] ["Nothing"]])
+   [["Do"] ["Nothing"]])</p>
+
+<p>(= (__ [[[[:a :b]]] [[:c :d]] [:e :f]])
+   [[:a :b] [:c :d] [:e :f]])</p>
+
+<p>(= (__ '((1 2) ((3 4) ((((5 6)))))))
+      '((1 2) (3 4) (5 6)))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn q [x]
+  (letfn [(flat-seq? [x]
+            (empty? (filter (fn [y] (coll? y)) x)))]
+    (loop [x x, ret []]
+      (cond
+       (not (seq x)) ret
+       (flat-seq? x) x
+       (flat-seq? (first x)) (recur (rest x)
+                                    (concat ret [(first x)]))
+       :else (recur (rest x)
+                    (concat ret (q (first x))))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (q []) [])
+(expect (q [1]) [1])
+(expect (q [1 2]) [1 2])
+(expect (q [[1 2]]) [[1 2]])
+(expect (q [[1 2] [3 4]]) [[1 2] [3 4]])
+(expect (q [[1 2] [3 4] [5 6]]) [[1 2] [3 4] [5 6]])
+(expect (q [[[1 2]]]) [[1 2]])
+(expect (q [[1 2] [[3 4] [[[[5 6]]]]]]) [[1 2] [3 4] [5 6]])
+(expect (q [[[[:a :b]]] [[:c :d]] [:e :f]]) [[:a :b] [:c :d] [:e :f]])
+(expect (q '((1 2) ((3 4) ((((5 6))))))) '((1 2) (3 4) (5 6)))
+(expect (q [[&quot;Do&quot;] [&quot;Nothing&quot;]]) [[&quot;Do&quot;] [&quot;Nothing&quot;]])</pre></td></tr><tr><td class="docs"><p>Identify keys and values</p>
+
+<p>Difficulty:Medium
+Topics:maps seqs</p>
+
+<p>Given an input sequence of keywords and numbers, create a map such
+that each key in the map is a keyword, and the value is a sequence of
+all the numbers (if any) between it and the next keyword in the
+sequence.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= {} (__ []))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= {:a [1]} (__ [:a 1]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= {:a [1], :b [2]} (__ [:a 1, :b 2]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= {:a [1 2 3], :b [], :c [4]} (__ [:a 1 2 3 :b :c 4]))</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn unflatten-map [s]
+  (loop [ret {}
+         prev-kw []
+         s s]
+    (let [f (first s)
+          kw? (keyword? f)
+          num? (not kw?)
+          this-kw (if kw? f prev-kw)
+          prev-list (vec (ret this-kw))
+          next-value (vec (concat (ret this-kw) (if num? [f] [])))
+          next-map (assoc ret this-kw (if num? next-value []))]
+      (if (seq s)
+        (recur next-map this-kw (rest s))
+        ret))))</pre></td></tr><tr><td class="docs"><p>The Balance of N</p>
+
+<p>Difficulty:Medium
+Topics:math</p>
+
+<p>A balanced number is one whose component digits have the same sum
+on the left and right halves of the number. Write a function which
+accepts an integer n, and returns true iff n is balanced.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= true (__ 11))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= true (__ 121))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= false (__ 123))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= true (__ 0))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= false (__ 88099))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= true (__ 89098))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= true (__ 89089))</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (take 20 (filter __ (range)))
+   [0 1 2 3 4 5 6 7 8 9 11 22 33 44 55 66 77 88 99 101])</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn balanced [n]
+  (let [digits (map #(Integer/parseInt (str %)) (str n))
+        len (count digits)
+        pivot (int (/ len 2))
+        [l r] (split-at pivot digits)
+        r (if (even? len) r (rest r))]
+    (= (apply + l) (apply + r))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect true (balanced 11))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (take 20 (filter balanced (range)))
+        [0 1 2 3 4 5 6 7 8 9 11 22 33 44 55 66 77 88 99 101])</pre></td></tr><tr><td class="docs"><p>Difficulty:Easy
+Topics:set-theory
+Given a set of sets, create a function which returns true if no two
+of those sets have any elements in common1 and false
+otherwise. Some of the test cases are a bit tricky, so pay a little
+more attention to them.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>1 Such sets are usually called pairwise disjoint or mutually
+disjoint.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{\U} #{\s} #{\e \R \E} #{\P \L} #{.}})
+   true)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{:a :b :c :d :e}
+         #{:a :b :c :d}
+         #{:a :b :c}
+         #{:a :b}
+         #{:a}})
+   false)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{[1 2 3] [4 5]}
+         #{[1 2] [3 4 5]}
+         #{[1] [2] 3 4 5}
+         #{1 2 [3 4] [5]}})
+   true)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{'a 'b}
+         #{'c 'd 'e}
+         #{'f 'g 'h 'i}
+         #{''a ''c ''f}})
+   true)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{'(:x :y :z) '(:x :y) '(:z) '()}
+         #{#{:x :y :z} #{:x :y} #{:z} #{}}
+         #{'[:x :y :z] [:x :y] [:z] [] {}}})
+   false)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{(= "true") false}
+         #{:yes :no}
+         #{(class 1) 0}
+         #{(symbol "true") 'false}
+         #{(keyword "yes") ::no}
+         #{(class '1) (int \0)}})
+   false)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (__ #{#{distinct?}
+         #{#(-> %) #(-> %)}
+         #{#(-> %) #(-> %) #(-> %)}
+         #{#(-> %) #(-> %) #(-> %)}})
+   true)</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>(= (<em>_ #{#{(#(-> *)) + (quote mapcat) #</em> nil}
+         #{'+ '* mapcat (comment mapcat)}
+         #{(do) set contains? nil?}
+         #{, , , #_, , empty?}})
+      false)</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def samp1 #{#{\U} #{\s} #{\e \R \E} #{\P \L} #{\.}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def samp2 #{#{:a :b :c :d :e}
+             #{:a :b :c :d}
+             #{:a :b :c}
+             #{:a :b}
+             #{:a}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def samp3 #{#{[1 2 3] [4 5]}
+             #{[1 2] [3 4 5]}
+             #{[1] [2] 3 4 5}
+             #{1 2 [3 4] [5]}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def samp4 #{#{(#(-&gt; *)) + (quote mapcat) #_ nil}
+             #{'+ '* mapcat (comment mapcat)}
+             #{(do) set contains? nil?}
+             #{, , , #_, , empty?}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn in?
+  [seq elm]
+  (some #(= elm %) seq))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def f
+  (fn [ss]
+    (empty?
+     (for [ss0 ss
+           ss1 ss :when (not (= ss0 ss1))
+           el ss0 :when (some #(= el %) ss1)]
+       el))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (f samp1) true)
+(expect (f samp2) false)
+(expect (f samp3) true)
+(expect (f samp4) false)</pre></td></tr><tr><td class="docs"><p>Power set</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">&quot;
+Difficulty:Medium
+Topics:set-theory
+
+
+Write a function which generates the power set of a given set. The
+power set of a set x is the set of all subsets of x, including the
+empty set and x itself.
+
+(= (__ #{1 :a}) #{#{1 :a} #{:a} #{} #{1}})
+
+(= (__ #{}) #{#{}})
+
+(= (__ #{1 2 3})
+   #{#{} #{1} #{2} #{3} #{1 2} #{1 3} #{2 3} #{1 2 3}})
+
+(= (count (__ (into #{} (range 10)))) 1024)
+
+&quot;</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn pwrset [S]
+  (let [pwr2 (fn [n] (apply * (repeat n 2)))
+        has-bit-set (fn [num digit]
+                      (&gt; (bit-and num (pwr2 digit)) 0))
+        nitems (count S)
+        itemlist (apply list S)
+        num_combinations (pwr2 nitems)]
     (set
-     (loop [k k, ss (map hash-set s)]
-       (if (&lt;= k 1)
-         ss
-         (recur (dec k)
-                (for [en ss, e0 s :when (not (some #{e0} en))]
-                  (conj en e0)))))))
+     (for [c (range num_combinations)]
+       (set (for [i (range nitems) :when (has-bit-set c i)]
+              (nth itemlist i)))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(println (combi #{:a :b :c}))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn pwr2 [n] (apply * (repeat n 2)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn has-bit-set [num digit]
+  (&gt; (bit-and num (pwr2 digit)) 0))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (pwr2 2) 4)
+(expect (pwr2 10) 1024)
+(expect (has-bit-set 0 0) false)
+(expect (has-bit-set 1 0) true)
+(expect (map (partial has-bit-set 0xFF) (range 8)) (repeat 8 true))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn works [S]  ;; But requires S of length 3!!!
+  (set
+   (for [tf1 [true false], e1 S :when tf1,
+         tf2 [true false], e2 S :when tf2,
+         tf3 [true false], e3 S :when tf3]
+     (set [e1 e2 e3]))))</pre></td></tr><tr><td class="docs"><p>Equivalence relations</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">&quot;
+(= (__ #(* % %) #{-2 -1 0 1 2})
+   #{#{0} #{1 -1} #{2 -2}})
 
-  (= (__ 1 #{4 5 6}) #{#{4} #{5} #{6}})
-  (= (__ 10 #{4 5 6}) #{})
-  (= (__ 2 #{0 1 2}) #{#{0 1} #{0 2} #{1 2}})
-  (= (__ 3 #{0 1 2 3 4}) #{#{0 1 2} #{0 1 3} #{0 1 4} #{0 2 3} #{0 2 4}
-                           #{0 3 4} #{1 2 3} #{1 2 4} #{1 3 4} #{2 3 4}})
-  (= (__ 4 #{[1 2 3] :a &quot;abc&quot; &quot;efg&quot;}) #{#{[1 2 3] :a &quot;abc&quot; &quot;efg&quot;}})
-  (= (__ 2 #{[1 2 3] :a &quot;abc&quot; &quot;efg&quot;}) #{#{[1 2 3] :a} #{[1 2 3] &quot;abc&quot;} #{[1 2 3] &quot;efg&quot;}
-                                        #{:a &quot;abc&quot;} #{:a &quot;efg&quot;} #{&quot;abc&quot; &quot;efg&quot;}}))</pre></td></tr><tr><td class="docs"><h3>Problem 106: <a href="http://www.4clojure.com/problem/106">Number Maze</a></h3>
+(= (__ #(rem % 3) #{0 1 2 3 4 5 })
+   #{#{0 3} #{1 4} #{2 5}})
 
-<p>This problem is similar to searching for the shortest path through
-an undirected graph, a problem for which breadth-first search is
-well-suited.  For every "layer" in the search (each layer
-corresponds to a successive number of allowed operations) we
-calculate the next layer by applying all the allowed operations to
-the values in the current layer.  The layers can grow large
-relatively quickly, but converting the sequence to a set on each
-iteration reduces the size substantially for large layers.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [n0 n1]
-    (letfn [(apply-ops [ns]
-              (mapcat ops-on-num ns))
-            (ops-on-num [n]
-              (if (even? n)
-                [(* 2 n) (/ n 2) (+ 2 n)]
-                [(* 2 n) (+ 2 n)]))]
+(= (__ identity #{0 1 2 3 4})
+   #{#{0} #{1} #{2} #{3} #{4}})
 
-      (loop [c 1, ns [n0]]
-        (if (some #{n1} ns)
-          c
-          (let [next-ns (apply-ops ns)]
-            (recur (inc c)
-                   (set (apply-ops ns))))))))
+(= (__ (constantly true) #{0 1 2 3 4})
+   #{#{0 1 2 3 4}})
+&quot;</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn equiv
+  [f D]
+  (set
+   (for [a D]
+     (set
+      (for [b D :when (= (f a) (f b))]
+        b)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (equiv #(* % %) #{-2 -1 0 1 2})
+        #{#{0} #{1 -1} #{2 -2}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (equiv #(rem % 3) #{0 1 2 3 4 5 })
+        #{#{0 3} #{1 4} #{2 5}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (equiv identity #{0 1 2 3 4})
+        #{#{0} #{1} #{2} #{3} #{4}})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (equiv (constantly true) #{0 1 2 3 4})
+        #{#{0 1 2 3 4}})</pre></td></tr><tr><td class="docs"><p>Euler's totient</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def totient-f
+  (fn totient-f [x]
+    (let [gcd (fn [a b]
+                (let [aa (max a b)
+                      bb (min a b)]
+                  (if (zero? b)
+                    a
+                    (recur b (mod a b))))),
+          coprime (fn [a b]
+                    (= (gcd a b) 1))]
+      (if (= x 1)
+        1
+        (let [r (range 1 x)
+              coprimes (filter #(coprime % x) r)]
+          (count coprimes))))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(expect (totient-f 1) 1)
+(expect (totient-f 10) 4)
+(expect (totient-f 40) 16)
+(expect (totient-f 99) 60)</pre></td></tr><tr><td class="docs"><p>intoCamelCase</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">((fn [s]
+   (let [words (re-seq #&quot;[^-]+&quot; s)]
+       (apply str (cons (first words)
+                        (for [w (rest words)]
+                          (str (.toUpperCase (str (first w))) (apply str (rest w))))))))
+     &quot;multi-word-key&quot;)</pre></td></tr><tr><td class="docs"><p>Merge with a function</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">((fn [fun &amp; maps]
+      (let [pairs (apply concat
+                         (for [mm maps]
+                           (for [[k, v] mm] [k v])))]
+        (loop [p pairs, ret {}]
+          (if (seq p)
+            (let [[k, v] (first p),
+                  lookup (ret k)
+                  insert (if lookup (fun lookup v) v)]
+              (recur (rest p)
+                     (conj ret (assoc {} k insert))))
+            ret))))
+     - {1 10, 2 20} {1 3, 2 10, 3 15})</pre></td></tr><tr><td class="docs"><p>Sequence reductions</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">((fn redu
+   ([f i s]
+     (if (seq s)
+       (lazy-seq
+         (cons i
+               (redu f (f i (first s)) (rest s))))
+       [i]))
+   ([f s]
+     (redu f (first s) (rest s))))
+  conj [1] [2 3 4])</pre></td></tr><tr><td class="docs"><p>Black Box Testing</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(map (fn [s]
+   (let [r (conj s [4 5] [5 4] [5 5]),
+         a (- (count r) (count s)),
+         b (first r),
+         c (last r)]
+     (cond (= a 2) :map,
+           (and (= a 3) (= b [5 4])) :set,
+           (and (= a 3) (= c [5 5])) :vector,
+           (and (= a 3) (= b [5 5])) :list,
+           :true :something-else))) [{:a 1, :b 2} #{:a 1 :b 2} [:a 1 :b 2] '(:a 1 :b 2) [1 2 3 4 5 6]])</pre></td></tr><tr><td class="docs"><p> Difficulty:    Medium
+ Topics:</p>
 
-  (= 1 (__ 1 1))   ; 1
-  (= 3 (__ 3 12))  ; 3 6 12
-  (= 3 (__ 12 3))  ; 12 6 3
-  (= 3 (__ 5 9))   ; 5 7 9
-  (= 9 (__ 9 2))   ; 9 18 20 10 12 6 8 4 2
-  (= 5 (__ 9 12))) ; 9 11 22 24 12</pre></td></tr><tr><td class="docs"><h3>Problem 137: <a href="http://www.4clojure.com/problem/137">Digits and Bases</a></h3>
+<p> Given a string of comma separated integers, write a function which
+ returns a new comma separated string that only contains the numbers
+ which are perfect squares.</p>
 
-<p>This is a simple matter of dividing modulo the base and shifting
-out low-order digits.  Alternatively, could do as a lazy seq.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [n base]
-          (loop [n n, ret []]
-            (if (zero? n)
-              (if (empty? ret) [0] ret)
-              (recur (quot n base) (cons (mod n base) ret)))))
-  (= [1 2 3 4 5 0 1] (__ 1234501 10))
-  (= [0] (__ 0 11))
-  (= [1 0 0 1] (__ 9 2))
-  (= [1 0] (let [n (rand-int 100000)](__ n n)))
-  (= [16 18 5 24 15 1] (__ Integer/MAX_VALUE 42)))</pre></td></tr><tr><td class="docs"><h3>Problem 141: <a href="http://www.4clojure.com/problem/141">Tricky card games</a></h3>
+<p> (= (__ "4,5,6,7,8,9") "4,9")</p>
 
-<p>We want to provide a function which determines the winning card of
-a sequence of plays, defined by:</p>
-
-<ol>
-<li>The highest trump, if applicable;</li>
-<li>The highest card in the suit that was led, otherwise.</li>
-</ol>
-
-<p>We calculate which suit was led, and then order the cards according
-to their "value" in descending order, with high trumps first,
-followed by low trumps, followed by high cards in the leading suit,
-followed by low cards in the leading suit.  While <code>trump-cards</code>
-will be empty when nothing is trump, <code>suit-led-cards</code> cannot be,
-since, by assumption, at least one card was played.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-  (fn [trump]
-    (fn [cards]
-      (let [suit-led (-&gt;&gt; cards first :suit)
-            get-cards (fn [suit] (-&gt;&gt; cards
-                                      (filter #(= (:suit %) suit))
-                                      (sort-by :rank)
-                                      reverse))
-            trump-cards (get-cards trump)
-            suit-led-cards (get-cards suit-led)]
-        (first (concat trump-cards suit-led-cards)))))
-
-  (let [notrump (__ nil)]
-    (and (= {:suit :club :rank 9}  (notrump [{:suit :club :rank 4}
-                                             {:suit :club :rank 9}]))
-         (= {:suit :spade :rank 2} (notrump [{:suit :spade :rank 2}
-                                             {:suit :club :rank 10}]))))
-  (= {:suit :club :rank 10} ((__ :club) [{:suit :spade :rank 2}
-                                         {:suit :club :rank 10}]))
-  (= {:suit :heart :rank 8}
-     ((__ :heart) [{:suit :heart :rank 6} {:suit :heart :rank 8}
-                   {:suit :diamond :rank 10} {:suit :heart :rank 4}])))</pre></td></tr><tr><td class="docs"><h3>Problem 150: <a href="http://www.4clojure.com/problem/150">Palindromic Numbers</a></h3>
-
-<p>My solution has three parts: (a) to calculate the
-<code>nearest-palindrome</code> to a given number <code>x</code> (which will be <code>x</code> if it
-is already a palindromic number); (b) to calculate the
-<code>next-palindrome</code> given an already palindromic number; and finally
-(c) to iterate <code>next-palindrome</code> to provide an infinite lazy
-sequence of palindromes larger than <code>n</code>.  Because
-<code>nearest-palindrome</code> can provide a result less than <code>x</code>, we use
-<code>drop-while</code> in the final sequence to choose only values >= <code>n</code>.</p>
-
-<p>For both <code>nearest-palindrome</code> and <code>next-palindrome</code>, the approach
-is to split the number into left and right halves based on its
-length in digits (the <code>rl-pair</code> function); the left half is then
-reflected and concatenated onto itself using <code>recombine</code> (e.g.,
-1234 -> 1221).  The twist in <code>next-palindrome</code> is to increment the
-left half of the number before recombining.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves
-
-  (fn [n]
-    (letfn [(rl-pair [n]
-              [(quot (inc n) 2), (quot n 2)])
-
-            (recombine [s k1 k2]
-              (Long/parseLong (apply str (concat (take k1 s)
-                                                 (reverse (take k2 s))))))
-            (nearest-palindrome [x]
-              (let [sx (str x)
-                    [k1 k2] (rl-pair (count sx))]
-                (recombine sx k1 k2)))
-
-            (next-palindrome [x]
-              (let [sx (str x)
-                    [k1 _] (rl-pair (count sx))
-                    x' (inc (Long/parseLong (apply str (take k1 sx))))
-                    [kk1 kk2] (rl-pair (count (str (inc x))))]
-                (recombine (str x') kk1 kk2)))]
-
-      (drop-while #(&lt; % n) (iterate next-palindrome
-                                    (nearest-palindrome n)))))
-
-  (= (take 26 (__ 0))
-     [0 1 2 3 4 5 6 7 8 9
-      11 22 33 44 55 66 77 88 99
-      101 111 121 131 141 151 161])
-  (= (take 16 (__ 162))
-     [171 181 191 202
-      212 222 232 242
-      252 262 272 282
-      292 303 313 323])
-  (= (take 6 (__ 1234550000))
-     [1234554321 1234664321 1234774321
-      1234884321 1234994321 1235005321])
-  (= (first (__ (* 111111111 111111111)))
-     (* 111111111 111111111))
-  (= (set (take 199 (__ 0)))
-     (set (map #(first (__ %)) (range 0 10000))))
-  (= true
-     (apply &lt; (take 6666 (__ 9999999))))
-  (= (nth (__ 0) 10101)
-     9102019))</pre></td></tr><tr><td class="docs"><h3>Problem 177: <a href="http://www.4clojure.com/problem/177">Balancing Brackets</a></h3>
-
-<p>After a couple of tries on this I realized that stripping out
-non-parenthetic characters and then successively eliminating empty,
-balanced pairs of parens/braces/brackets would do the trick.</p>
-</td><td class="codes"><pre class="brush: clojure">(solves (fn [s]
-          (empty?
-           (loop [s (clojure.string/replace s #&quot;[^\(\)\{\}\[\]]&quot; &quot;&quot;)]
-             (let [r (clojure.string/replace s #&quot;\(\)|\{\}|\[\]&quot; &quot;&quot;)]
-               (if (= r s) s (recur r))))))
-        (__ &quot;This string has no brackets.&quot;)
-        (__ &quot;class Test {
-      public static void main(String[] args) {
-        System.out.println(\&quot;Hello world.\&quot;);
-      }
-    }&quot;)
-        (not (__ &quot;(start, end]&quot;))
-        (not (__ &quot;())&quot;))
-        (not (__ &quot;[ { ] } &quot;))
-        (__ &quot;([]([(()){()}(()(()))(([[]]({}()))())]((((()()))))))&quot;)
-        (not (__ &quot;([]([(()){()}(()(()))(([[]]({}([)))())]((((()()))))))&quot;))
-        (not (__ &quot;[&quot;)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+<p> (= (__ "15,16,25,36,37") "16,25,36")</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(fn [S]
+  (apply str (interpose &quot;,&quot;
+                        (for [[x, y] (map (fn [s]
+                                            (let [i (Integer/parseInt s),
+                                                  rx (Math/sqrt i),
+                                                  ri (int rx)]
+                                              [i (= (* ri ri) i)])) (re-seq #&quot;\d+&quot; S)) :when y] x))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">[1 3 5 7 9 11]</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def noprintln (fn [&amp;rest]))</pre></td></tr><tr><td class="docs"><p>Pascal's Trapezoid</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  (take 4
+        ((fn [outer]
+           (let [nxt (fn [s]
+                       (concat [(first s)]
+                               (loop [ss s, ret []]
+                                 (let [[a &amp; b] ss]
+                                   (if (seq ss)
+                                     (recur (rest ss) (conj ret (if (nil? b)
+                                                                  a
+                                                                  (+ a (first b)))))
+                                     ret)))))]
+             (iterate nxt outer))) [3 1 2])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn [s]
+     (concat [(first s)]
+             (loop [ss s, ret []]
+               (let [[a &amp; b] ss]
+                 (if (seq ss)
+                   (recur (rest ss) (conj ret (if (nil? b)
+                                                a
+                                                (+ a (first b)))))
+                   ret)))))
+    [3 1 2]))</pre></td></tr><tr><td class="docs"><p>Dot product</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln ((fn [a b]
+            (loop [aa a,
+                   bb b,
+                   ret 0]
+              (if (seq aa)
+                (recur (rest aa) (rest bb) (+ ret (* (first aa) (first bb))))
+                ret)))
+           [0 1 0] [1 1 1]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln ((fn [s]  ;;
+            (let [[val l r] s
+                  swp (fn swap [t]
+                        (let [[v l r] t]
+                          (if
+                            (nil? v) t
+                            [v (swap r) (swap l)])))]
+              (= l (swp r))))
+           '(:a (:b nil nil) (:b nil nil))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn [SS]
+     (let [suit ({\D :diamond,
+                  \H :heart,
+                  \C :club,
+                  \S :spade} (first SS))
+           rank ({\2 0
+                  \3 1
+                  \4 2
+                  \5 3
+                  \6 4
+                  \7 5
+                  \8 6
+                  \9 7
+                  \T 8
+                  \J 9
+                  \Q 10
+                  \K 11
+                  \A 12}
+                  (second SS))] {:suit suit, :rank rank}))
+    &quot;DQ&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn f
+     ([a op b] (op a b))
+     ([a op b &amp; rst]
+       (apply f (op a b) rst)))
+    38 + 48 - 2 / 2))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn mymap2 [f s]
+     (lazy-seq
+       (if (seq s)
+         (cons (f (first s)) (mymap2 f (rest s))))))
+    inc (range 10)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn mymap [f s]
+    (lazy-seq
+      (loop [cur s
+             ret []]
+        (if (seq cur)
+          (recur (rest cur) (conj ret (f (first cur))))
+          ret))))
+  inc (range 10)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln ((fn dolcm [&amp; r]
+            (letfn [(lcm [a &amp; rst]
+                         (/ (reduce * a rst)
+                            (reduce gcd1 a rst)))
+                    (gcd1 [a b]
+                          (let [aa (max a b)
+                                bb (min a b)]
+                            (if (zero? b)
+                              a
+                              (recur b (mod a b)))))]
+                   (apply lcm r)))
+           5 3 7))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn [s]
+     (loop [cur s
+            cnt 0]
+       (if (not (seq cur))
+         cnt
+         (let [f (first cur)
+               digits (map (comp #(Integer/parseInt %) str) (seq (str f)))
+               dsq (map #(* % %) digits)
+               sumsq (apply + dsq)]
+           (recur (rest cur) (if (&lt; f sumsq) (+ cnt 1) cnt))))))
+    (range 100)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  (let [x java.lang.Class]
+    (and (= (class x) x) x)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn treep [s]
+     (or (nil? s)
+         (and (coll? s)
+              (= (count s) 3)
+              (treep (nth s 1))
+              (treep (nth s 2)))))
+    [1 nil [2 [3 nil nil] [4 nil nil]]]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn [s]
+     (loop [in (map (comp #(Integer/parseInt %) str) (seq s)),
+            pwr 0,
+            ret 0]
+       (if (seq in)
+         (recur (rest in) (+ pwr 1) (+ (first in) (bit-shift-left ret 1)))
+         ret)))
+    &quot;1111&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(noprintln
+  ((fn [n]
+     (last
+       (take n
+             (iterate
+               (fn [l]
+                 (loop [cur l,
+                        ret [1]]
+                   (if (seq cur)
+                     (let [a (or (first cur) 0)
+                           b (or (second cur) 0)
+                           next (+ a b)]
+                       (recur (rest cur) (conj ret next)))
+                     ret)))
+      [1]))))
+    11))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p>(use 'clojure.tools.trace)</p>
+</td><td class="codes"><pre class="brush: clojure">(use 'clojure.pprint)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmacro dbg [x]
+  `(let [x# ~x] (println (str '~x &quot;=&quot; x#)) x#))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def noprintln (fn [&amp;rest]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn pmax
+  ([x] (pmax x 15))
+  ([x T]
+     (let [sx (str x)
+           six (take (- T 4) sx)
+           ell (concat six [&quot;...&quot;])]
+       (if (&gt; (count sx) T)
+         (apply str ell)
+         (str x)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn p
+  ([s]
+     (p 10 s))
+  ([width s]
+     (let [c (count s)
+           fmt (apply str (repeat c (apply str &quot;%&quot; width &quot;s&quot;)))]
+       (apply (partial format fmt) (map pmax s)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn pcolls [&amp; s] (println (p 20 s)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
        SyntaxHighlighter.all()</script></body></html>
