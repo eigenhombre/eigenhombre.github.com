@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8" content="text/html" http-equiv="Content-Type" /><meta content="FIXME: write description" name="description" /><style type="text/css">/**
+<html><head><meta charset="utf-8" content="text/html" http-equiv="Content-Type" /><meta content="Problems from 4clojure.com, solved and annotated." name="description" /><style type="text/css">/**
  * SyntaxHighlighter
  * http://alexgorbatchev.com/SyntaxHighlighter
  *
@@ -3028,8 +3028,8 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>probs4clojure -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">probs4clojure</h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>FIXME: write description</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">expectations</td><td class="dotted"><hr /></td><td class="dep-version">1.3.3</td></tr><tr><td class="dep-name">org.clojure/tools.trace</td><td class="dotted"><hr /></td><td class="dep-version">0.7.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#probs4clojure.core-test">probs4clojure.core-test</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#probs4clojure.core-test" name="probs4clojure.core-test"><h1 class="project-name">probs4clojure.core-test</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</script><title>probs4clojure -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">probs4clojure</h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>Problems from 4clojure.com, solved and annotated.</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.4.0</td></tr><tr><td class="dep-name">expectations</td><td class="dotted"><hr /></td><td class="dep-version">1.3.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#probs4clojure.core-test">probs4clojure.core-test</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#probs4clojure.core-test" name="probs4clojure.core-test"><h1 class="project-name">probs4clojure.core-test</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns probs4clojure.core-test
   (:require [midje.sweet :refer :all]
             [probs4clojure.core :refer :all]))</pre></td></tr><tr><td class="docs"><h3>Solutions to 4clojure.com problems</h3>
@@ -3057,7 +3057,9 @@ first!!!  They are much better that way.</p>
  (= (- 10 (* 2 3)) __))</pre></td></tr><tr><td class="docs"><h3>Problem 3:</h3>
 </td><td class="codes"><pre class="brush: clojure">(solves &quot;HELLO WORLD&quot;
  (= __ (.toUpperCase &quot;hello world&quot;)))</pre></td></tr><tr><td class="docs"><h3>Problem 4:</h3>
-</td><td class="codes"><pre class="brush: clojure">(solves  ;; solution less amenable to `solves` macro, added inline...
+
+<p>This is the one problem not amenable to <code>solves</code> off-the-shelf, so solution is added inline.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
  (= (list :a :b :c) '(:a :b :c)))</pre></td></tr><tr><td class="docs"><h3>Problem 5:</h3>
 </td><td class="codes"><pre class="brush: clojure">(solves '(1 2 3 4)
  (= __ (conj '(2 3 4) 1))
