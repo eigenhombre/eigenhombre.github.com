@@ -42,15 +42,19 @@ Since the Midje dependency is only needed during development, and not in product
 
     :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
 
-Running your tests hundreds of times per day not only reduces debugging time (you generally can figure out exactly what you broke much easier when the deltas to the code are small), but they also help build knowledge of what parts of the code run slowly.  If the tests start taking longer than a few seconds to run, I like to give some thought to what could be improved -- either I am focusing my testing effort at too high of a level (e.g. hitting the database, starting/stopping subprocesses, etc.) or I have made some questionable assumptions about performance somewhere.
+I also add the Midje plugin for Leingingen to `~/.lein/profiles.clj`:
 
-Sometimes, however, despite best efforts, the tests still take longer than a few seconds to run.  At this point I start annotating tests with metadata (Clojure) or decorators (Python) indicating that those tests should be skipped during autotesting (I still run the full test suite before committing (usually) or pushing to master (always)).  In Midje, this is done as follows:
+    {:user {:plugins [[lein-midje "3.1.1"]]}}
+
+Running your tests hundreds of times per day not only reduces debugging time (you generally can figure out exactly what you broke much easier when the deltas to the code since the last successful test are small), but they also help build knowledge of what parts of the code run slowly.  If the tests start taking longer than a few seconds to run, I like to give some thought to what could be improved -- either I am focusing my testing effort at too high of a level (e.g. hitting the database, starting/stopping subprocesses, etc.) or I have made some questionable assumptions about performance somewhere.
+
+Sometimes, however, despite best efforts, the tests still take longer than a few seconds to run.  At this point I start annotating tests with metadata indicating that those tests should be skipped during autotesting (I still run the full test suite before committing (usually) or pushing to master (always)).  In Midje, this is done with the `:slow` tag as follows:
 
     (fact "I'm a slow test." :slow
        (Thread/sleep 1000)
        (+ 1 1) => 2)
 
-Updating our alias skips the slow tests:
+Updating our `autotest` alias skips the slow tests:
 
     :aliases {"autotest" ["midje" ":autotest" ":filter" "-slow"]}
 
