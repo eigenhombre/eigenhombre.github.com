@@ -100,4 +100,4 @@ To install Emacs packages, e.g. paredit, `M-x install-package<RET>paredit`.  Or,
 
 Conference talks and online videos are a great way to find Emacs tricks to steal.  For example, I've seen people run unit tests from inside Emacs and display failures inline with the code, which is a very cool trick, though not exactly what I want.  The best way to increase your Emacs-fu is to sit down with a grizzled Emacs guru and compare notes and techniques.  I wish I had more opportunities to do this.
 
-In the next post, we'll talk about test-driven development and how "RDD" (REPL-driven development) and TDD enhance and complement each other.
+In [the next post](/clojure/2014/07/20/a-worfklow-tdd-rdd-and-ddd/), we'll talk about test-driven development and how "RDD" (REPL-driven development) and TDD enhance and complement each other.

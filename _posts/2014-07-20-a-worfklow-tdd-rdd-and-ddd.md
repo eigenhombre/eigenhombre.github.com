@@ -8,8 +8,9 @@ draft: true
 ---
 {% include JB/setup %}
 
-Having [discussed my Emacs setup](/clojure/2014/07/05/emacs-customization-for-clojure/) for Clojure, I now present my "ideal" workflow, with subsequent discussion.  But first, let me motivate things with a few questions:
+**This is the third post in a [series](/clojure/2014/07/03/an-advanced-clojure-workflow/) about my current Clojure workflow.**
 
+Having [discussed my Emacs setup](/clojure/2014/07/05/emacs-customization-for-clojure/) for Clojure, I now present my "ideal" workflow.  But first, some questions:
 
 <ol type="a">
 <li>How do you preserve the ability to make improvements without fear of breaking things?</li>
@@ -20,11 +21,11 @@ Having [discussed my Emacs setup](/clojure/2014/07/05/emacs-customization-for-cl
 </ol>
 
 
-The answer to (a) is, of course, by having good test coverage; and the simplest way I know to have good test coverage is by doing Test-Driven Development (TDD).  However, my experience with TDD is that it doesn't always help much with the other points on the list (though it helps a bit with (b), (c) and (e)).  In particular, [Rich Hickey points out](http://www.infoq.com/presentations/Simple-Made-Easy) that TDD is not a substitute for *thinking* about the problem at hand.
+The answer to (a) is, of course, by having good tests; and the best way I know of to have maintain good tests is by writing test code along with, and slightly ahead of, the production code (test-driven development, a.k.a. TDD).  However, my experience with TDD is that it doesn't always help much with the other points on the list (though it helps a bit with (b), (c) and (e)).  In particular, [Rich Hickey points out](http://www.infoq.com/presentations/Simple-Made-Easy) that TDD is not a substitute for *thinking* about the problem at hand.
 
 As an aid for thinking, I find writing to be invaluable, so a minimal sort of [literate programming](http://en.wikipedia.org/wiki/Literate_programming) has increasingly become a part of my workflow, at least for hard problems.
 
-#### Worfklow
+**The Worfklow**
 
 Now for the workflow proper.  Given the following tools:
 
@@ -49,10 +50,14 @@ Here are the above steps as a flow chart:
 
 The workflow presented above is a somewhat idealized version of what I actually manage to pull off during any given coding session.  It is essentially the <span style="color:red">red</span>-<span style="color:green">green</span>-<span style="color:blue">refactor</span> of traditional test-driven development, with the explicit addition of REPL experimentation ("REPL-driven development," or RDD) and continuous writing of documentation ("documentation-driven development," or DDD) as a way of steering the effort and clarifying the approach.
 
-A lot has been written about TDD and its advantages or drawbacks.  What I want to emphasize is how the addition of REPL experimentation and the emphasis on writing complement TDD, essentially covering all the bases (a)-(e), above.  While I've been combining unit tests and the REPL for some time, the emphasis on writing is new to me, and I am excited about it.
+A lot has been written about test-first development and its advantages or drawbacks.  At the moment, [the practice seems to be particularly controversial in the Rails community](http://david.heinemeierhansson.com/2014/tdd-is-dead-long-live-testing.html).  I don't want to go too deep into the pros and cons other than to say [once again](/testing/2012/03/31/ontinuous-testing-in-python-clojure-and-blub/) that the practice has saved my bacon so many times that I try to minimize the amount of code I write that doesn't begin life as a response to a failing test.
 
-While I don't always follow each of the above steps to the letter, the harder the problem, the more closely I will tend to follow this plan, with one further modification: I am willing to wipe the slate clean and start over if a new understanding shows the current path to be unworkable, or to be leading to unneeded complexity.
+ What I want to emphasize here is how writing and the use of the REPL complement TDD.  These three ingredients cover all the bases (a)-(e), above.  While I've been combining unit tests and the REPL for some time, the emphasis on writing is new to me, and I am excited about it.  Much more than coding by itself, I find that writing things down and building small narratives of code and prose together forces me to do the thinking I need in order to write the best code I can.
 
-The next few posts attack specifics about testing and writing, giving what I personally have found most effective (so far), and elaborating on helpful aspects of each.
+**Always beginning again**
+
+While I don't always follow each of the above steps to the letter, the harder the problem, the more closely I will tend to follow this plan, with one further modification: I am willing to wipe the slate clean and begin again if new understanding shows that the current path is unworkable, or leads to unneeded complexity.
+
+The next few posts attack specifics about testing and writing, presenting what I personally have found most effective (so far), and elaborating on helpful aspects of each.
 
 How does your preferred workflow differ from the above?
