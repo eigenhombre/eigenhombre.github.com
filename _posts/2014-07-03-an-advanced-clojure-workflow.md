@@ -4,6 +4,7 @@ title: "An Advanced Clojure Workflow"
 description: ""
 category: clojure
 tags: [clojure]
+draft: true
 ---
 {% include JB/setup %}
 
@@ -26,3 +27,4 @@ Without further ceremony, let's go straight to the first post, about [customizin
 **Other posts in this series:**
 
 * [A Workflow ­ TDD, RDD and DDD](/clojure/2014/07/20/a-worfklow-tdd-rdd-and-ddd/)
+* [Testing, Continuously](/clojure/2014/07/20/a-worfklow-tdd-rdd-and-ddd/)
