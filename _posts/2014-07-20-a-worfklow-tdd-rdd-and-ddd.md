@@ -27,7 +27,7 @@ The answer to (a) is, of course, by having good tests; and the best way I know o
 
 As an aid for thinking, I find writing to be invaluable, so a minimal sort of [literate programming](http://en.wikipedia.org/wiki/Literate_programming) has increasingly become a part of my workflow, at least for hard problems.
 
-**The Worklow**
+**The Workflow**
 
 Now for the workflow proper.  Given the following tools:
 
