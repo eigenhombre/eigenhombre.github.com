@@ -10,7 +10,7 @@ draft: true
 
 **This is the third post in a [series](/clojure/2014/07/03/an-advanced-clojure-workflow/) about my current Clojure workflow.**
 
-Having [discussed my Emacs setup](/clojure/2014/07/05/emacs-customization-for-clojure/) for Clojure, I now present my "ideal" workflow, in which I supplant traditional TDD with literate programming and REPL experimentation.
+Having [discussed my Emacs setup](/clojure/2014/07/05/emacs-customization-for-clojure/) for Clojure, I now present my "ideal" workflow, in which I supplement traditional TDD with literate programming and REPL experimentation.
 
 First, some questions:
 

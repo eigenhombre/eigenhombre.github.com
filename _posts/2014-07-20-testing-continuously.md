@@ -58,7 +58,7 @@ Updating our `autotest` alias skips the slow tests:
 
     :aliases {"autotest" ["midje" ":autotest" ":filter" "-slow"]}
 
-While I'm working on a slow test (or its feature), I omit the `:slow` tag until I'm done with the feature in question.  In this way, I can continue to get the most feedback in real time as possible -- which helps me develop quality code efficiently.
+While I'm working on a slow test (or its associated feature), I omit the `:slow` tag until I'm done with the feature in question.  In this way, I can continue to get the most feedback in real time as possible -- which helps me develop quality code efficiently.
 
 **A note about Emacs integration**: While there is [a Midje plugin](https://github.com/marick/Midje/wiki/Midje-mode) which annotates one's working buffer with Midje test results, I prefer to run `lein autotest` in an Emacs shell window, since that allows me to add `println`s, [SpyScope](https://github.com/dgrnbrg/spyscope) debugging, etc.
 
