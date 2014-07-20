@@ -4,7 +4,6 @@ title: "An Advanced Clojure Workflow"
 description: ""
 category: clojure
 tags: [clojure]
-draft: true
 ---
 {% include JB/setup %}
 
