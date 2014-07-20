@@ -17,11 +17,11 @@ Even before I started developing in Clojure full time, I [discovered](/testing/2
 1. Ruby-based [Guard](https://github.com/guard/guard#readme), commonly used in the Rails community;
 2. [Conttest](https://github.com/eigenhombre/continuous-testing-helper), a language-agnostic Python-based test runner I wrote;
 3. in the Clojure sphere:
-    a. [Midje](https://github.com/marick/Midje), using the `:autotest` option;
-    b. [Expectations](https://github.com/jaycfields/expectations), using the [autoexpect plugin](https://github.com/jakemcc/lein-autoexpect) for Leiningen;
-    c. [Speclj](https://github.com/slagyr/speclj)
-    d. `clojure.test`, with [quickie](https://github.com/jakepearson/quickie) (and possibly other) plugins
-    e. ...
+    1. [Midje](https://github.com/marick/Midje), using the `:autotest` option;
+    1. [Expectations](https://github.com/jaycfields/expectations), using the [autoexpect plugin](https://github.com/jakemcc/lein-autoexpect) for Leiningen;
+    1. [Speclj](https://github.com/slagyr/speclj)
+    1. `clojure.test`, with [quickie](https://github.com/jakepearson/quickie) (and possibly other) plugins
+    1. ...
 4. ....
 
 I used to use Expectations; now I use Midje since I like its rich DSL and the ability to develop functionality bottom-up or [top-down](https://github.com/marick/Midje/wiki/The-idea-behind-top-down-development).
