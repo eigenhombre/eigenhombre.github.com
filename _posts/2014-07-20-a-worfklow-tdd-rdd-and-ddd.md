@@ -17,7 +17,7 @@ First, some questions:
 <ol type="a">
 <li>How do you preserve the ability to make improvements without fear of breaking things?</li>
 <li>What process best facilitates careful thinking about design and implementation?</li>
-<li>How do you communicate your intent to future maintainers (including future versions of yourself)?</li>
+<li>How do you communicate your intentions to future maintainers (including future versions of yourself)?</li>
 <li>How do you experiment with potential approaches and solve low-level tactical problems as quickly as possible?</li>
 <li>Since "simplicity is a prerequisite for reliability" (Dijkstra), how do you arrive at simple designs and implementations?</li>
 </ol>
@@ -27,7 +27,7 @@ The answer to (a) is, of course, by having good tests; and the best way I know o
 
 As an aid for thinking, I find writing to be invaluable, so a minimal sort of [literate programming](http://en.wikipedia.org/wiki/Literate_programming) has increasingly become a part of my workflow, at least for hard problems.
 
-**The Worfklow**
+**The Worklow**
 
 Now for the workflow proper.  Given the following tools:
 
