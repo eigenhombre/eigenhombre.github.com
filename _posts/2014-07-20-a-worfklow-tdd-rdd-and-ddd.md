@@ -4,7 +4,7 @@ title: "A Worfklow: TDD, RDD and DDD"
 description: ""
 category: clojure
 tags: [clojure, testing, "literate programming"]
-draft: true
+draft: false
 ---
 {% include JB/setup %}
 

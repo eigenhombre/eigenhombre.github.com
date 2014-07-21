@@ -4,7 +4,7 @@ title: "Testing, Continuously"
 description: ""
 category: clojure
 tags: [clojure, testing]
-draft: true
+draft: false
 ---
 {% include JB/setup %}
 
