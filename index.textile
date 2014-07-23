@@ -34,6 +34,10 @@ I have originated or contributed to several Open Source projects, including "two
 
 Other interests include machine learning, logic programming ("MiniKanren":http://kanren.sourceforge.net/, "core.logic":https://github.com/clojure/core.logic), AI in general, and creating visualization tools (I am currently working on "a JavaScript charting library":https://github.com/eigenhombre/i3d3 using D3.js).  I'm also an on-again, off-again "visual artist":http://johnj.com (painting, drawing and photography).
 
+-----
+
+<img src="images/email.png">
+
 Links:
 
 * "GitHub":http://github.com/eigenhombre
