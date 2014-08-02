@@ -62,4 +62,4 @@ While I'm working on a slow test (or its associated feature), I omit the `:slow`
 
 **A note about Emacs integration**: While there is [a Midje plugin](https://github.com/marick/Midje/wiki/Midje-mode) which annotates one's working buffer with Midje test results, I prefer to run `lein autotest` in an Emacs shell window, since that allows me to add `println`s, [SpyScope](https://github.com/dgrnbrg/spyscope) debugging, etc.
 
-In the next post, we'll switch gears and talk about literate programming with Marginalia.
+In the next post, we'll switch gears and talk about [literate programming with Marginalia](/clojure/2014/08/02/communicating-with-humans/).

@@ -60,6 +60,6 @@ The utility of the REPL needs no elaboration to Clojure enthusiasts and I won't 
 
 While I don't always follow each of the above steps to the letter, the harder the problem, the more closely I will tend to follow this plan, with one further modification: I am willing to wipe the slate clean and begin again if new understanding shows that the current path is unworkable, or leads to unneeded complexity.
 
-The next few posts attack specifics about [testing](/clojure/2014/07/20/testing-continuously/) and writing, presenting what I personally have found most effective (so far), and elaborating on helpful aspects of each.
+The next few posts attack specifics about [testing](/clojure/2014/07/20/testing-continuously/) and [writing](/clojure/2014/08/02/communicating-with-humans/), presenting what I personally have found most effective (so far), and elaborating on helpful aspects of each.
 
 How does your preferred workflow differ from the above?
