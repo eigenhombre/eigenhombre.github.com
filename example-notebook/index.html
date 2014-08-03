@@ -3028,11 +3028,11 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><script src="d3.v3.min.js" type="text/javascript"></script><script src="underscore-min.js" type="text/javascript"></script><script src="i3d3.js" type="text/javascript"></script><script src="local.js" type="text/javascript"></script><link href="style.css" rel="stylesheet" tyle="text/css" /><title>liveanal -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">liveanal</h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>An investigation into a day's worth of IceCube Live message traffic</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.clojure/data.json</td><td class="dotted"><hr /></td><td class="dep-version">0.2.3</td></tr><tr><td class="dep-name">clj-time</td><td class="dotted"><hr /></td><td class="dep-version">0.6.0</td></tr><tr><td class="dep-name">clj-ssh</td><td class="dotted"><hr /></td><td class="dep-version">0.5.7</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#liveanal.core">liveanal.core</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#liveanal.core" name="liveanal.core"><h1 class="project-name">liveanal.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p><em>[Clojure bookkeeping ...] ---></em></p>
-</td><td class="codes"><pre class="brush: clojure">(ns liveanal.core
+</script><script src="d3.v3.min.js" type="text/javascript"></script><script src="underscore-min.js" type="text/javascript"></script><script src="i3d3.js" type="text/javascript"></script><script src="local.js" type="text/javascript"></script><link href="style.css" rel="stylesheet" tyle="text/css" /><title>liveana -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">liveana</h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>An investigation into a day's worth of IceCube Live message traffic</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.clojure/data.json</td><td class="dotted"><hr /></td><td class="dep-version">0.2.3</td></tr><tr><td class="dep-name">clj-time</td><td class="dotted"><hr /></td><td class="dep-version">0.6.0</td></tr><tr><td class="dep-name">clj-ssh</td><td class="dotted"><hr /></td><td class="dep-version">0.5.7</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#liveana.core">liveana.core</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#liveana.core" name="liveana.core"><h1 class="project-name">liveana.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><p><em>[Clojure bookkeeping ...] ---></em></p>
+</td><td class="codes"><pre class="brush: clojure">(ns liveana.core
   (:require [clojure.data.json :as json]
-            [liveanal.i3d3 :refer [i3d3 time-to-js]]
+            [liveana.i3d3 :refer [i3d3 time-to-js]]
             [clojure.pprint :refer [pprint]]
             [clj-time.core :refer [date-time interval in-seconds now]]
             [clj-ssh.cli :refer [ssh sftp]]))</pre></td></tr><tr><td class="docs"><h1>First look at a day's worth of messages</h1>
@@ -3070,7 +3070,7 @@ is a <a href="http://en.wikipedia.org/wiki/Literate_programming">literate
 program</a> which
 we may choose to execute later.</p>
 </td><td class="codes"><pre class="brush: clojure">(comment
-  (frequencies (for [file (-&gt;&gt; &quot;/Users/jacobsen/Desktop/liveanal/resources/&quot;
+  (frequencies (for [file (-&gt;&gt; &quot;/Users/jacobsen/Desktop/liveana/resources/&quot;
                                  clojure.java.io/file
                                  file-seq)
                        :when (.isFile file)
@@ -3110,7 +3110,7 @@ the Run Coordinator.</p>
  &quot;PFServer4&quot; 8449,
  &quot;DB&quot; 624}</pre></td></tr><tr><td class="docs"><p>Refactoring the above code slightly, we pull out a function to
 extract all messages from the files in our directory.</p>
-</td><td class="codes"><pre class="brush: clojure">(def dirname &quot;/Users/jacobsen/Desktop/liveanal/resources/&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def dirname &quot;/Users/jacobsen/Desktop/liveana/resources/&quot;)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn day-msgs []
   (for [file (-&gt;&gt; dirname
                   clojure.java.io/file

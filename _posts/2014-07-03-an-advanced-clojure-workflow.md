@@ -28,3 +28,4 @@ Without further ceremony, let's go straight to the first post, about [customizin
 * [A Workflow ­ TDD, RDD and DDD](/clojure/2014/07/20/a-worfklow-tdd-rdd-and-ddd/)
 * [Testing, Continuously](/clojure/2014/07/20/a-worfklow-tdd-rdd-and-ddd/)
 * [Communicating With Humans](/clojure/2014/08/02/communicating-with-humans/)
+* [Marginalia Hacks](/clojure/2014/08/03/marginalia-hacks/)

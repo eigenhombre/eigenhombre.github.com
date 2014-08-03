@@ -53,7 +53,7 @@ I often start writing by making simple statements or questions:
 * If we had feature _P_, then _Q_ would be easy....
 * How long would it take to compute _Z_?
 
-Sentences like these are like snippets of code in the REPL: things to evaluate and experiment with.  Often these statements are attached to bits of code -- experimental expressions, and their evaluated results.  They are the building blocks of further ideas, programs, and chains of thought.  In my next post, I'll talk about using Marginalia to make small notebooks where I collect written thoughts, code, expression, even graphs and plots while working on a problem.  This workflow involves some Marginalia hacks you may not have seen elsewhere.
+Sentences like these are like snippets of code in the REPL: things to evaluate and experiment with.  Often these statements are attached to bits of code -- experimental expressions, and their evaluated results.  They are the building blocks of further ideas, programs, and chains of thought.  In [my next post](/clojure/2014/08/03/marginalia-hacks/), I'll talk about using Marginalia to make small notebooks where I collect written thoughts, code, expression, even graphs and plots while working on a problem.  This workflow involves some Marginalia hacks you may not see elsewhere.
 
 Meanwhile, here are some quotes about LP:
 
