@@ -3,14 +3,14 @@ layout: post
 title: "Marginalia Hacks"
 description: "Solutions for Notebook-style Literate Programming"
 category: clojure
-tags: [clojure, "literate programming"]
+tags: [clojure, "literate programming", math, i3d3]
 ---
 {% include JB/setup %}
 
 **This is the sixth and final post in a
 [series](/clojure/2014/07/03/an-advanced-clojure-workflow/) on my Clojure workflow.**
 
-Here are some tricks I used to make [Marginalia](https://github.com/gdeer81/marginalia) work for me -- in particular, to support a sort of investigatory, notebook style of working. As always, your mileage may vary.
+In [my last post](/clojure/2014/08/02/communicating-with-humans/), I introduced Marginalia as a tool for (semi-)literate programming.  Here are some tricks I've used to make [Marginalia](https://github.com/gdeer81/marginalia) work for me -- in particular, to support a sort of investigatory, notebook style of working. As always, your mileage may vary.
 
 -----------
 
@@ -22,7 +22,7 @@ I have been able to work around this to my satisfaction by specifying directorie
 
     lein marg src/myproject/core.clj src test
 
-If I wanted to reorder forms within `core.clj`, I could also just use Clojure's `declare` macro to forward-declare the vars at the top of the file.
+If I wanted to reorder forms within `core.clj`, I could also just use Clojure's `declare` macro to forward-declare the vars at the top of the file.  This is far from the power of Knuth's WEB, but it's been good enough for me.
 
 -----------
 
@@ -53,7 +53,7 @@ Though it does take a few seconds, Marginalia not being a speed demon, one can g
 <a href="/images/emacs-eval.png"><img src="/images/emacs-eval.png"/></a>
 <a href="/images/marg-eval.png"><img src="/images/marg-eval.png"/></a>
 
-Here I added a single quote (`'`) to keep the resulting form from throwing an exception when the buffer is recompiled.  This not quite iPython Notebook, but I find it gets me surprisingly far.  _And the source code remains completely usable as a whole, standalone program_.  This means I can combine notebook-style investigations directly in a working project without worrying how to get the code described in my "notes" into production.
+Here I added a single quote (`'`) to keep the resulting form from throwing an exception when the buffer is recompiled.  This not quite iPython Notebook, but I find it gets me surprisingly far.  _And the source code remains completely usable as a whole, standalone program_.  This means I can combine notebook-style investigations directly in a working project without worrying how, eventually, to get the annotated code into production.
 
 -------
 
@@ -95,5 +95,44 @@ $$r^2 = x^2 + y^2.$$
 
 **Solution**: Use a JavaScript plotting library, and a little Clojure to prepare the data.
 
-This last hack is perhaps the most fun and the most "hacky" of the bunch.  One of the best features of notebook solutions like iPython Notebook is the ability to show graphs inline with the code that generates them.  This is not really in the wheelhouse of Marginalia, but since we can incorporate JavaScript (as seen above, for mathematics), we can leverage plotting libraries
+This last hack is perhaps the most fun and the most "hacky" of the bunch.  One of the best features of notebook solutions like iPython Notebook is the ability to show graphs inline with the code that generates them.  This is not really in the wheelhouse of Marginalia, which was meant as a static documentation tool, but since we can incorporate JavaScript (as seen above, for mathematics), we can leverage existing plotting libraries.  I use i3d3 [(i3d3.org)](http://i3d3.org), an open-source JavaScript plotting library built on top of [d3.js](http://d3js.org).
+
+The only obvious difficulty is how to get the data points into the browser for JavaScript to plot.  For this, we need to do the following:
+
+1. Using the REPL, capture the Clojure data, format it as JavaScript, and write to a disk file in the project, `local.js`.
+2. Load the resulting `local.js`, as well as any other needed libraries (in my case, d3, i3d3, and [underscore.js](http://underscorejs.org/)) as part of the Marginalia command.
+
+The Clojure for Step 1 is shown in [this gist](https://gist.github.com/eigenhombre/bed80ab20c2bab2ef9d7).  The `i3d3` function, evaluated in the REPL, does the work of preparing the data on disk. The intermediate JavaScript file looks something like this:
+
+    // BEGIN DIV plot2
+    i3d3.plot({"ylabel":"Entries","xlabel":"Priorities","size":[700,250],"data":[{"type":"bars","bins":[93991,103924,3396],"color":"grey","range":[0,4]}],"div":"plot2"});
+    // END DIV plot2
+
+(Multiple DIVs are supported in a single file by changing the DIV ID for each `i3d3` function call in the REPL).
+
+The command to continuously run Marginalia (Step 2) is:
+
+    conttest "lein marg src/liveana/core.clj -c style.css -j 'd3.v3.min.js;underscore-min.js;i3d3.js;local.js' && osascript ~/bin/reload-browser.scpt file://path/to/docs/uberdoc.html"
+
+Here I have put the JavaScript libraries in the `docs/` directory in advance; also, since i3d3 benefits from a style sheet, that is prepared and included in the Marginalia shell command as well.
+
+Here's an **example plot**, from [this notebook](/example-notebook/):
+
+<a href="/images/plot-example.png"><img src="/images/plot-example.png"/></a>
+
+I told you it was hacky, but [give the example a whirl anyways](/example-notebook/). Since i3d3 supports panning and zooming, that comes for free!
+
+_(Thanks to John Kelley / [WIPAC](http://wipac.wisc.edu/) for permission to show this work in this post.)_
+
+As tools like Gorilla REPL and Session become more popular and powerful, I may discard this way of injecting graphs into "literate" programs.  But I did want to see how far I could push Marginalia as a Clojure-based substitute for iPython Notebook, and found this approach surprisingly powerful.  I might package it into something a bit more off-the-shelf if anyone else shows interest.
+
+----------
+
+This concludes [the series of posts on my Clojure workflow](/clojure/2014/07/03/an-advanced-clojure-workflow/) -- thanks to any of you who made it this far!  The Clojure tooling landscape is constantly shifting, and I continue to learn new tricks, so things may look different a year from now.  In the mean time, perhaps some people will find something helpful here.
+
+Happy hacking!
+
+
+
+
 
