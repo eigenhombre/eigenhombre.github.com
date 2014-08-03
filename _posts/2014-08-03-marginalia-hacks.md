@@ -10,7 +10,7 @@ tags: [clojure, "literate programming", math, i3d3]
 **This is the sixth and final post in a
 [series](/clojure/2014/07/03/an-advanced-clojure-workflow/) on my Clojure workflow.**
 
-In [my last post](/clojure/2014/08/02/communicating-with-humans/), I introduced Marginalia as a tool for (semi-)literate programming.  Here are some tricks I've used to make [Marginalia](https://github.com/gdeer81/marginalia) work for me -- in particular, to support a sort of investigatory, notebook style of working. As always, your mileage may vary.
+In [my last post](/clojure/2014/08/02/communicating-with-humans/), I introduced Marginalia as a tool for (semi-)literate programming.  Here are some tricks I've used to make [Marginalia](https://github.com/gdeer81/marginalia) work for me -- in particular, to support a style of working with investigatory "notebooks." As always, your mileage may vary.
 
 -----------
 
