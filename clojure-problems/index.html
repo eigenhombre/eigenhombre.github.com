@@ -3051,14 +3051,16 @@ first!!!  They are much better that way.</p>
   [expr &amp; tests]
   (let [replacef# (fn [t] (clojure.walk/postwalk-replace {'__ expr} t))
         newtests# (map replacef# tests)]
-    `(fact (and ~@newtests#) =&gt; truthy)))</pre></td></tr><tr><td class="docs"><h3>Problem 1:</h3>
+    `(doseq [f# [~@newtests#]]
+       (fact f# =&gt; truthy))))</pre></td></tr><tr><td class="docs"><h3>Problem 1:</h3>
 </td><td class="codes"><pre class="brush: clojure">(solves true (= __ true))</pre></td></tr><tr><td class="docs"><h3>Problem 2:</h3>
 </td><td class="codes"><pre class="brush: clojure">(solves 4
  (= (- 10 (* 2 3)) __))</pre></td></tr><tr><td class="docs"><h3>Problem 3:</h3>
 </td><td class="codes"><pre class="brush: clojure">(solves &quot;HELLO WORLD&quot;
  (= __ (.toUpperCase &quot;hello world&quot;)))</pre></td></tr><tr><td class="docs"><h3>Problem 4:</h3>
 
-<p>This is the one problem not amenable to <code>solves</code> off-the-shelf, so solution is added inline.</p>
+<p>This is the one problem not amenable to <code>solves</code> off-the-shelf, so
+solution is added inline.</p>
 </td><td class="codes"><pre class="brush: clojure">(solves
  (= (list :a :b :c) '(:a :b :c)))</pre></td></tr><tr><td class="docs"><h3>Problem 5:</h3>
 </td><td class="codes"><pre class="brush: clojure">(solves '(1 2 3 4)
@@ -3933,7 +3935,38 @@ whether the cell should live or die is trivial to apply.</p>
       &quot; #  # &quot;
       &quot; #  # &quot;
       &quot;  #   &quot;
-      &quot;      &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 101: <a href="http://www.4clojure.com/problem/101">Levenshtein Distance</a></h3>
+      &quot;      &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 97: <a href="http://www.4clojure.com/problem/97">Pascal's Triangle</a></h3>
+
+<p>I solved this problem by thinking about the following series of
+data transformations on an arbitrary level of the problem:</p>
+
+<pre><code>[1     3     3     1]  ;; Given level
+  [1 3] [3 3] [3 1]    ;; Partition by pairs
+   [4     6     4]     ;; Map sum onto pairs
+     [1 4 6 4 1]       ;; Prepend and append 1s
+</code></pre>
+
+<p>The application of the transformations gets us to the next "level"
+of the problem.  The code reflects this exactly, by iterating the
+transformations on the base case, <code>[1]</code>.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+ (fn [n]
+   (nth (iterate (fn [s]
+                   (let [p (partition 2 1 s)
+                         added (map (partial apply +) p)]
+                     (concat [1] added [1])))
+                 [1])
+        (dec n)))
+
+ (= (__ 1) [1])
+ (= (map __ (range 1 6))
+   [     [1]
+        [1 1]
+       [1 2 1]
+      [1 3 3 1]
+     [1 4 6 4 1]])
+ (= (__ 11)
+    [1 10 45 120 210 252 210 120 45 10 1]))</pre></td></tr><tr><td class="docs"><h3>Problem 101: <a href="http://www.4clojure.com/problem/101">Levenshtein Distance</a></h3>
 
 <p>For this solution, we build on the simplest recursive solution
 shown in the <a href="http://en.wikipedia.org/wiki/Levenshtein_distance#Recursive">relevant Wikipedia
@@ -4040,7 +4073,205 @@ iteration reduces the size substantially for large layers.</p>
   (= 3 (__ 12 3))  ; 12 6 3
   (= 3 (__ 5 9))   ; 5 7 9
   (= 9 (__ 9 2))   ; 9 18 20 10 12 6 8 4 2
-  (= 5 (__ 9 12))) ; 9 11 22 24 12</pre></td></tr><tr><td class="docs"><h3>Problem 137: <a href="http://www.4clojure.com/problem/137">Digits and Bases</a></h3>
+  (= 5 (__ 9 12))) ; 9 11 22 24 12</pre></td></tr><tr><td class="docs"><h3>Problem 113: <a href="http://www.4clojure.com/problem/113">Making Data Dance</a></h3>
+
+<p>The fact that <code>proxy</code> was disallowed suggested a look at
+<code>reify</code>, since <code>proxy</code> and <code>reify</code> are often discussed together.  A
+bit of research and REPL experimentation showed how to get <code>reify</code>
+to implement the given interface.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [&amp; args]
+    (reify clojure.lang.ISeq
+      (toString [this] (clojure.string/join &quot;, &quot; (sort args)))
+      (seq [this] (and args (distinct args)))))
+
+  (= &quot;1, 2, 3&quot; (str (__ 2 1 3)))
+  (= '(2 1 3) (seq (__ 2 1 3)))
+  (= '(2 1 3) (seq (__ 2 1 3 3 1 2)))
+  (= '(1) (seq (apply __ (repeat 5 1))))
+  (= &quot;1, 1, 1, 1, 1&quot; (str (apply __ (repeat 5 1))))
+  (and (= nil (seq (__)))
+       (=  &quot;&quot; (str (__)))))</pre></td></tr><tr><td class="docs"><p>Hats off to user <code>dacquiri</code> for the
+<a href="http://pastebin.com/cS9sP764">reminder</a> that <code>distinct</code> removes
+duplicates (the <code>and args</code> is needed in case args is not supplied
+at all).  My original solution to the <code>seq</code> part was quite a bit uglier.</p>
+</td><td class="codes"><pre class="brush: clojure">(comment  ;; Original solution for removing duplicates:
+  (seq [this] (loop [[x &amp; xs :as X] args
+                     ret []]
+                (if-not (seq X)
+                  (seq ret)
+                  (recur xs (if ((set ret) x) ret (conj ret x)))))))</pre></td></tr><tr><td class="docs"><h3>Problem 117: <a href="http://www.4clojure.com/problem/117">For Science!</a></h3>
+
+<p>I treat this as another graph search problem, where connections
+between "nodes" are determined by horizontal or vertical adjacency.
+At each stage in the search, we loop through neighbors that:</p>
+
+<ol>
+<li>are "valid" positions (within bounds of the board, i.e. their
+contents are non-nil;</li>
+<li>have not been explored yet; and</li>
+<li>are not walls (<code>#</code>).</li>
+</ol>
+
+<p>At each point we check to see if we've found the cheese or run out
+of unexplored spaces to check. After the graph traversal terminates,
+we look at all the visited nodes to see if cheese has been found.
+Though the algorithm terminates as soon as cheese is found
+(<code>(set-cheese bp p)</code>), it is somewhat inefficient in that it loops
+through the visited locations again at the end.  It does, however,
+only visit "connected" parts of the maze.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+ (fn [board]
+   (let [bm (into {} (for [r (range (count board))
+                           c (range (count (get board r)))]
+                       (let [val (get-in board [r c])]
+                         [[r c] {:val val
+                                 :explored (= val \#)}])))
+         mouse (some (fn [[k v]] (when (= (:val v) \M) k)) bm)]
+     (letfn [(explored [bm pos] (get-in bm [pos :explored]))
+             (set-explored [bm pos] (assoc-in bm [pos :explored] true))
+             (set-cheese [bm pos] (assoc-in bm [pos :cheese] true))
+             (is-valid [bm pos] (not (nil? (get-in bm [pos :val]))))
+             (is-wall [bm pos] (= (get-in bm [pos :val]) \#))
+             (get-neighbors [[r c]]
+               [[(dec r) c], [r (dec c)], [(inc r) c], [r (inc c)]])
+             (dfs [bm pos]
+               (let [bm (set-explored bm pos)
+                     neighbors (-&gt;&gt; pos
+                                    get-neighbors
+                                    (filter (partial is-valid bm))
+                                    (remove (partial explored bm))
+                                    (remove (partial is-wall bm)))]
+                 (loop [bm bm, [p &amp; ps] neighbors]
+                   (cond
+                    (not p) bm
+                    (= (get-in bm [p :val]) \C) (set-cheese bm p)
+                    (or (explored bm p)
+                        (= (get-in bm [p :val]) \#)) (recur bm ps)
+                        :else (recur (dfs bm p) ps)))))]
+       (true? (some (fn [[_ {cheese :cheese}]] cheese)
+                    (dfs bm mouse))))))
+
+ (= true  (__ [&quot;M   C&quot;]))
+ (= false (__ [&quot;M # C&quot;]))
+ (= true  (__ [&quot;#######&quot;
+               &quot;#     #&quot;
+               &quot;#  #  #&quot;
+               &quot;#M # C#&quot;
+               &quot;#######&quot;]))
+ (= false (__ [&quot;########&quot;
+               &quot;#M  #  #&quot;
+               &quot;#   #  #&quot;
+               &quot;# # #  #&quot;
+               &quot;#   #  #&quot;
+               &quot;#  #   #&quot;
+               &quot;#  # # #&quot;
+               &quot;#  #   #&quot;
+               &quot;#  #  C#&quot;
+               &quot;########&quot;]))
+ (= false (__ [&quot;M     &quot;
+               &quot;      &quot;
+               &quot;      &quot;
+               &quot;      &quot;
+               &quot;    ##&quot;
+               &quot;    #C&quot;]))
+ (= true  (__ [&quot;C######&quot;
+               &quot; #     &quot;
+               &quot; #   # &quot;
+               &quot; #   #M&quot;
+               &quot;     # &quot;]))
+ (= true  (__ [&quot;C# # # #&quot;
+               &quot;        &quot;
+               &quot;# # # # &quot;
+               &quot;        &quot;
+               &quot; # # # #&quot;
+               &quot;        &quot;
+               &quot;# # # #M&quot;])))</pre></td></tr><tr><td class="docs"><h3>Problem 119: <a href="http://www.4clojure.com/problem/119">Win at Tic Tac Toe</a></h3>
+
+<p>The solution is quite similar to that for <a href="http://www.4clojure.com/problem/73">Problem
+73</a>.  We preserve the "diag,"
+"ant-diag," "across" and "down" logic for determining whether
+three-in-a-row has been obtained.  The difference is that we now
+apply this logic over every \(x, y\) (or, rather, <code>[y x]</code>)
+combination, placing the desired piece (<code>:x</code> or <code>:o</code>) in the spot
+if it's currently empty, and returning the pair only if it makes
+three-in-a-row.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [ox current-board]
+    (set
+     (for [y (range 3)
+           x (range 3)
+           :let [piece (get-in current-board [y x])
+                 new-piece (if (= piece :e) ox piece)
+                 new-board (assoc-in current-board [y x] new-piece)]
+           :when (or
+                  ;; diag:
+                  (every? #{ox}
+                          (for [i (range 3)]
+                            (get-in new-board [i i])))
+                  ;; anti-diag:
+                  (every? #{ox}
+                          (for [i (range 3)]
+                            (get-in new-board [i (- 2 i)])))
+                  ;; across:
+                  (some (fn [i]
+                          (every? #{ox} (for [j (range 3)]
+                                          (get-in new-board [i j]))))
+                        (range 3))
+                  ;; down:
+                  (some (fn [i]
+                          (every? #{ox} (for [j (range 3)]
+                                          (get-in new-board [j i]))))
+                        (range 3)))]
+       [y x])))
+
+  (= (__ :x [[:o :e :e]
+             [:o :x :o]
+             [:x :x :e]])
+     #{[2 2] [0 1] [0 2]})
+  (= (__ :x [[:x :o :o]
+             [:x :x :e]
+             [:e :o :e]])
+     #{[2 2] [1 2] [2 0]})
+  (= (__ :x [[:x :e :x]
+             [:o :x :o]
+             [:e :o :e]])
+     #{[2 2] [0 1] [2 0]})
+  (= (__ :x [[:x :x :o]
+             [:e :e :e]
+             [:e :e :e]])
+     #{})
+  (= (__ :o [[:x :x :o]
+             [:o :e :o]
+             [:x :e :e]])
+     #{[2 2] [1 1]}))</pre></td></tr><tr><td class="docs"><h3>Problem 120: <a href="http://www.4clojure.com/problem/120">Sum of Square Digits</a></h3>
+
+<p>The solution consists of building up and composing functions which:
+convert a character to an integer (<code>char-to-int</code>); square an
+integer (<code>square</code>); pull out the squares of digits of a number
+(<code>sq-digs-fn</code>); and apply the comparison of the sum of squares to
+the original number (<code>compare-fn</code>).</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+ (fn [s]
+   (let [char-to-int #(-&gt; % str Integer/parseInt)
+         square #(* % %)
+         sq-digs-fn (fn [n] (map #(-&gt;&gt; % char-to-int square)
+                                 (str n)))
+         compare-fn #(&lt; % (apply + (sq-digs-fn %)))]
+     (count (filter compare-fn s))))
+
+ (= 8 (__ (range 10)))
+ (= 19 (__ (range 30)))
+ (= 50 (__ (range 100)))
+ (= 50 (__ (range 1000))))</pre></td></tr><tr><td class="docs"><h3>Problem 126: <a href="http://www.4clojure.com/problem/126">Through the Looking Class</a></h3>
+
+<p>I found the answer to this one just by iterating <code>class</code> at the
+REPL, calling it successively on its own output.  The final <code>x</code> in
+the <code>and</code> form excludes <code>nil</code>, whose class is also itself.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  java.lang.Class
+  (let [x __]
+    (and (= (class x) x) x)))</pre></td></tr><tr><td class="docs"><h3>Problem 137: <a href="http://www.4clojure.com/problem/137">Digits and Bases</a></h3>
 
 <p>This is a simple matter of dividing modulo the base and shifting
 out low-order digits.  Alternatively, could do as a lazy seq.</p>
@@ -4090,7 +4321,10 @@ since, by assumption, at least one card was played.</p>
                                          {:suit :club :rank 10}]))
   (= {:suit :heart :rank 8}
      ((__ :heart) [{:suit :heart :rank 6} {:suit :heart :rank 8}
-                   {:suit :diamond :rank 10} {:suit :heart :rank 4}])))</pre></td></tr><tr><td class="docs"><h3>Problem 150: <a href="http://www.4clojure.com/problem/150">Palindromic Numbers</a></h3>
+                   {:suit :diamond :rank 10} {:suit :heart :rank 4}]))
+  (= {:suit :diamond :rank 2}
+     ((__ :club) [{:suit :diamond :rank 2}
+                  {:suit :spade :rank 10}])))</pre></td></tr><tr><td class="docs"><h3>Problem 150: <a href="http://www.4clojure.com/problem/150">Palindromic Numbers</a></h3>
 
 <p>My solution has three parts: (a) to calculate the
 <code>nearest-palindrome</code> to a given number <code>x</code> (which will be <code>x</code> if it
