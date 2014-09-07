@@ -4023,8 +4023,8 @@ to finish) to about 25 msec on my laptop.</p>
                                (for [v ret, x s]
                                  (conj v x)))))))))</pre></td></tr><tr><td class="docs"><p>New solution.  Note that Mark Engelberg's <a href="https://github.com/clojure/math.combinatorics/blob/master/src/main/clojure/clojure/math/combinatorics.clj">math.combinatorics
 implementation</a>
-relies heavily on Knuth, and is less straightforward, but has much better time
-complexity than my solution.</p>
+relies heavily on Knuth, and is less straightforward, but has much
+better time complexity than my solution.</p>
 </td><td class="codes"><pre class="brush: clojure">(solves
   (fn [k s]
     (set
@@ -4073,7 +4073,57 @@ iteration reduces the size substantially for large layers.</p>
   (= 3 (__ 12 3))  ; 12 6 3
   (= 3 (__ 5 9))   ; 5 7 9
   (= 9 (__ 9 2))   ; 9 18 20 10 12 6 8 4 2
-  (= 5 (__ 9 12))) ; 9 11 22 24 12</pre></td></tr><tr><td class="docs"><h3>Problem 113: <a href="http://www.4clojure.com/problem/113">Making Data Dance</a></h3>
+  (= 5 (__ 9 12))) ; 9 11 22 24 12</pre></td></tr><tr><td class="docs"><h3>Problem 111: <a href="http://www.4clojure.com/problem/111">Crossword Puzzle</a></h3>
+
+<p>The approach taken here is a relatively straightforward functional
+"pipeline":</p>
+
+<ol>
+<li>collect horizontal rows (<code>rows</code>) and vertical ones (<code>vert-rows</code>)
+and treat them the same by concatenating them into <code>all-rows</code>.
+Vertical rows are made from horizontal ones by <code>interleave</code>ing
+the horizontal rows and then re-<code>partition</code>ing them (only needed
+when more than one horizontal row is present);</li>
+<li>Split each of these at the <code>\#</code> symbol using <code>partition-by</code>;</li>
+<li>Remove the left-over <code>\#</code>s;</li>
+<li>Remove all spaces;</li>
+<li>Only accept sequences with the same length as the given word;</li>
+<li>Accept any sequence which "matches" the word; match either using
+underscores, or when characters are equal (<code>match-char?</code> and
+<code>match?</code>);</li>
+<li>Convert truthiness to true/false.</li>
+</ol>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [word rows]
+     (let [vert-rows (if (empty? (rest rows))               ;; 1
+                       (map vector (first rows))
+                       (-&gt;&gt; rows
+                            (apply interleave)
+                            (partition (count rows))))
+           all-rows (concat rows vert-rows)                 ;; 1
+           match-char? #(or (= %1 \_) (= %1 %2))            ;; 6
+           match? #(every? true? (map match-char? %1 %2))]  ;; 6
+       (-&gt;&gt; all-rows
+            (mapcat (partial partition-by #(= % \#)))       ;; 2
+            (remove #{[\#]})                                ;; 3
+            (map (partial remove #{\space}))                ;; 4
+            (filter #(= (count %) (count word)))            ;; 5
+            (some #(match? % word))                         ;; 6
+            true?)))                                        ;; 7
+
+  (= true  (__ &quot;the&quot; [&quot;_ # _ _ e&quot;]))
+  (= false (__ &quot;the&quot; [&quot;c _ _ _&quot;
+                      &quot;d _ # e&quot;
+                      &quot;r y _ _&quot;]))
+  (= true  (__ &quot;joy&quot; [&quot;c _ _ _&quot;
+                      &quot;d _ # e&quot;
+                      &quot;r y _ _&quot;]))
+  (= false (__ &quot;joy&quot; [&quot;c o n j&quot;
+                      &quot;_ _ y _&quot;
+                      &quot;r _ _ #&quot;]))
+  (= true  (__ &quot;clojure&quot; [&quot;_ _ _ # j o y&quot;
+                          &quot;_ _ o _ _ _ _&quot;
+                          &quot;_ _ f _ # _ _&quot;])))</pre></td></tr><tr><td class="docs"><h3>Problem 113: <a href="http://www.4clojure.com/problem/113">Making Data Dance</a></h3>
 
 <p>The fact that <code>proxy</code> was disallowed suggested a look at
 <code>reify</code>, since <code>proxy</code> and <code>reify</code> are often discussed together.  A
@@ -4263,7 +4313,88 @@ the original number (<code>compare-fn</code>).</p>
  (= 8 (__ (range 10)))
  (= 19 (__ (range 30)))
  (= 50 (__ (range 100)))
- (= 50 (__ (range 1000))))</pre></td></tr><tr><td class="docs"><h3>Problem 126: <a href="http://www.4clojure.com/problem/126">Through the Looking Class</a></h3>
+ (= 50 (__ (range 1000))))</pre></td></tr><tr><td class="docs"><h3>Problem 124: <a href="http://www.4clojure.com/problem/124">Analyze Reversi</a></h3>
+
+<p>To solve this, we check every non-empty starting position (1)
+which causes one or more "flips" (2), as determined by the <code>flips</code>
+function, called for each of eight possible directions (3a,b).</p>
+
+<p>Given a board, starting position, player color and direction,
+<code>flips</code> works by iterating the direction function against the
+starting position and collecting the color at each resulting
+position (4), stopping when it runs off the board (5).
+<code>partition-by</code> collects sequences of like colors (including
+empties) (6); <code>flips</code> returns a truthy val iff the last color
+sequence is the played color, and the closest color sequence is the
+opposite color (7).</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [board player]
+    (let [n (count board) ;; assume square board
+          ;; 8 directions:
+          no (fn [[r c]] [(dec r) c])
+          so (fn [[r c]] [(inc r) c])
+          ea (fn [[r c]] [r (inc c)])
+          we (fn [[r c]] [r (dec c)])
+          ne (comp no ea)
+          nw (comp no we)
+          se (comp so ea)
+          sw (comp so we)
+          directions [no so ea we ne nw se sw]                           ;; #3a
+          flips (fn [B [r c] color dirn]
+                  (let [places-on-path (map (juxt (partial get-in B) identity)
+                                            (rest (iterate dirn [r c]))) ;; #4
+                        pieces-on-path (take-while (comp (complement nil?)
+                                                         first)
+                                                   places-on-path)]      ;; #5
+                    (-&gt;&gt; pieces-on-path
+                         (partition-by first)                            ;; #6
+                         (take-while #(not= (ffirst %) 'e))
+                         reverse
+                         ((fn [[[[clr-a]] ret]]
+                            (if (and (= clr-a color)                     ;; #7
+                                     (= (ffirst ret) ({'w 'b, 'b 'w} color)))
+                              (map second ret)))))))]
+      (into {} (for [row (range n)
+                     col (range n)
+                     :let [flps (set
+                                 (mapcat (partial flips board [row col] player)
+                                         directions))]                   ;; #3b
+                     :when (and (= (get-in board [row col]) 'e)          ;; #1
+                                (seq flps))]                             ;; #2
+                 [[row col] flps]))))
+
+  (= {[1 3] #{[1 2]}, [0 2] #{[1 2]}, [3 1] #{[2 1]}, [2 0] #{[2 1]}}
+     (__ '[[e e e e]
+           [e w b e]
+           [e b w e]
+           [e e e e]] 'w))
+  (= {[3 2] #{[2 2]}, [3 0] #{[2 1]}, [1 0] #{[1 1]}}
+     (__ '[[e e e e]
+           [e w b e]
+           [w w w e]
+           [e e e e]] 'b))
+  (= {[0 3] #{[1 2]}, [1 3] #{[1 2]}, [3 3] #{[2 2]}, [2 3] #{[2 2]}}
+     (__ '[[e e e e]
+           [e w b e]
+           [w w b e]
+           [e e b e]] 'w))
+  (= {[0 3] #{[2 1] [1 2]}, [1 3] #{[1 2]}, [2 3] #{[2 1] [2 2]}}
+     (__ '[[e e w e]
+           [b b w e]
+           [b w w e]
+           [b w w w]] 'b)))</pre></td></tr><tr><td class="docs"><h3>Problem 125: <a href="http://www.4clojure.com/problem/125">Gus' Quinundrum</a></h3>
+
+<p>Even if you didn't follow the hint link to Wikipedia (I did), the
+title itself is a hint that a Quine is called for.  Not much more
+to say about this solution other than that getting all the escaped
+characters to match up was the tricky bit.</p>
+
+<p>I saw a talk at, I think, Clojure/West a few years back, where Dan
+Friedman and William Byrd generated an infinite lazy sequence of
+progressively more complex quines -- very impressive!</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+ (fn [] (let [e \\ q \&quot; s &quot;(fn [] (let [e %c%c q %c%c s %c%s%c] (format s e e e q q s q)))&quot;] (format s e e e q q s q)))
+ (= (str '__) (__)))</pre></td></tr><tr><td class="docs"><h3>Problem 126: <a href="http://www.4clojure.com/problem/126">Through the Looking Class</a></h3>
 
 <p>I found the answer to this one just by iterating <code>class</code> at the
 REPL, calling it successively on its own output.  The final <code>x</code> in
@@ -4271,7 +4402,94 @@ the <code>and</code> form excludes <code>nil</code>, whose class is also itself.
 </td><td class="codes"><pre class="brush: clojure">(solves
   java.lang.Class
   (let [x __]
-    (and (= (class x) x) x)))</pre></td></tr><tr><td class="docs"><h3>Problem 137: <a href="http://www.4clojure.com/problem/137">Digits and Bases</a></h3>
+    (and (= (class x) x) x)))</pre></td></tr><tr><td class="docs"><h3>Problem 130: <a href="http://www.4clojure.com/problem/130">Tree Reparenting</a></h3>
+
+<p>The solution works by successively "lifting" an element upwards in
+the tree.  "Lifting" (<code>lift-kid</code>) means promoting the element to be
+lifted to the root node, and adding the original root node (minus
+the child) to the new root's children.  Finally the reduction
+applies this "lifting" successively to all nodes on the path to the
+desired one.  <code>path-fn</code> finds that path.</p>
+
+<p>I found it easiest to reason about this in small steps, making the
+various helper functions, e.g. to find the appropriate child node
+(<code>find-kid</code>), remove a child node (<code>remove-kid</code>), etc. as I went,
+and staring at lots of drawings of tree graphs.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [lift-el T]
+    (let [kids (fn [[_ &amp; ks]] ks)
+          tree (fn [eln kids] (list* eln kids))
+          add (fn [el T] (concat T [el]))
+          name-fn (fn [[eln &amp; _]] eln)
+          find-kid (fn [[_ &amp; ks] el-name]
+                     (first (filter #(= el-name (name-fn %)) ks)))
+          remove-kid (fn [[eln &amp; ks] el-name]
+                       (tree eln
+                             (remove #(= el-name (name-fn %)) ks)))
+          lift-kid (fn [T el-name]
+                     (add (remove-kid T el-name)
+                          (find-kid T el-name)))
+          path-fn (fn p [so-far goal [eln &amp; kids]]
+                    (if (= eln goal)
+                      (conj so-far eln)
+                      (mapcat (partial p (conj so-far eln) goal) kids)))
+          path (rest (path-fn [] lift-el T))]
+      (reduce lift-kid T path)))
+
+  (= '(n)
+     (__ 'n '(n)))
+  (= '(a (t (e)))
+     (__ 'a '(t (e) (a))))
+  (= '(e (t (a)))
+     (__ 'e '(a (t (e)))))
+  (= '(a (b (c)))
+     (__ 'a '(c (b (a)))))
+  (= '(d
+       (b
+        (c)
+        (e)
+        (a
+         (f
+          (g)
+          (h)))))
+     (__ 'd '(a
+              (b
+               (c)
+               (d)
+               (e))
+              (f
+               (g)
+               (h)))))
+  (= '(c
+       (d)
+       (e)
+       (b
+        (f
+         (g)
+         (h))
+        (a
+         (i
+          (j
+           (k)
+           (l))
+          (m
+           (n)
+           (o))))))
+     (__ 'c '(a
+              (b
+               (c
+                (d)
+                (e))
+               (f
+                (g)
+                (h)))
+              (i
+               (j
+                (k)
+                (l))
+               (m
+                (n)
+                (o)))))))</pre></td></tr><tr><td class="docs"><h3>Problem 137: <a href="http://www.4clojure.com/problem/137">Digits and Bases</a></h3>
 
 <p>This is a simple matter of dividing modulo the base and shifting
 out low-order digits.  Alternatively, could do as a lazy seq.</p>
@@ -4384,7 +4602,71 @@ left half of the number before recombining.</p>
   (= true
      (apply &lt; (take 6666 (__ 9999999))))
   (= (nth (__ 0) 10101)
-     9102019))</pre></td></tr><tr><td class="docs"><h3>Problem 177: <a href="http://www.4clojure.com/problem/177">Balancing Brackets</a></h3>
+     9102019))</pre></td></tr><tr><td class="docs"><h3>Problem 168: <a href="http://www.4clojure.com/problem/168">Infinite Matrix</a></h3>
+
+<p>This problem is all about <code>lazy-seq</code> and would probably be hard to
+do without it.  I originally considered a one-dimensional version
+of this problem as <code>maprange1</code>, a combination of <code>map</code> and <code>range</code>,
+each of which can be trivially implemented with <code>lazy-seq</code>.  Then I
+realized that the 2d version is very nearly just another
+implementation of the 1d case: <code>maprange2</code> slightly modifies
+<code>maprange1</code> by adding a second argument to the mapping function
+<code>f</code>.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+ (fn mapmap
+   ([f] (mapmap f 0 0))
+   ([f s1 s2]
+      (letfn [(maprange1 [f n1]
+                (lazy-seq
+                 (cons (f n1) (maprange1 f (inc n1)))))
+              (maprange2 [f n1 n2]
+                (lazy-seq
+                 (cons (f n1 n2) (maprange2 f n1 (inc n2)))))]
+        (maprange1 (fn [n1] (maprange2 f n1 s2)) s1)))
+   ([f s1 s2 t1 t2]
+      (take t1 (map #(take t2 %) (mapmap f s1 s2)))))
+
+ (= (take 5 (map #(take 6 %) (__ str)))
+    [[&quot;00&quot; &quot;01&quot; &quot;02&quot; &quot;03&quot; &quot;04&quot; &quot;05&quot;]
+     [&quot;10&quot; &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot; &quot;15&quot;]
+     [&quot;20&quot; &quot;21&quot; &quot;22&quot; &quot;23&quot; &quot;24&quot; &quot;25&quot;]
+     [&quot;30&quot; &quot;31&quot; &quot;32&quot; &quot;33&quot; &quot;34&quot; &quot;35&quot;]
+     [&quot;40&quot; &quot;41&quot; &quot;42&quot; &quot;43&quot; &quot;44&quot; &quot;45&quot;]])
+ (= (take 6 (map #(take 5 %) (__ str 3 2)))
+    [[&quot;32&quot; &quot;33&quot; &quot;34&quot; &quot;35&quot; &quot;36&quot;]
+     [&quot;42&quot; &quot;43&quot; &quot;44&quot; &quot;45&quot; &quot;46&quot;]
+     [&quot;52&quot; &quot;53&quot; &quot;54&quot; &quot;55&quot; &quot;56&quot;]
+     [&quot;62&quot; &quot;63&quot; &quot;64&quot; &quot;65&quot; &quot;66&quot;]
+     [&quot;72&quot; &quot;73&quot; &quot;74&quot; &quot;75&quot; &quot;76&quot;]
+     [&quot;82&quot; &quot;83&quot; &quot;84&quot; &quot;85&quot; &quot;86&quot;]])
+ (= (__ * 3 5 5 7)
+    [[15 18 21 24 27 30 33]
+     [20 24 28 32 36 40 44]
+     [25 30 35 40 45 50 55]
+     [30 36 42 48 54 60 66]
+     [35 42 49 56 63 70 77]])
+ (= (__ #(/ % (inc %2)) 1 0 6 4)
+    [[1/1 1/2 1/3 1/4]
+     [2/1 2/2 2/3 1/2]
+     [3/1 3/2 3/3 3/4]
+     [4/1 4/2 4/3 4/4]
+     [5/1 5/2 5/3 5/4]
+     [6/1 6/2 6/3 6/4]])
+ (= (class (__ (juxt bit-or bit-xor)))
+    (class (__ (juxt quot mod) 13 21))
+    (class (lazy-seq)))
+ (= (class (nth (__ (constantly 10946)) 34))
+    (class (nth (__ (constantly 0) 5 8) 55))
+    (class (lazy-seq)))
+ (= (let [m 377 n 610 w 987
+          check (fn [f s] (every? true? (map-indexed f s)))
+          row (take w (nth (__ vector) m))
+          column (take w (map first (__ vector m n)))
+          diagonal (map-indexed #(nth %2 %) (__ vector m n w w))]
+      (and (check #(= %2 [m %]) row)
+           (check #(= %2 [(+ m %) n]) column)
+           (check #(= %2 [(+ m %) (+ n %)]) diagonal)))
+    true))</pre></td></tr><tr><td class="docs"><h3>Problem 177: <a href="http://www.4clojure.com/problem/177">Balancing Brackets</a></h3>
 
 <p>After a couple of tries on this I realized that stripping out
 non-parenthetic characters and then successively eliminating empty,
