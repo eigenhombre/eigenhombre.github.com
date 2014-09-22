@@ -3046,7 +3046,7 @@ first!!!  They are much better that way.</p>
   <a href="http://4clojure.com">4clojure.com</a> problem by taking the first
   expression, substituting it for __ in all subsequent expressions,
   and evaluating each resulting expression for truthiness (i.e.,
-  evaluating the resulting Midje fact).</p>
+  evaluating the resulting Midje facts).</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro solves
   [expr &amp; tests]
   (let [replacef# (fn [t] (clojure.walk/postwalk-replace {'__ expr} t))
@@ -4502,7 +4502,98 @@ out low-order digits.  Alternatively, could do as a lazy seq.</p>
   (= [0] (__ 0 11))
   (= [1 0 0 1] (__ 9 2))
   (= [1 0] (let [n (rand-int 100000)](__ n n)))
-  (= [16 18 5 24 15 1] (__ Integer/MAX_VALUE 42)))</pre></td></tr><tr><td class="docs"><h3>Problem 141: <a href="http://www.4clojure.com/problem/141">Tricky card games</a></h3>
+  (= [16 18 5 24 15 1] (__ Integer/MAX_VALUE 42)))</pre></td></tr><tr><td class="docs"><h3>Problem 138: <a href="http://www.4clojure.com/problem/138">Squares Squared</a></h3>
+
+<p>I'm probably less proud of this one than most of the others.  In
+any case, had the 4Clojure format supported <code>defn</code> I'd have broken
+this up into several functions and documented them individually for
+the sake of clarity.  Instead, comments are salted throughout the
+code, which is longer than I'd like.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [n0 n1]
+    (let [turn-right {[ 1  1] [ 1 -1], [ 1 -1] [-1 -1],
+                      [-1 -1] [-1  1], [-1  1] [ 1  1]}
+          ;; The function which returns the coordinates of an
+          ;; ever-increasing spiral of `n` values:
+          spiral (fn [n]
+                   (let [pts (loop [pos [0 0], dir [-1 1], n n, ret [],
+                                    board #{pos}]
+                               (if-not (pos? n)
+                                 ret
+                                 (let [next-dir (turn-right dir)
+                                       next-pos (map + pos next-dir)
+                                       should-turn (board next-pos)]
+                                   ;; Already have been there?  If so,
+                                   ;; use existing rather than new
+                                   ;; direction.  If not, turn right.
+                                   (recur (if should-turn
+                                            (map + pos dir)
+                                            next-pos)
+                                          (if should-turn dir next-dir)
+                                          (dec n)
+                                          (conj ret pos)
+                                          (conj board pos)))))
+                         minr (-&gt;&gt; pts (map first) (apply min))
+                         minc (-&gt;&gt; pts (map second) (apply min))]
+                     ;; Apply offset to zero-based positions to &quot;true&quot;
+                     ;; rows/columns
+                     (map (fn [[r c]] [(- r minr) (- c minc)]) pts)))
+          ;; Calculate the actual values in the 'digit spiral',
+          ;; filling in the necessary number of `*` characters::
+          sqr #(*' % %)
+          s (take-while (partial &gt;= n1) (iterate sqr n0))
+          squares (map sqr (range))
+          digs (mapcat str s)
+          square-size (-&gt;&gt; squares
+                           (drop-while (partial &gt; (count digs)))
+                           first)
+          stars (repeat (- square-size (count digs)) \*)
+          digs (concat digs stars)
+          ;; Figure out how big the board needs to be, based on the
+          ;; range of positions returned by the `spiral` function:
+          spir (spiral (count digs))
+          board-size (-&gt;&gt; spir
+                          (map first)
+                          (apply (juxt max min))
+                          (apply -)
+                          inc)
+          ;; Unadorned board consisting only of spaces:
+          raw-board (-&gt;&gt; \space
+                         (repeat board-size)
+                         (into [])
+                         (repeat board-size)
+                         (into []))]
+      ;; The final board calculation is a reduction, using `assoc-in`
+      ;; to fill the values in `digs` and coordinates returned by
+      ;; `spiral`:
+      (-&gt;&gt; (reduce (fn [B [ch [r c]]]
+                     (assoc-in B [r c] ch))
+                   raw-board
+                   (partition 2 (interleave digs spir)))
+           (map (partial apply str)))))
+
+  (= (__ 2 2) [&quot;2&quot;])
+  (= (__ 2 4) [&quot; 2 &quot;
+               &quot;* 4&quot;
+               &quot; * &quot;])
+  (= (__ 3 81) [&quot; 3 &quot;
+                &quot;1 9&quot;
+                &quot; 8 &quot;])
+  (= (__ 4 20) [&quot; 4 &quot;
+                &quot;* 1&quot;
+                &quot; 6 &quot;])
+  (= (__ 2 256) [&quot;  6  &quot;
+                 &quot; 5 * &quot;
+                 &quot;2 2 *&quot;
+                 &quot; 6 4 &quot;
+                 &quot;  1  &quot;])
+  (= (__ 10 10000) [&quot;   0   &quot;
+                    &quot;  1 0  &quot;
+                    &quot; 0 1 0 &quot;
+                    &quot;* 0 0 0&quot;
+                    &quot; * 1 * &quot;
+                    &quot;  * *  &quot;
+                    &quot;   *   &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 141: <a href="http://www.4clojure.com/problem/141">Tricky card games</a></h3>
 
 <p>We want to provide a function which determines the winning card of
 a sequence of plays, defined by:</p>
@@ -4542,7 +4633,22 @@ since, by assumption, at least one card was played.</p>
                    {:suit :diamond :rank 10} {:suit :heart :rank 4}]))
   (= {:suit :diamond :rank 2}
      ((__ :club) [{:suit :diamond :rank 2}
-                  {:suit :spade :rank 10}])))</pre></td></tr><tr><td class="docs"><h3>Problem 150: <a href="http://www.4clojure.com/problem/150">Palindromic Numbers</a></h3>
+                  {:suit :spade :rank 10}])))</pre></td></tr><tr><td class="docs"><h3>Problem 144: <a href="https://www.4clojure.com/problem/144">Oscilrate<a/></h3>
+
+<p>The <code>cycle</code> function (1), applied to the list of given functions, makes
+this straightforward.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn f [x &amp; s]
+    (letfn [(g [x s]
+              (lazy-seq
+               (cons x
+                     (g ((first s) x)
+                        (next s)))))]
+      (g x (cycle s))))                    ;; #1
+
+  (= (take 3 (__ 3.14 int double)) [3.14 3 3.0])
+  (= (take 5 (__ 3 #(- % 3) #(+ 5 %))) [3 0 5 2 7])
+  (= (take 12 (__ 0 inc dec inc dec inc)) [0 1 0 1 0 1 2 1 2 1 2 3]))</pre></td></tr><tr><td class="docs"><h3>Problem 150: <a href="http://www.4clojure.com/problem/150">Palindromic Numbers</a></h3>
 
 <p>My solution has three parts: (a) to calculate the
 <code>nearest-palindrome</code> to a given number <code>x</code> (which will be <code>x</code> if it
