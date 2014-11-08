@@ -60,7 +60,6 @@ h2. All Blog Posts
 
 <img src="/images/feed-icon-14x14.png"/> RSS feed for "Clojure":http://eigenhombre.com/feed.clojure.xml, "Python":http://eigenhombre.com/feed.python.xml
 
-
 <a name="blogposts"/>
 
 <ul class="posts">
