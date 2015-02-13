@@ -11,6 +11,9 @@ tags: [clojure, physics]
 in Clojure via the example of looking for (nearly-)coincident
 clusters of times in a series.*
 
+<br/>
+<a href="/images/birds-on-wires.jpg"><img src="/images/birds-on-wires.jpg" alt="Birds, on wires"/></a>
+
 A fundamental technical problem in experimental particle physics is
 how to distinguish the signatures of particles from instrumental
 noise.
