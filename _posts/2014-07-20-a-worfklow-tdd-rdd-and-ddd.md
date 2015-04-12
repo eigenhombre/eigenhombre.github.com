@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A Worfklow: TDD, RDD and DDD"
+title: "A Workflow: TDD, RDD and DDD"
 description: ""
 category: clojure
 tags: [clojure, testing, "literate programming"]
