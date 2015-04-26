@@ -24,7 +24,7 @@ h3. Recent Blog Posts ("all posts":#blogposts)
 
 I'm a software developer with a background in physics and art and a passion for writing awesome programs in Clojure.
 
-I am currently a *Senior Software Architect at "OpinionLab":http://opinionlab.com* in Chicago.  I have created software for more than two decades in industry and in the fields of high energy physics and particle astrophysics, and have built a wide range of systems, including front-end Web applications, control systems, Linux device drivers, embedded systems for physics detectors, data mining / analysis, and numerical simulations.
+I am currently a *Senior Software Engineer at "OpinionLab":http://opinionlab.com* in Chicago.  I have created software for more than two decades in industry and in the fields of high energy physics and particle astrophysics, and have built a wide range of systems, including front-end Web applications, control systems, Linux device drivers, embedded systems for physics detectors, data mining / analysis, and numerical simulations.
 
 I like to write *elegant, powerful, maintainable code*.  Generally this means striving for "simplicity":http://bit.ly/simple-made-easy whenever possible.  (Almost all the code I've written in the last decade is still in production use.) When practical, I practice iterative, test-driven development and fully-automated deployment workflows with frequent releases.
 
