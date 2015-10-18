@@ -5020,7 +5020,7 @@ iterations.</p>
   <a href="http://4clojure.com">4clojure.com</a> problem by taking the first
   expression, substituting it for __ in all subsequent expressions,
   and evaluating each resulting expression for truthiness (i.e.,
-  evaluating the resulting Midje facts).</p>
+  evaluating the resulting Speclj assertions).</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro solves
   [expr &amp; tests]
   (let [replacef# (fn [t] (postwalk-replace {'__ expr} t))
