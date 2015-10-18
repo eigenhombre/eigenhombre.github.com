@@ -3528,7 +3528,7 @@ resulting set is maximal.</p>
         #{[&quot;father&quot; &quot;son&quot;] [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]}]
     (= (__ progeny)
      #{[&quot;father&quot; &quot;son&quot;] [&quot;father&quot; &quot;grandson&quot;]
-       [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]})))</pre></td></tr><tr><td class="docs"><h3>Problem 85:</h3>
+       [&quot;uncle&quot; &quot;cousin&quot;] [&quot;son&quot; &quot;grandson&quot;]})))</pre></td></tr><tr><td class="docs"><h3>Problem 85: <a href="http://www.4clojure.com/problem/85">Power Set</a></h3>
 
 <p>The problem has a recursive solution, which becomes clearer when one realizes
 that, for every subset in the power set, any given object is
@@ -3786,7 +3786,32 @@ whether the cell should live or die is trivial to apply.</p>
       &quot; #  # &quot;
       &quot; #  # &quot;
       &quot;  #   &quot;
-      &quot;      &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 97: <a href="http://www.4clojure.com/problem/97">Pascal's Triangle</a></h3>
+      &quot;      &quot;]))</pre></td></tr><tr><td class="docs"><h3>Problem 95: <a href="http://www.4clojure.com/problem/95">To Tree, or not to Tree</a></h3>
+
+<p>Solve recursively, with base cases to catch the wrong shape at any
+given node.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn treep [s]
+    (or (nil? s)
+        (and (coll? s)
+             (= (count s) 3)
+             (treep (nth s 1))
+             (treep (nth s 2)))))
+
+  (= (__ '(:a (:b nil nil) nil))
+     true)
+  (= (__ '(:a (:b nil nil)))
+     false)
+  (= (__ [1 nil [2 [3 nil nil] [4 nil nil]]])
+     true)
+  (= (__ [1 [2 nil nil] [3 nil nil] [4 nil nil]])
+     false)
+  (= (__ [1 [2 [3 [4 nil nil] nil] nil] nil])
+     true)
+  (= (__ [1 [2 [3 [4 false nil] nil] nil] nil])
+     false)
+  (= (__ '(:a nil ()))
+     false))</pre></td></tr><tr><td class="docs"><h3>Problem 97: <a href="http://www.4clojure.com/problem/97">Pascal's Triangle</a></h3>
 
 <p>I solved this problem by thinking about the following series of
 data transformations on an arbitrary level of the problem:</p>
