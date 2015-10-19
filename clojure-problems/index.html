@@ -3107,7 +3107,8 @@ solution is added inline.</p>
                                          keys
                                          (apply max))
                      desired-sequence (-&gt;&gt; series
-                                           (filter #(= (count %) longest-length))
+                                           (filter #(= (count %)
+                                                       longest-length))
                                            first)
                      start (second (first desired-sequence))
                      end (int (nth (last desired-sequence) 2))]
@@ -3723,7 +3724,41 @@ initial loop destructuring form works.</p>
   (= false (__ #{[:a :b] [:b :c] [:c :d]
                [:x :y] [:d :a] [:b :e]}))
   (= true (__ #{[:a :b] [:b :c] [:c :d]
-              [:x :y] [:d :a] [:b :e] [:x :a]})))</pre></td></tr><tr><td class="docs"><h3>Problem 94: <a href="http://www.4clojure.com/problem/94">Game of Life</a></h3>
+              [:x :y] [:d :a] [:b :e] [:x :a]})))</pre></td></tr><tr><td class="docs"><h3>Problem 92: <a href="http://www.4clojure.com/problem/92">Read Roman Numerals</a></h3>
+
+<p>We find the allowed number patterns with their numerical values,
+searching for the subtractive patterns (e.g. IV) first to keep them
+distinct from the non-subptractive ones (e.g. VII).  We thread the
+current string and an accumulator value through each of the
+possible patterns, taking the final accumulator value at the end.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn [s]
+    (let [pn
+          (fn [[s acc] pat incr]
+            (loop [s s, acc acc]
+              (if-not (re-find pat s)
+                [s acc]
+                (recur (clojure.string/replace-first s pat &quot;&quot;) (+ acc incr)))))]
+      (-&gt; [s 0]
+          (pn #&quot;CM&quot; 900)
+          (pn #&quot;CD&quot; 400)
+          (pn #&quot;XC&quot; 90)
+          (pn #&quot;XL&quot; 40)
+          (pn #&quot;IX&quot; 9)
+          (pn #&quot;IV&quot; 4)
+          (pn #&quot;M&quot; 1000)
+          (pn #&quot;D&quot; 500)
+          (pn #&quot;C&quot; 100)
+          (pn #&quot;L&quot; 50)
+          (pn #&quot;X&quot; 10)
+          (pn #&quot;V&quot; 5)
+          (pn #&quot;I&quot; 1)
+          last)))
+
+  (= 14 (__ &quot;XIV&quot;))
+  (= 3999 (__ &quot;MMMCMXCIX&quot;))
+  (= 827 (__ &quot;DCCCXXVII&quot;))
+  (= 48 (__ &quot;XLVIII&quot;)))</pre></td></tr><tr><td class="docs"><h3>Problem 94: <a href="http://www.4clojure.com/problem/94">Game of Life</a></h3>
 
 <p>We accept a vector of strings as our "board representation."  The
 problem is, essentially, For any given spot, how many neighbors do
