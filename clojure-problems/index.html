@@ -3758,7 +3758,26 @@ possible patterns, taking the final accumulator value at the end.</p>
   (= 14 (__ &quot;XIV&quot;))
   (= 3999 (__ &quot;MMMCMXCIX&quot;))
   (= 827 (__ &quot;DCCCXXVII&quot;))
-  (= 48 (__ &quot;XLVIII&quot;)))</pre></td></tr><tr><td class="docs"><h3>Problem 94: <a href="http://www.4clojure.com/problem/94">Game of Life</a></h3>
+  (= 48 (__ &quot;XLVIII&quot;)))</pre></td></tr><tr><td class="docs"><h3>Problem 93: <a href="http://www.4clojure.com/problem/93">Partially Flatten a Sequence</a></h3>
+
+<p>I solved this by writing a simple, recursive <code>flatten</code> first, and
+then adding the extra check <code>(coll? (first x))</code>.</p>
+</td><td class="codes"><pre class="brush: clojure">(solves
+  (fn flat [s]
+    (cond
+      (not (coll? s)) s
+      :else
+      (let [[x &amp; xs] s]
+        (if (and (coll? x) (coll? (first x)))
+          (concat (flat x) (flat xs))
+          (cons x (flat xs))))))
+
+  (= (__ [[&quot;Do&quot;] [&quot;Nothing&quot;]])
+     [[&quot;Do&quot;] [&quot;Nothing&quot;]])
+  (= (__ [[[[:a :b]]] [[:c :d]] [:e :f]])
+     [[:a :b] [:c :d] [:e :f]])
+  (= (__ '((1 2)((3 4)((((5 6)))))))
+     '((1 2)(3 4)(5 6))))</pre></td></tr><tr><td class="docs"><h3>Problem 94: <a href="http://www.4clojure.com/problem/94">Game of Life</a></h3>
 
 <p>We accept a vector of strings as our "board representation."  The
 problem is, essentially, For any given spot, how many neighbors do
