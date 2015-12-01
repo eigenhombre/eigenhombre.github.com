@@ -1,0 +1,100 @@
+<head><title>Continuous Testing in Python, Clojure and Blub</title><link href="tufte-css/tufte.css" rel="stylesheet" /><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></head><body><h1>Continuous Testing in Python, Clojure and Blub</h1><p class="subtitle">John Jacobsen</p><div><p><figure><a href="img/IMG_9625.jpg"><img src="img/IMG_9625.jpg" width="300" /></a><figcaption>A separate monitor is handy for showing tests
+  results continuously while working. The paintbrushes are strictly
+  optional.</figcaption></figure></p><p><strong>What follows is a somewhat rambling introduction to continuous,
+  test-driven development, focusing mainly on Python and influenced by
+  Clojure tools and philosophy. At the end, a simple script is
+  introduced to help facilitate continuous TDD in (almost) any
+  language.</strong></p><p><span>For the last four years I have increasingly followed a test-driven
+  approach in my development. My approach continues to evolve and
+  deepen even as some of the <a href="http://www.headspring.com/2011/11/guard-rail-programming">limits of TDD</a> are becoming clearer to me.</span></p><p>Initially, I had a hard time getting my head around TDD. Writing
+  tests AND production code seemed like twice as much work, and I
+  typically ran the program under development, e.g. with print
+  statements added, to test each change. But making changes to old
+  code was always a fairly daunting proposition, since there was no
+  way to validate all the assumptions I&rsquo;d checked &ldquo;by eye&rdquo; just after
+  I&rsquo;d written the code.</p><p><span>TDD helps reduce risk by continuously verifying your assumptions
+  about how the code should perform at any time. Using TDD for a
+  <a href="http://npxdesigns.com/projects/icecube-live/">fairly
+  large project</a> has saved my bacon any number of times.</span></p><p>The basic approach is that the test code and the production code
+  evolve together more or less continuously, as one follows these
+  rules:</p><p><ol><li>Don&rsquo;t write any production code without a failing unit test</li><li>Write only enough production code needed to make the tests pass</li></ol></p><p>Once I started writing tests for all new production code, I found I
+  could change that code and make it better without fear. That led to
+  much better (and usually simpler) code. I realized I was spending
+  much less time debugging; and when there were bugs, the tests helped
+  find them much faster. As I have gained experience with this
+  approach I have found that the reliability of, and my trust in, my
+  code written with TDD is vastly superior than otherwise. The
+  two-rule cycle also tends to foster simplicity, as one tends to
+  eschew any modifications that don&rsquo;t actually achieve the desired
+  objectives (i.e. meet the goals of the software, as specified
+  formally in the tests themselves). The process is also surprisingly
+  agreeable!</p><p><span>It goes without saying that if you follow this approach you will be
+  running your tests a lot. The natural next step is to automate this
+  more. In the book Foundations of Agile Python Development, Jeff
+  Younker explains how to make Eclipse run your unit tests <strong>every time you save a file</strong> in the project. The speed
+  and convenience of this approach was enough to get me to switch from
+  Emacs to Eclipse for awhile.</span></p><p><span>Most of my daily programming work is in Python, but I have been an
+   avid <a href="http://johnj.com/navblog/in-defense-of-hobbies/">hobbyist</a> in Clojure for several months now. It wasn&rsquo;t until I
+   saw Bill Caputo&rsquo;s preparatory talk for Clojure/West here in Chicago
+   that I heard the term <strong>continuous testing</strong> and
+   realized that this is what I was already doing; namely, the natural
+   extension of TDD in which one runs tests continuously rather than
+   &ldquo;by hand.&rdquo; Bill demoed the expectations module and the autoexpect
+   plugin for Leiningen, which runs your tests after every save
+   without incurring the overhead of starting a fresh JVM each time.</span></p><p>(One point Bill made in his talk was that if your tests are slow,
+   i.e. if you introduce some new inefficiency, you really notice
+   it. Ideally the tests should take a few seconds or less to
+   complete.)</p><p><span>Back to Python-land. Not wanting to be always leashed to Eclipse,
+   and inspired by the autoexpect plugin, I started looking for an
+   alternative to using Eclipse&rsquo;s auto-builders &mdash; something I could
+   use with Emacs or any other editor. There are a lot of continuous
+   build systems out there, but I wanted something simple which would
+   just run on the command line on my laptop screen while I edited
+   code on my larger external monitor. I found <a href="https://github.com/brunobord/tdaemon/blob/master/tdaemon.py">tdaemon</a> on GitHub; this
+   program walks a directory tree and runs tests whenever anything
+   changes (as determined by keeping a dictionary/map of SHA values
+   for all the files). This is most of what I want, but it restricts
+   you to its own choices of test programs.</span></p><p><span>In a large project with many tests, some fast and some slow, I
+   often need to specify a specific test program or arguments. For
+   example, I have a wrapper for <a href="http://readthedocs.org/docs/nose/en/latest/">nosetests</a> which
+   will alternately run all my &ldquo;fast&rdquo; unit tests, check for PEP-8
+   compliance, run Django tests, etc. In some cases, such as debugging
+   a system with multiple processes, I may need to do something
+   complex at the shell prompt to set up and/or tear down enough
+   infrastructure to perform an
+   existing test in a new way.</span></p><p><span>One piece of Clojure philosophy (from Functional Programming,
+   a.k.a. &ldquo;FP&rdquo;) that has been influencing my thinking of late is the
+   notion of <strong>composability</strong>: the decoupling or
+   disentanglement of the pieces of the systems one builds into small,
+   general, composable pieces. This will make those pieces easier to
+   reuse in new ways, and will also facilitate reasoning about their
+   use and behaviors. (Unfortunately, the merits of the FP approach,
+   which are many, have poisoned my enthusiasm for OO to the extent
+   that I will typically use a function, or even a closure, before
+   using an object, which would perhaps be more Pythonic in some
+   cases).</span></p><p>So, in the current case under discussion (continuous testing),
+  rather than making some kind of stateful object which knows about
+  not only your current file system, but also what tests should be
+  allowed, their underlying dependencies, etc., it would be better (or
+  at least more &ldquo;functional&rdquo;) instead to simply provide a
+  directory-watching function that checks a dictionary of file hashes,
+  and compose that function with whatever test program suits your
+  purposes at the moment.</p><p><span>The result of these thoughts is a small script called <a href="https://github.com/eigenhombre/continuous-testing-helper">conttest</a> which is a simplification of <code>tdaemon</code>
+  that composes well with any test suite you can specify on the
+  command line.</span></p><p>Some examples follow:</p><p><pre><code>$ conttest nosetests  # Runs nosetests whenever the files on disk change
+
+$ conttest nosetests test.path:harness  # Runs only tests in 'harness'
+                                        # object in path/to/test &mdash; handy
+                                        # for developing a single feature
+                                        # or fixing a single bug.
+# Check both PEP-8 style and unit tests:
+$ conttest 'pep8 -r . ; nosetests'
+</code></pre></p><p><span>It would work equally well with a different language (&ldquo;<a href="http://www.paulgraham.com/avg.html">blub</a> language&rdquo;) with a
+  separate compilation step:</span></p><p><pre><code>$ conttest 'make && ./run-tests'</code></pre></p><p>Using this program, depending on my needs of the moment, I can
+  continuously run a single unit test, all my &ldquo;fast&rdquo; unit tests, or,
+  if I&rsquo;m willing to deal with slower turnaround times, all my unit and
+  integration tests.</p><p><span>The script is on <a href="https://github.com/eigenhombre/continuous-testing-helper">GitHub</a> for your continuous enjoyment of continuous testing. May
+  you find it helpful.</span></p><p><span>(Ironically, this script does NOT work that well for JVM languages
+  like Clojure since the startup time is lengthy (a couple of seconds
+  on my MacBook Pro). Most of the testing frameworks have autotest
+  capabilities built in, which work great.)</span></p></div></body><div><p><a href="about.html">about</a>|<a href="content.html">all posts</a></p><p>&copy; 2015 <a href="about.html">John Jacobsen</a>. Created with <a href="https://github.com/eigenhombre/unmark">unmark</a>.  CSS by <a href="https://edwardtufte.github.io/tufte-css/">Tufte-CSS</a>.</p></div>

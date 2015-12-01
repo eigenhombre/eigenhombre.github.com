@@ -1,0 +1,115 @@
+<head><title>Macro-writing Macros</title><link href="tufte-css/tufte.css" rel="stylesheet" /><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></head><body><h1>Macro-writing Macros</h1><p class="subtitle">John Jacobsen</p><div><p>I&rsquo;ve been writing Clojure full time for nearly two years now. I
+  have a pretty good feel for the language, its virtues and its
+  faults. Mostly, I appreciate its virtues (though I still wish the
+  REPL started faster).</p><p>For me one of the language&rsquo;s attractions has always been that it&rsquo;s
+  a Lisp &mdash; a &ldquo;homoiconic&rdquo; language, i.e., one defined in terms of
+  its own data structures. Homoiconicity has one primary virtue, which
+  is that it makes metaprogramming more powerful and straightforward
+  than it is in non-homoiconic languages.</p><p>In Lisp, this metaprogramming is accomplished with macros, which
+  are functions that transform your code during a separate stage of
+  compilation. In other words, you write little programs to change
+  your programs before they execute.</p><p>I run a Clojure study group at work and find that it can be hard to
+  explain the utility (or appeal) of this to newcomers to Lisp. When
+  pressed for examples on the spot, I often draw a blank. This is
+  partly because I don&rsquo;t often need to write them &mdash; maybe one or two
+  a week, as opposed to hundreds of functions over the same time
+  period.</p><p><span>While <a href="https://github.com/eigenhombre/moarquil">playing around with 3d rendering</a> in <a href="http://quil.info/">Quil</a>, I recently came
+   across the following use case which I find entertaining and
+   instructive.</span></p><p>In Quil, there are multiple situations in which one needs to create
+  a temporary context to carry out a series of operations, restoring
+  the original state afterwards:</p><p><ol><li>Save current style with <code>push-style</code>; change
+  style and draw stuff; restore previous style with <code>pop-style</code>.</li><li>Start shape with <code>begin-shape</code>; draw vertices; <code>end-shape</code> to end.</li><li>Save current position/rotation
+   with <code>push-matrix</code>; translate / rotate and draw stuff;
+   restore old position/rotation with <code>pop-matrix</code>.</li></ol></p><p>Here&rsquo;s an example:</p><p><pre><code>(push-matrix)
+(try
+  (push-style)
+  (try
+    (fill 255)
+    (no-stroke)
+    (translate [10 10 10])
+    (begin-shape)
+    (try
+      (vertex x1 y1 0)
+      (vertex x2 y2 0)
+      (vertex x2 y2 h)
+      (vertex x1 y1 h)
+      (vertex x1 y1 0)
+      (finally
+        (end-shape)))
+    (finally
+      (pop-style)))
+  (finally
+    (pop-matrix)))
+</code></pre></p><p><span>The <code>(try ... (finally ...))</code> constructions may not be
+  strictly needed for a Quil drawing, but it&rsquo;s a good habit to
+  guarantee that stateful context changes are undone, even if problems
+  occur.</span></p><p>In a complex Quil drawing the idioms for saving style, translation
+  state, and denoting shapes appear often enough that one hungers for
+  a more compact way of representing each.  Here&rsquo;s one way to do it:</p><p><pre><code>(defmacro with-style [& body]
+  (push-style)
+  (try
+    ~@body
+    (finally
+      (pop-style))))
+
+(defmacro with-matrix [& body]
+  (push-matrix)
+  (try
+    ~@body
+    (finally
+      (pop-matrix))))
+
+(defmacro with-shape [& body]
+  (begin-shape)
+  (try
+    ~@body
+    (finally
+      (end-shape))))
+
+</code></pre></p><p>The original code then becomes more compact and easier to read:</p><p><pre><code>
+(with-matrix
+  (with-style
+    (fill 255)
+    (no-stroke)
+    (translate [10 10 10])
+    (with-shape
+      (vertex x1 y1 0)
+      (vertex x2 y2 0)
+      (vertex x2 y2 h)
+      (vertex x1 y1 h)
+      (vertex x1 y1 0))))</code></pre></p><p><span>However, the astute reader will realize that the macro definitions
+  themselves are pretty repetitive&mdash;in fact, they look almost
+  identical except for the setup and teardown details (this kind of
+  &ldquo;context manager&rdquo; pattern is common enough that Python has <a href="http://eigenhombre.com/2013/04/20/introduction-to-context-managers/">its own language construct</a> for it).</span></p><p>I generally reach for macros when I have a pattern that occurs with
+  obvious repetition that&rsquo;s not easy to abstract out using just pure
+  functions.  Control abstractions such as loops or exception handling
+  are common examples. (I find this situation occurs especially
+  frequently when writing test code).</p><p>In any case, the solution for our repetitive macros could be
+  something like:</p><p><pre><code>(defmacro defcontext
+  [nom setup teardown]
+  `(defmacro ~(symbol (str &ldquo;with-&rdquo; nom))
+     [~'& body#]
+     `(do
+        ~'~setup
+        (try
+          ~@body#
+          (finally
+            ~'~teardown)))))</code></pre></p><p><span>Yikes! I have to admit I had to write a lot of macros, and also refer to <a href="http://hubpages.com/technology/Clojure-macro-writing-macros">this
+  helpful page</a> for reference, before I could write (and grok) this macro.</span></p><p><span>With <code>defcontext</code> in hand, our repetitive macro code
+  just becomes:</span></p><p><pre><code>(defcontext style (push-style) (pop-style))
+(defcontext shape (begin-shape) (end-shape))
+(defcontext matrix (push-matrix) (pop-matrix))</code></pre></p><p><span>These are exactly equivalent to the three context macros (<code>with-*</code>) defined above.</span></p><p><span>With a little effort, it&rsquo;s actually not too hard to construct such
+  a nested macro. It&rsquo;s largely a matter of writing out the code you
+  want to generate, and then writing the code that generates it,
+  testing with <code>macroexpand-1</code> at the REPL as you go. <a href="http://hubpages.com/technology/Clojure-macro-writing-macros">This
+  page by A. Malloy</a> has a lot of helpful remarks, including this
+  cautionary note: &ldquo;Think twice before trying to nest macros: it&rsquo;s
+  usually the wrong answer.&rdquo; In this case, I actually think it&rsquo;s the
+  right answer, because the pattern of a context with setup and
+  teardown is so common that I know I&rsquo;ll reuse this macro for many
+  other things.</span></p><p><span>There&rsquo;s a saying in the Clojure community: <code>data >
+  functions > macros</code>. I&rsquo;m a big believer in this. Clojure&rsquo;s
+  powerful built-in abstractions for wrangling data in all its forms
+  make it the language I prefer above all others these days. But
+  occasionally that means wrangling the data that is the code itself,
+  thereby reaping the benefits in power, brevity and expressiveness.</span></p><p><span>(Original code on GitHub is <a href="https://github.com/eigenhombre/moarquil/blob/master/src/moarquil/util.clj#L5">here</a>.)</span></p></div></body><div><p><a href="about.html">about</a>|<a href="content.html">all posts</a></p><p>&copy; 2015 <a href="about.html">John Jacobsen</a>. Created with <a href="https://github.com/eigenhombre/unmark">unmark</a>.  CSS by <a href="https://edwardtufte.github.io/tufte-css/">Tufte-CSS</a>.</p></div>
