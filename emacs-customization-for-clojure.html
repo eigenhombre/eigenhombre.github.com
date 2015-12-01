@@ -1,0 +1,74 @@
+<head><title>Emacs Customization for Clojure</title><link href="tufte-css/tufte.css" rel="stylesheet" /><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></head><body><h1>Emacs Customization for Clojure</h1><p class="subtitle">John Jacobsen</p><div><p><span><strong>Synopsis</strong>: <em>I talk about the value of paredit in Emacs
+  and show a trick which allows you to insert the result of any given
+  Clojure expression directly underneath that expression.</em></span></p><p><span>As I said in the <a href="http://eigenhombre.com/clojure/2014/07/03/an-advanced-clojure-workflow/">first post</a>, a good set of tools can make a big difference in
+  productivity and enjoyment while working in any language, and
+  Clojure is certainly no exception. The most important tool in your
+  toolbox, regardless of language, is your editor. Editing Lisp code
+  in particular is much more natural with the right editor setup.</span></p><p><span>I have been using Emacs since the 1990s, though I still consider
+  myself a novice (Emacs is that way). Though good alternatives
+  exist, <a href="http://cemerick.com/2013/11/18/results-of-the-2013-state-of-clojure-clojurescript-survey/">over half of the Clojure community has adopted Emacs</a> despite
+  its lack of polish and its Himalayan learning curve. Emacs is
+  massively customizable, with hundreds of plugins available, and can
+  be extended to just about any degree using its own flavor of
+  Lisp.</span></p><p><span>While I&rsquo;ll give a few Emacs configuration tips below, I don&rsquo;t give
+  a complete recipe for customizing Emacs here. <a href="https://github.com/eigenhombre/emacs-config/">My Emacs
+  configuration file</a> is on GitHub if you are interested.</span></p><p><h1>Paredit</h1><p><span>Though it takes a little getting used to, I started using <a href="http://emacsrocks.com/e14.html">paredit mode</a> exclusively a year or so and it has made a huge difference, not
+    only for my productivity with the language, but also in my
+    enjoyment and appreciation of Lisp in general.</span></p><p><span>In paredit, the units of code are not lines of text or sequences
+    of characters, but <em>s-expressions</em> (generally,
+    lists). In other words, paredit gives you the ability to easily
+    manipulate the data structures that your code is built out
+    of. With various key combinations, you can kill expressions, split
+    them, join them, expell (&ldquo;barf&rdquo;) or absorb (&ldquo;slurp&rdquo;) neighboring
+    expressions, and so on. This <a href="https://github.com/joelittlejohn/paredit-cheatsheet">excellent
+    cheat</a> sheet covers the whole range of commands and
+    keybindings.</span></p><p>I think that it wasn&rsquo;t until I started using paredit that I
+    really got used to all those parentheses. Now editing non-Lisp
+    code feels unnatural to me, since I don&rsquo;t have the ability to
+    sling blocks of code about with the same ease without those
+    parentheses steering my editor. And, though it&rsquo;s hard to give a
+    specific reason for this, working directly with trees of Lisp
+    expressions gives me a feeling of somehow being closer to the
+    essence of computation.</p></p><p><h1>CIDER</h1><p><span>An even more important tool is <a href="https://github.com/clojure-emacs/cider">CIDER</a>, which integrates the Clojure REPL directly with Emacs. The
+    upshot of this kind of integration is that one can <em>evaluate
+    Clojure code directly from the editor</em> with a single key
+    combination and see the results instantly.</span></p><p>I bind my own key combinations to the common CIDER commands to
+    make them as quick to execute as possible:</p><p><pre><code>(add-hook 'clojure-mode-hook
+   '(lambda ()
+      (paredit-mode 1)
+      ;; Actual keyboard bindings follow:</code></pre></p><p><span>Start CIDER REPL with <code>control-o-j</code>:</span></p><p><pre><code>      (define-key clojure-mode-map (kbd &ldquo;C-o j&rdquo;) 'cider-jack-in)
+</code></pre></p><p><span><strong>Restart</strong> CIDER REPL
+    with <code>control-o-J</code> (in case of dirty JVM, etc.):</span></p><p><pre><code>      (define-key clojure-mode-map (kbd &ldquo;C-o J&rdquo;) 'cider-restart)</code></pre></p><p><span>Use <code>&#8984;-i</code> to evaluate previous expression and display
+    result in minibuffer (I am on a Mac):</span></p><p><pre><code>      (define-key clojure-mode-map (kbd &ldquo;s-i&rdquo;) 'cider-eval-last-sexp)</code></pre></p><p><span>Rather than showing in minibuffer, use <code>control-o y</code>
+    to insert the result <em>directly in the code</em>.</span></p><p><pre><code>      (define-key clojure-mode-map (kbd &ldquo;C-o y&rdquo;)
+        (lambda ()
+           (interactive)
+           (insert &ldquo;\n;;=>\n&rdquo;)
+           (cider-eval-last-sexp 't))) </code></pre></p><p>As an example of using this, suppose I have the following Clojure code:</p><p><pre><code>(range 100)
+|</code></pre></p><p><span>With the position of my cursor denoted by <code>|</code>, and I type <code>control-o y</code>, I get:</span></p><p><pre><code>(range 100)
+;;=>
+(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48
+49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94
+95 96 97 98 99)</code></pre></p><p><span>To see a video of this trick in action, check out this <a href="https://vimeo.com/99980843">demonstration
+    video</a>. I find that using <code>cider-eval-last-sexp</code>
+    feels a little like working with the InstaREPL in <a href="http://www.lighttable.com/">Light Table</a>, except that here you can actually preserve and edit the results
+     of expressions rather than just viewing them inline. This is
+     especially helpful for the style of semi-literate programming I
+     will describe in a coming post.</span></p><p><span>Other Emacs plugins which I use and recommend are:<ol><li><a href="https://github.com/clojure-emacs/clojure-mode">clojure-mode</a>,
+      which provides syntax coloring, indentation rules, and source
+      code navigation;</li><li><a href="https://github.com/Fanael/rainbow-delimiters">rainbow-delimiters</a>,
+      which colorizes parentheses according to their nesting depth;
+      and,</li><li><a href="https://github.com/auto-complete/auto-complete">auto-complete</a>,
+      which provides IDE-like auto-completion. </li></ol></span></p><p><span>To install Emacs packages, e.g. paredit, <code>M-x
+    install-package [RET] paredit</code>. Or, steal the code from <a href="https://github.com/eigenhombre/emacs-config/blob/master/init.el">my init.el</a> file which installs and updates any missing
+     packages from a list of packages you define.</span></p><p>Conference talks and online videos are a great way to find Emacs
+    tricks to steal. For example, I&rsquo;ve seen people run unit tests from
+    inside Emacs and display failures inline with the code, which is a
+    very cool trick, though not exactly what I want. The best way to
+    increase your Emacs-fu is to sit down with a grizzled Emacs guru
+    and compare notes and techniques. I wish I had more opportunities
+    to do this.</p><p><span>In <a href="testing,-continuously.html">the next post</a>, we&rsquo;ll talk about test-driven development and how
+     &ldquo;RDD&rdquo; (REPL-driven development) and TDD enhance and complement
+     each other.</span></p></p></div></body><div><p><a href="about.html">about</a>|<a href="content.html">all posts</a></p><p>&copy; 2015 <a href="about.html">John Jacobsen</a>. Created with <a href="https://github.com/eigenhombre/unmark">unmark</a>.  CSS by <a href="https://edwardtufte.github.io/tufte-css/">Tufte-CSS</a>.</p></div>
