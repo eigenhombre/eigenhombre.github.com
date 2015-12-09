@@ -1,0 +1,82 @@
+<head><title>Introduction to Context Managers in Python</title><link href="tufte-css/tufte.css" rel="stylesheet" /><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></head><body><h1>Introduction to Context Managers in Python</h1><p class="subtitle">John Jacobsen</p><div><p><em>This is the third of a <a href="http://eigenhombre.com/2013/04/18/thoughts-on-integration-testing/">series</a> of posts loosely associated with
+  integration testing, mostly focused on Python.</em></p><p>Context managers are a way of allocating and releasing some sort of
+  resource exactly where you need it. The simplest example is file
+  access:</p><p><pre><code>with file(&ldquo;/tmp/foo", &ldquo;w&rdquo;) as foo:
+    print >> foo, &ldquo;Hello!&rdquo;</code></pre></p><p>This is essentially equivalent to:</p><p><pre><code>foo = file(&ldquo;/tmp/foo", &ldquo;w&rdquo;)
+try:
+    print >> foo, &ldquo;Hello!&rdquo;
+finally:
+    foo.close()</code></pre></p><p>Locks are another example. Given:</p><p><pre><code>import threading
+lock = threading.Lock()</code></pre></p><p>then</p><p><pre><code>with lock:
+    my_list.append(item)</code></pre></p><p>replaces the more verbose:</p><p><pre><code>lock.acquire()
+try:
+    my_list.append(item)
+finally:
+    lock.release()
+</code></pre></p><p><span>In each case a bit of boilerplate is eliminated, and the &ldquo;context&rdquo;
+  of the file or the lock is acquired, used, and released cleanly.Context managers are a common idiom in Lisp, where they are usually
+  defined using macros (examples are <code>with-open</code> and <code>with-out-str</code> in
+  Clojure and <code>with-open-file</code> and <code>with-output-to-string</code> in Common
+  Lisp).</span></p><p><span>Python, not having macros, must include context managers as part of
+  the language. Since 2.5, it does so, providing an easy mechanism for
+  rolling your own. Though the default, &ldquo;low level&rdquo; way to make a
+  context manager is to make a class which follows the <a href="http://docs.python.org/2/library/stdtypes.html#typecontextmanager">context management protocol</a>, by
+    implementing <code>__enter__</code> and
+  <code>__exit__</code> methods,
+  the simplest way is using the <code>contextmanager</code> decorator from the
+  contextlib library, and invoking <code>yield</code> in your context manager
+  function in between the setup and teardown steps.</span></p><p><span>Here is a context manager which you could use to time <a href="http://eigenhombre.com/2013/04/19/processes-vs-threads-for-testing/">our threads-vs-processes testing</a>, discussed previously:</span></p><p><pre><code>import contextlib
+import time
+
+@contextlib.contextmanager
+def time_print(task_name):
+    t = time.time()
+    try:
+        yield
+    finally:
+        print task_name, &ldquo;took", time.time() - t, &ldquo;seconds.&rdquo;
+
+with time_print(&ldquo;processes&rdquo;):
+    [doproc() for _ in range(500)]
+
+# processes took 15.236166954 seconds.
+
+with time_print(&ldquo;threads&rdquo;):
+    [dothread() for _ in range(500)]
+
+# threads took 0.11357998848 seconds.</code></pre></p><p><h2>Composition</h2><p>Context managers can be composed very nicely. While you can
+  certainly do the following,</p><p><pre><code>with a(x, y) as A:
+    with b(z) as B:
+        # Do stuff</code></pre></p><p>in Python 2.7 or above, the following also works:</p><p><pre><code>
+with a(x, y) as A, b(z) as B:
+    # Do stuff</code></pre></p><p><span>with Python 2.6, using <code>contextlib.nested</code> does almost
+  the same thing:</span></p><p><pre><code>with contextlib.nested(a(x, y), b(z)) as (A, B):
+    # Do the same stuff</code></pre></p><p><span>the difference being that with the 2.7+ syntax, you can use the
+  value yielded from the first context manager as the argument to the
+  second (e.g., <code>with a(x, y) as A, b(A) as C:...</code>).</span></p><p>If multiple contexts occur together repeatedly, you can also roll
+  them together into a new context manager:</p><p><pre><code>import contextlib
+
+@contextlib.contextmanager
+def c(x, y, z):
+    with a(x, y) as A, b(z) as B:
+        yield (A, B)
+
+with c(x, y, z) as C:  # C == (A, B)
+    # Do that same old stuff</code></pre></p><p>What does all this have to do with testing? I have found that for
+complex integration tests where there is a lot of setup and teardown,
+context managers provide a helpful pattern for making compact, simple
+code, by putting the &ldquo;context&rdquo; (state) needed for any given test close
+to where it is actually needed (and not everywhere else). Careful
+isolation of state is an important aspect of functional programming.</p><p>More on the use of context managers in actual integration tests in
+the next post.</p></p></div><div><p><a href="about-me.html">about</a>|<a href="content.html">all posts</a></p><p>&copy; 2015 <a href="about-me.html">John Jacobsen</a>. Created with <a href="https://github.com/eigenhombre/unmark">unmark</a>.  CSS by <a href="https://edwardtufte.github.io/tufte-css/">Tufte-CSS</a>.</p></div><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-40279882-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www')
+               + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; 
+      s.parentNode.insertBefore(ga, s);
+})();</script></body>

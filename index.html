@@ -19,7 +19,7 @@
    problem it needs to solve. Any other regularity in the code is a
    sign, to me at least, that I&rsquo;m using abstractions that aren&rsquo;t
    powerful enough&mdash; often that I&rsquo;m generating by hand the expansions
-   of some macro that I need to write<span><label class="margin-toggle sidenote-number" for="G__22617"></label><input class="margin-toggle" id="G__22617" type="checkbox" /><span class="sidenote">Paul Graham, <em>Revenge of the Nerds</em>, <a href="http://www.paulgraham.com/icad.html">http://www.paulgraham.com/icad.html</a></span></span>.</p></blockquote></span></p><p>In Quil, there are multiple situations in which one needs to create
+   of some macro that I need to write<span><label class="margin-toggle sidenote-number" for="G__18121"></label><input class="margin-toggle" id="G__18121" type="checkbox" /><span class="sidenote">Paul Graham, <em>Revenge of the Nerds</em>, <a href="http://www.paulgraham.com/icad.html">http://www.paulgraham.com/icad.html</a></span></span>.</p></blockquote></span></p><p>In Quil, there are multiple situations in which one needs to create
   a temporary context to carry out a series of operations, restoring
   the original state afterwards:</p><p><ol><li>Save current style with <code>push-style</code>; change
   style and draw stuff; restore previous style with <code>pop-style</code>.</li><li>Start shape with <code>begin-shape</code>; draw vertices; <code>end-shape</code> to end.</li><li>Save current position/rotation
@@ -113,7 +113,7 @@
   setup and teardown is so common that I know I&rsquo;ll reuse this macro
   for many other things&mdash;we have effectively added one of
   my favorite Python features to Clojure in just a few lines of
-  code<span><label class="margin-toggle sidenote-number" for="G__22618"></label><input class="margin-toggle" id="G__22618" type="checkbox" /><span class="sidenote">To be even more like Python&rsquo;s context managers, <code>defcontext</code> would want to enable the user to
+  code<span><label class="margin-toggle sidenote-number" for="G__18122"></label><input class="margin-toggle" id="G__18122" type="checkbox" /><span class="sidenote">To be even more like Python&rsquo;s context managers, <code>defcontext</code> would want to enable the user to
               bind some local state resulting from the setup phase of
               execution (&ldquo;<code>with x() as y:</code>&rdquo; idiom);
               examples include file descriptors or database
