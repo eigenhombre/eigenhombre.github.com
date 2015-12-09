@@ -1,0 +1,86 @@
+<head><title>Resources for Learning Clojure</title><link href="tufte-css/tufte.css" rel="stylesheet" /><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></head><body><h1>Resources for Learning Clojure</h1><p class="subtitle">John Jacobsen</p><div><p><span>I thought I&rsquo;d take a moment to present one possible path, or set of
+  alternate paths, for learning Clojure, a modern Lisp implemented on
+  top of the Java Virtual Machine.<span><label class="margin-toggle sidenote-number" for="G__19162"></label><input class="margin-toggle" id="G__19162" type="checkbox" /><span class="sidenote"><em>Update</em>: Since this was written in 2012, a number of
+  additional excellent books have come out. These include Carin
+  Meier&rsquo;s <a href="http://shop.oreilly.com/product/0636920034292.do"><em>Living Clojure</em></a>; Vandgrift and Miller, <a href="https://pragprog.com/book/vmclojeco/clojure-applied"><em>Clojure Applied</em></a>; and Daniel Higginbotham&rsquo;s, <a href="http://www.braveclojure.com/"><em>Clojure for the Brave and True</em></a>. These are all great choices,
+  and Clojure for the Brave and True is a strong competitor for the
+  best introductory Clojure book.</span></span></span></p><p>In addition to a surprising number of very good resources out there
+  for such a young language, there are resources specific to other
+  Lisps which map reasonably well onto Clojure.</p><p>Clojure does have a learning curve, especially for one coming from
+  imperative languages such as Java, Python, C++, or Ruby. These
+  languages are, in some ways, more similar to each other than they
+  are to functional languages such as Clojure (though they all have
+  features which were pioneered originally in implementations of Lisp,
+  one of the oldest computer languages).</p><p>Since the approach I took was somewhat haphazard and I have the
+  benefit of some hindsight now, I present here a rough sequence which
+  might make the road a little less bumpy for others. Though not an
+  exhaustive list of resources by any means, the following diagram
+  summarizes the discussion points that follows.</p><p><figure><a href="img/learnclojure2.png"><img src="img/learnclojure2.png" /></a></figure></p><p>The approach I recommend goes something like this:</p><p><span>If you are going to pick just one of these resources to get
+  started, I recommend the O&rsquo;Reilly book <a href="http://www.clojurebook.com/">Clojure Programming</a> by C. Emerick et. al. I have both the PDF and print versions of
+  this book, and it&rsquo;s not only an excellent book on Clojure, it&rsquo;s one
+  of the best O&rsquo;Reilly books I&rsquo;ve seen in the dozen or so years I&rsquo;ve
+  been reading them. The other two books are also good (I have not
+  checked out the 2nd edition of Programming Clojure yet)&hellip; Clojure is
+  particularly blessed in having not just one but at least three
+  excellent &ldquo;starter books&rdquo; on the language.</span></p><p><span>If you&rsquo;re curious why one might want to learn a Lisp as your next
+  (or last?) programming language, Paul Graham <a href="http://www.paulgraham.com/avg.html">evangelizes</a> very effectively about Lisp in some of his many <a href="http://www.paulgraham.com/articles.html">essays</a>. You might want to check those out before diving into
+  Clojure per se.</span></p><p><span>Additionally, videos of Rich Hickey&rsquo;s talks, particularly <a href="videos">Simple Made Easy</a> , though not so much
+  about Lisp or Clojure per se, explain the challenges and limitations
+  involved with stateful Object-Oriented programming and motivate the
+  ideas behind functional programming in general and Clojure in
+  particular. I very much recommend these videos, though reaction to
+  them among programmers I&rsquo;ve shown them to has varied wildly from
+  enthusiasm to extreme irritation.</span></p><p><span>People with exposure to Common Lisp or Scheme may be familiar with
+  Abelson and Sussman&rsquo;s <a href="http://mitpress.mit.edu/sicp/">Structure and Interpretation of Computer Programs</a> ; Friedman&rsquo;s <a href="http://www.ccs.neu.edu/home/matthias/BTLS/">The Little Schemer</a> and its sequels <a href="http://www.ccs.neu.edu/home/matthias/BTSS/">The Seasoned Schemer</a> and
+  <a href="http://www.ccs.neu.edu/home/matthias/BRS/">The Reasoned Schemer</a> ; and P. Seibel&rsquo;s <a href="http://www.gigamonkeys.com/book/">Practical Common Lisp</a>, which I&rsquo;ve only peeked at but which has
+  an excellent reputation. These books could provide a gateway into
+  Clojure, or might merit a look at once you&rsquo;ve got some Clojure
+  basics under your belt. I find them to be interesting supplemental
+  reading.</span></p><p><span>Before getting to the more advanced books, the
+  <a href="https://github.com/functional-koans/clojure-koans">Clojure Koans</a> are a
+  fun and pleasantly gradual way to start reinforcing your Clojure
+  basics (I worked most of them on various airplane flights to the
+  South Pole last year). Similar but somewhat more challenging are the
+  <a href="http://4clojure.org/">4clojure problems</a> (I&rsquo;m about 3/4 of the way through these).</span></p><p>I find these kinds of problems alternately soothing (when I get
+  them right away) and maddening (when I actually have to work at
+  them). They are like crossword puzzles for programmers, and they do
+  really help reinforce the material from the books. Due to the way
+  the problems are implemented, they are unfortunately limited in
+  terms of how they cover Java interoperability, macros, and
+  concurrency.</p><p><span>After you&rsquo;ve read an introductory text, worked some problems and
+  maybe started one or two personal projects with the language, you&rsquo;re
+  ready for
+  <a href="http://joyofclojure.com/">The Joy of Clojure</a>. This book is somewhat hard to describe; I started it too early,
+  then came back after six months and it make a whole lot more
+  sense. The best way to explain The Joy of Clojure is that it helps
+  you to understand both some of the quirks of the language and what
+  makes it truly great, and will help you evolve from writing clumsy
+  translations of what you&rsquo;ve learned in other languages, to truly
+  compact, elegant, idiomatic Clojure code.</span></p><p><span>After, or perhaps during, Joy of Clojure, take a deep dive into
+  macros, the secret sauce of Lisp. Macros allow one to implement new
+  language features in order to make one&rsquo;s code elegant and
+  expressive, and to optimize the fit to one&rsquo;s problem domain. Paul
+  Graham&rsquo;s
+  <a href="http://www.paulgraham.com/onlisp.html">On Lisp</a> is mostly about macros; Hoyte&rsquo;s
+  <a href="http://letoverlambda.com/">Let over Lambda</a>
+  refers to On Lisp many times and builds on some of the foundations
+  laid in that book.</span></p><p><span>To summarize (strongest suggestions in <strong>bold</strong>):</span></p><p><ol><li>Graham essays</li><li>Hickey videos</li><li>Introductory book (<strong>Clojure Programming</strong>,
+   Programming Clojure, or Practical Clojure)</li><li>Possibly detour into SICP, Practical Common Lisp and/or The *
+   Schemer books</li><li>Clojure Koans</li><li>4Clojure Problems</li><li><strong>Joy of Clojure</strong></li><li>On Lisp</li><li>Let Over Lambda</li></ol></p><p><span>There are many other Lisp books which I haven&rsquo;t read yet, as well
+  as a Clojure book or two I&rsquo;ve left out. Also, lest I forget, the
+  Clojure community has a reputation for being extremely welcoming and
+  helpful. There is a <a href="http://groups.google.com/group/clojure">Google
+  Group</a> / mailing list and an IRC chat as well.</span></p><p>The bottom line is that for such a young language (or young variant
+  of an old language), we are fortunate to have such a rich selection
+  of resources to pick and choose from. Enjoy!</p></div><div><p><a href="about-me.html">about</a>|<a href="content.html">all posts</a></p><p>&copy; 2015 <a href="about-me.html">John Jacobsen</a>. Created with <a href="https://github.com/eigenhombre/unmark">unmark</a>.  CSS by <a href="https://edwardtufte.github.io/tufte-css/">Tufte-CSS</a>.</p></div><script type="text/javascript">var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-40279882-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www')
+               + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; 
+      s.parentNode.insertBefore(ga, s);
+})();</script></body>
