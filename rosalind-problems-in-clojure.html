@@ -8,7 +8,6 @@ elegance and brevity that Clojure lends the solutions.</span></p><p><span>In par
 (defmacro deftable [tname & rest]
   `(def ~tname (apply hash-map '(~@rest))))
 
-
 (deftable proteins
   UUU F      CUU L      AUU I      GUU V
   UUC F      CUC L      AUC I      GUC V
@@ -26,7 +25,6 @@ elegance and brevity that Clojure lends the solutions.</span></p><p><span>In par
   UGC C      CGC R      AGC S      GGC G
   UGA Stop   CGA R      AGA R      GGA G
   UGG W      CGG R      AGG R      GGG G)
-
 
 (defn to-protein [s]
   (->> s
